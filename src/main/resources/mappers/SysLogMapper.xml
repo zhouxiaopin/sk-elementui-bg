@@ -249,13 +249,13 @@
   <!-- 查询条件的sql片段 -->
 
   <sql id="base_query_condition">
-    <if test="null != sysLogCustom">
+    <if test="null != cdtCustom">
       <!-- ${}拼接字符串，有sql注入的维修，少用-->
-      <if test="null != sysLogCustom.operation and '' != sysLogCustom.operation">
-        AND operation LIKE CONCAT('%',CONCAT(#{sysLogCustom.operation,jdbcType=VARCHAR},'%'))
+      <if test="null != cdtCustom.operation and '' != cdtCustom.operation">
+        AND operation LIKE CONCAT('%',CONCAT(#{cdtCustom.operation,jdbcType=VARCHAR},'%'))
       </if>
-      <if test="null != sysLogCustom.userName and '' != sysLogCustom.userName">
-        AND user_name LIKE CONCAT('%',CONCAT(#{sysLogCustom.userName,jdbcType=VARCHAR},'%'))
+      <if test="null != cdtCustom.userName and '' != cdtCustom.userName">
+        AND user_name LIKE CONCAT('%',CONCAT(#{cdtCustom.userName,jdbcType=VARCHAR},'%'))
       </if>
     </if>
     <if test="null != startCreatTime and '' != startCreatTime">
