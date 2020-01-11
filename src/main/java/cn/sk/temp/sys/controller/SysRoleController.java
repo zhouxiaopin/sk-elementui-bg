@@ -1,8 +1,8 @@
 package cn.sk.temp.sys.controller;
 
 import cn.sk.temp.base.controller.BaseController;
-import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.common.ServerResponse;
+import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.pojo.SysRoleCustom;
 import cn.sk.temp.sys.pojo.SysRoleQueryVo;
 import cn.sk.temp.sys.service.ISysRoleService;
@@ -10,7 +10,6 @@ import cn.sk.temp.sys.utils.SysUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sysRole")
-@RequiresAuthentication
+//@RequiresAuthentication
 public class SysRoleController extends BaseController<SysRoleCustom, SysRoleQueryVo> {
     private static final String UPDATE_RECORDSTATUS_OPRT = "updateRecordStatus";
     @Autowired
@@ -86,14 +85,20 @@ public class SysRoleController extends BaseController<SysRoleCustom, SysRoleQuer
                 }
 
                 //判断角色标识是否存在
-                sysRoleQueryVo = new SysRoleQueryVo();
-                condition = new SysRoleCustom();
 
+                sysRoleQueryVo = SysRoleQueryVo.newInstance();
+                sysRoleQueryVo.getCdtCustom().setRoleFlag(sysRoleCustom.getRoleFlag());
                 sysRoleQueryVo.getIsNoLike().put("roleFlag",true);
 
-                condition.setRoleFlag(sysRoleCustom.getRoleFlag());
+//                sysRoleQueryVo = new SysRoleQueryVo();
+//                condition = new SysRoleCustom();
+//
+//                sysRoleQueryVo.getIsNoLike().put("roleFlag",true);
+//
+//                condition.setRoleFlag(sysRoleCustom.getRoleFlag());
+//
+//                sysRoleQueryVo.setSysRoleCustom(condition);
 
-                sysRoleQueryVo.setSysRoleCustom(condition);
                 serverResponse = this.queryAllByCondition(sysRoleQueryVo);
                 if(!CollectionUtils.isEmpty(serverResponse.getData())){
                     return ServerResponse.createByErrorMessage("角色标识已存在");
@@ -105,14 +110,18 @@ public class SysRoleController extends BaseController<SysRoleCustom, SysRoleQuer
                 break;
             case UPDATE_OPRT://修改
                 //判断角色标识是否存在
-                sysRoleQueryVo = new SysRoleQueryVo();
-                condition = new SysRoleCustom();
-
+//                sysRoleQueryVo = new SysRoleQueryVo();
+//                condition = new SysRoleCustom();
+//
+//                sysRoleQueryVo.getIsNoLike().put("roleFlag",true);
+//
+//                condition.setRoleFlag(sysRoleCustom.getRoleFlag());
+//
+//                sysRoleQueryVo.setSysRoleCustom(condition);
+                sysRoleQueryVo = SysRoleQueryVo.newInstance();
+                sysRoleQueryVo.getCdtCustom().setRoleFlag(sysRoleCustom.getRoleFlag());
                 sysRoleQueryVo.getIsNoLike().put("roleFlag",true);
 
-                condition.setRoleFlag(sysRoleCustom.getRoleFlag());
-
-                sysRoleQueryVo.setSysRoleCustom(condition);
                 serverResponse = this.queryAllByCondition(sysRoleQueryVo);
                 List<SysRoleCustom> sysRoleCustoms = serverResponse.getData();
                 if(!CollectionUtils.isEmpty(sysRoleCustoms)){

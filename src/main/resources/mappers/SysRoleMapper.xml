@@ -128,18 +128,18 @@
 
     <!-- 查询条件的sql片段 -->
     <sql id="base_query_condition">
-        <if test="null != sysRoleCustom">
+        <if test="null != cdtCustom">
             <!-- ${}拼接字符串，有sql注入的维修，少用-->
-            <if test="null != sysRoleCustom.roleFlag and '' != sysRoleCustom.roleFlag">
+            <if test="null != cdtCustom.roleFlag and '' != cdtCustom.roleFlag">
                 <if test="isNoLike.roleFlag">
-                    AND role_flag = #{sysRoleCustom.roleFlag,jdbcType=VARCHAR}
+                    AND role_flag = #{cdtCustom.roleFlag,jdbcType=VARCHAR}
                 </if>
                 <if test="!isNoLike.roleFlag">
-                    AND role_flag LIKE CONCAT('%',CONCAT(#{sysRoleCustom.roleFlag,jdbcType=VARCHAR},'%'))
+                    AND role_flag LIKE CONCAT('%',CONCAT(#{cdtCustom.roleFlag,jdbcType=VARCHAR},'%'))
                 </if>
             </if>
-            <if test="null != sysRoleCustom.roleName and '' != sysRoleCustom.roleName">
-                AND role_name LIKE CONCAT('%',CONCAT(#{sysRoleCustom.roleName,jdbcType=VARCHAR},'%'))
+            <if test="null != cdtCustom.roleName and '' != cdtCustom.roleName">
+                AND role_name LIKE CONCAT('%',CONCAT(#{cdtCustom.roleName,jdbcType=VARCHAR},'%'))
             </if>
 
         </if>

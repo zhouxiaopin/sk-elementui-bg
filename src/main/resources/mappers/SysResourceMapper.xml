@@ -301,7 +301,7 @@
 
     <!--根据角色id查找资源-->
     <select id="selectListByRoleId" parameterType="map" resultType="map">
-        select sr.r_id rId, sr.r_name rName, sr.r_url rUrl, sr.route_path routePath,sr.route_name routeName,sr.route_component rUrl,sr.parent_id parentId, sr.r_type
+        select sr.r_id rId, sr.r_name rName, sr.r_url rUrl, sr.route_path routePath,sr.route_name routeName,sr.route_component routeComponent,sr.parent_id parentId, sr.r_type
         rType,sr.r_level rLevel, sr.r_sort rSort, sr.left_icon leftIcon from tb_sys_resource sr
         LEFT JOIN tb_sys_role_resource rr
         on rr.res_id = sr.r_id
