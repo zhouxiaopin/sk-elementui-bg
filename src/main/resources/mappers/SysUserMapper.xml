@@ -193,14 +193,14 @@
   <!-- 查询条件的sql片段 -->
 
   <sql id="base_query_condition">
-    <if test="null != sysUserCustom">
+    <if test="null != cdtCustom">
       <!-- ${}拼接字符串，有sql注入的维修，少用-->
-      <if test="null != sysUserCustom.userName and '' != sysUserCustom.userName">
+      <if test="null != cdtCustom.userName and '' != cdtCustom.userName">
         <if test="isNoLike.userName">
-          AND user_name = #{sysUserCustom.userName,jdbcType=VARCHAR}
+          AND user_name = #{cdtCustom.userName,jdbcType=VARCHAR}
         </if>
         <if test="!isNoLike.userName">
-          AND user_name LIKE CONCAT('%',CONCAT(#{sysUserCustom.userName,jdbcType=VARCHAR},'%'))
+          AND user_name LIKE CONCAT('%',CONCAT(#{cdtCustom.userName,jdbcType=VARCHAR},'%'))
         </if>
       </if>
 

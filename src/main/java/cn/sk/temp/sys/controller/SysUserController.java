@@ -47,11 +47,14 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
         String userName = sc.getUserName();
         String password = sc.getPassword();
 
-        SysUserQueryVo sysUserQueryVo = new SysUserQueryVo();
-        SysUserCustom condition = new SysUserCustom();
-        condition.setUserName(userName);
+        SysUserQueryVo sysUserQueryVo = SysUserQueryVo.newInstance();
+        sysUserQueryVo.getCdtCustom().setUserName(userName);
         sysUserQueryVo.getIsNoLike().put("userName",true);
-        sysUserQueryVo.setSysUserCustom(condition);
+//        SysUserQueryVo sysUserQueryVo = new SysUserQueryVo().getEntityCustom();
+//        SysUserCustom condition = new SysUserCustom();
+//        condition.setUserName(userName);
+//        sysUserQueryVo.getIsNoLike().put("userName",true);
+//        sysUserQueryVo.setEntityCustom(condition);
 
 
         List<SysUserCustom> sysUserCustoms = sysUserService.queryObjs(sysUserQueryVo).getData();
@@ -92,11 +95,14 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
         }
         String userName = JwtUtil.getUsername(token);
 
-        SysUserQueryVo sysUserQueryVo = new SysUserQueryVo();
-        SysUserCustom condition = new SysUserCustom();
-        condition.setUserName(userName);
+        SysUserQueryVo sysUserQueryVo = SysUserQueryVo.newInstance();
+        sysUserQueryVo.getCdtCustom().setUserName(userName);
         sysUserQueryVo.getIsNoLike().put("userName",true);
-        sysUserQueryVo.setSysUserCustom(condition);
+//        SysUserQueryVo sysUserQueryVo = new SysUserQueryVo();
+//        SysUserCustom condition = new SysUserCustom();
+//        condition.setUserName(userName);
+//        sysUserQueryVo.getIsNoLike().put("userName",true);
+//        sysUserQueryVo.setSysUserCustom(condition);
 
 
         List<SysUserCustom> sysUserCustoms = sysUserService.queryObjs(sysUserQueryVo).getData();
@@ -239,14 +245,19 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
                 }
 
                 //判断字用户名是否存在
-                sysUserQueryVo = new SysUserQueryVo();
-                condition = new SysUserCustom();
 
+                sysUserQueryVo = SysUserQueryVo.newInstance();
+                sysUserQueryVo.getCdtCustom().setUserName(sysUserCustom.getUserName());
                 sysUserQueryVo.getIsNoLike().put("userName",true);
 
-                condition.setUserName(sysUserCustom.getUserName());
-
-                sysUserQueryVo.setSysUserCustom(condition);
+//                sysUserQueryVo = new SysUserQueryVo();
+//                condition = new SysUserCustom();
+//
+//                sysUserQueryVo.getIsNoLike().put("userName",true);
+//
+//                condition.setUserName(sysUserCustom.getUserName());
+//
+//                sysUserQueryVo.setSysUserCustom(condition);
                 serverResponse = this.queryAllByCondition(sysUserQueryVo);
                 if(!CollectionUtils.isEmpty(serverResponse.getData())){
                     return ServerResponse.createByErrorMessage("用户名已存在");
@@ -255,14 +266,17 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
                 break;
             case UPDATE_OPRT://修改
                 //判断字用户名是否存在
-                sysUserQueryVo = new SysUserQueryVo();
-                condition = new SysUserCustom();
-
+                sysUserQueryVo = SysUserQueryVo.newInstance();
+                sysUserQueryVo.getCdtCustom().setUserName(sysUserCustom.getUserName());
                 sysUserQueryVo.getIsNoLike().put("userName",true);
-
-                condition.setUserName(sysUserCustom.getUserName());
-
-                sysUserQueryVo.setSysUserCustom(condition);
+//                sysUserQueryVo = new SysUserQueryVo();
+//                condition = new SysUserCustom();
+//
+//                sysUserQueryVo.getIsNoLike().put("userName",true);
+//
+//                condition.setUserName(sysUserCustom.getUserName());
+//
+//                sysUserQueryVo.setSysUserCustom(condition);
                 serverResponse = this.queryAllByCondition(sysUserQueryVo);
                 List<SysUserCustom> sysUserCustoms = serverResponse.getData();
                 if(!CollectionUtils.isEmpty(sysUserCustoms)){

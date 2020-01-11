@@ -12,6 +12,7 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SysUserCustom extends SysUser {
     //确认密码
     private String password2;

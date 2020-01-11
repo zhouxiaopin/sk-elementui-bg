@@ -76,12 +76,16 @@ public class SkShiroRealm extends AuthorizingRealm {
         //2. 从 UsernamePasswordToken 中来获取 username
 //        String username = upToken.getUsername();
 
-        SysUserQueryVo sysUserQueryVo = new SysUserQueryVo();
-
-        SysUserCustom condition = new SysUserCustom();
-        condition.setUserName(username);
+        SysUserQueryVo sysUserQueryVo = SysUserQueryVo.newInstance();
+        sysUserQueryVo.getCdtCustom().setUserName(username);
         sysUserQueryVo.getIsNoLike().put("userName",true);
-        sysUserQueryVo.setSysUserCustom(condition);
+
+//        SysUserQueryVo sysUserQueryVo = new SysUserQueryVo();
+//
+//        SysUserCustom condition = new SysUserCustom();
+//        condition.setUserName(username);
+//        sysUserQueryVo.getIsNoLike().put("userName",true);
+//        sysUserQueryVo.setSysUserCustom(condition);
 
 
         List<SysUserCustom> sysUserCustoms = sysUserService.queryObjs(sysUserQueryVo).getData();
