@@ -61,11 +61,13 @@ public class SkShiroRealm extends AuthorizingRealm {
 
         String token = (String) auth.getCredentials();
         if (token == null) {
+            log.info("token为空!");
             throw new AuthenticationException("token为空!");
         }
         // 解密获得username，用于和数据库进行对比
         String username = JwtUtil.getUsername(token);
         if (username == null) {
+            log.info("token非法无效!");
             throw new AuthenticationException("token非法无效!");
         }
 
@@ -122,6 +124,7 @@ public class SkShiroRealm extends AuthorizingRealm {
         // 校验token是否超时失效 & 或者账号密码是否错误
         if (!jwtTokenRefresh(token, username, sysUserCustom.getPassword())) {
 //            throw new AuthenticationException("Token失效，请重新登录!");
+            log.info("Token失效，请重新登录!");
             throw new AuthenticationException("Token失效，请重新登录!");
 //            throw new AuthenticationException("Token失效，请重新登录!");
         }

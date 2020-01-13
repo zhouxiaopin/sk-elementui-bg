@@ -5,8 +5,10 @@ import cn.sk.temp.sys.common.*;
 import cn.sk.temp.sys.pojo.SysUserCustom;
 import cn.sk.temp.sys.pojo.SysUserQueryVo;
 import cn.sk.temp.sys.service.ISysUserService;
+import cn.sk.temp.sys.utils.DateUtils;
 import cn.sk.temp.sys.utils.JwtUtil;
 import cn.sk.temp.sys.utils.ShiroUtils;
+import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -16,7 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统用户 Controller
@@ -81,7 +85,11 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
 //                 设置token缓存有效时间
 //                redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 //                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
-        return ServerResponse.createBySuccess(ResponseCode.LOGIN_SUCCESS.getMsg(),token);
+        Map<String,Object> data = Maps.newHashMap();
+        data.put("token",token);
+        data.put("expiresTime", DateUtils.addMinuteTime(new Date(),30));
+        data.put("user",sysUserCustom);
+        return ServerResponse.createBySuccess(ResponseCode.LOGIN_SUCCESS.getMsg(),data);
 
     }
 

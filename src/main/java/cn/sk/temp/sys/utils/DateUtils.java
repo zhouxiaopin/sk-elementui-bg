@@ -201,6 +201,18 @@ public class DateUtils {
      * 指定时间，并且在它的基础上加多mm分钟
      * @return
      */
+    public static Date addMinuteTime(Date date,int mm){
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("当前时间：" + sdf.format(date));
+        Date afterDate = new Date(date.getTime() + (mm*60000));
+        System.out.println("afterDate:"+sdf.format(afterDate ));
+        return afterDate;
+    }
+
+    /**
+     * 指定时间，并且在它的基础上加多mm分钟
+     * @return
+     */
     public static String addOneMinuteTime(Date date,int mm){
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println("当前时间：" + sdf.format(date));

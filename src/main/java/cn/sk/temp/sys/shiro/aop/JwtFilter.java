@@ -1,9 +1,11 @@
 package cn.sk.temp.sys.shiro.aop;
 
+import cn.sk.temp.sys.common.CustomException;
+import cn.sk.temp.sys.common.ResponseCode;
 import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.shiro.JwtToken;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +14,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  *@Deseription 鉴权登录拦截器
@@ -35,7 +39,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 			executeLogin(request, response);
 			return true;
 		} catch (Exception e) {
-			throw new AuthenticationException("Token失效，请重新登录", e);
+			throw new CustomException(ResponseCode.TOKEN_LOSE_EFFICACY);
 		}
 	}
 
@@ -59,7 +63,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 	 * 对跨域提供支持
 	 */
 	@Override
-	protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
+	protected boolean preHandle(ServletRequest request, ServletResponse response){
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 		httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
@@ -70,6 +74,23 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 			httpServletResponse.setStatus(HttpStatus.OK.value());
 			return false;
 		}
-		return super.preHandle(request, response);
+		try {
+			return super.preHandle(request, response);
+		} catch (Exception e) {
+			httpServletResponse.setCharacterEncoding("utf-8");
+			httpServletResponse.setContentType("application/json; charset=utf-8");
+			httpServletResponse.setStatus(HttpStatus.OK.value());
+			PrintWriter writer = null;
+			try {
+				writer = httpServletResponse.getWriter();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("code",ResponseCode.TOKEN_LOSE_EFFICACY.getCode());
+			jsonObject.put("msg",ResponseCode.TOKEN_LOSE_EFFICACY.getMsg());
+			writer.write(jsonObject.toJSONString());
+			return false;
+		}
 	}
 }
