@@ -150,6 +150,14 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, S
             SysDictCustom sysDictCustom = sysDictCustoms.get(i);
             menuLevelMap.put(sysDictCustom.getDictCode(),sysDictCustom.getCodeName());
         }
+        //级别
+        condition.setDictType(SysConst.Dict.SysResource.LEFT_ICON);
+        sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
+        Map<String,String> leftIconMap = Maps.newHashMap();
+        for(int i = 0,len = sysDictCustoms.size(); i < len; i++) {
+            SysDictCustom sysDictCustom = sysDictCustoms.get(i);
+            leftIconMap.put(sysDictCustom.getDictCode(),sysDictCustom.getCodeName());
+        }
 
         //数据封装
         ServerResponse<PageInfo<SysResourceCustom>> pageInfo = super.queryObjsByPage(entityQueryVo);
@@ -158,6 +166,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, S
             SysResourceCustom sysResourceCustom = data.get(i);
             sysResourceCustom.setrType(menuTypeMap.get(sysResourceCustom.getrType()));
             sysResourceCustom.setRLevelStr(menuLevelMap.get(sysResourceCustom.getrLevel().toString()));
+            sysResourceCustom.setLeftIcon(leftIconMap.get(sysResourceCustom.getLeftIcon()));
         }
         return pageInfo;
     }

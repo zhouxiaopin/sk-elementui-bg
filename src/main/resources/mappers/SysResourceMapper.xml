@@ -262,21 +262,21 @@
         <!--<if test="null != greaterThanPLevel">-->
         <!--AND p_level >= #{greaterThanPLevel,jdbcType=INTEGER}-->
         <!--</if>-->
-        <if test="null != sysResourceCustom">
+        <if test="null != cdtCustom">
             <!-- ${}拼接字符串，有sql注入的维修，少用-->
             <!--<if test="null != SysPermisCustom.userName and '' != SysPermisCustom.userName">-->
             <!--AND user_name LIKE CONCAT('%',CONCAT(#{SysPermisCustom.userName},'%'))-->
             <!--</if>-->
-            <if test="null != sysResourceCustom.parentId and '' != sysResourceCustom.parentId">
-                AND sr.parent_id = #{sysResourceCustom.parentId,jdbcType=INTEGER}
+            <if test="null != cdtCustom.parentId and '' != cdtCustom.parentId">
+                AND sr.parent_id = #{cdtCustom.parentId,jdbcType=INTEGER}
             </if>
             <!--<if test="null != sysPermisCustom.pLevel and '' != sysPermisCustom.pLevel">-->
             <!--AND p_level = #{sysPermisCustom.pLevel,jdbcType=INTEGER}-->
             <!--</if>-->
-            <if test="null != sysResourceCustom.rName and '' != sysResourceCustom.rName">
-                AND sr.r_name LIKE CONCAT('%',CONCAT(#{sysResourceCustom.rName,jdbcType=VARCHAR},'%'))
+            <if test="null != cdtCustom.rName and '' != cdtCustom.rName">
+                AND sr.r_name LIKE CONCAT('%',CONCAT(#{cdtCustom.rName,jdbcType=VARCHAR},'%'))
             </if>
-            <if test="null != sysResourceCustom.recordStatus and '' != sysResourceCustom.recordStatus">
+            <if test="null != cdtCustom.recordStatus and '' != cdtCustom.recordStatus">
                 AND sr.record_status = #{recordStatus,jdbcType=VARCHAR}
             </if>
 

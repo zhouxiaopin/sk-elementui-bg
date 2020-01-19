@@ -10,7 +10,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SysResourceQueryVo extends BaseQueryVo {
-    private SysResourceCustom sysResourceCustom;
+    private SysResourceCustom cdtCustom = new SysResourceCustom();
 
+    public static SysResourceQueryVo newInstance() {
+        return new SysResourceQueryVo();
+    }
 
 }
