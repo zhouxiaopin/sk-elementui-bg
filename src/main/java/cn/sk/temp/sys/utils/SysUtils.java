@@ -13,7 +13,7 @@ public class SysUtils {
         Integer id = null;
         SysUserCustom sysUserInfo = (SysUserCustom) SecurityUtils.getSubject().getPrincipal();
         if(!ObjectUtils.isEmpty(sysUserInfo)) {
-            id = sysUserInfo.getuId();
+            id = sysUserInfo.getUserId();
         }
         return id;
     }

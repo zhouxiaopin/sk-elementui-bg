@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,7 +32,7 @@ public class SysRoleController extends BaseController<SysRoleCustom, SysRoleQuer
 
     //更新记录状态，禁用启用切换
     @PostMapping(value = "updateRecordStatus")
-    public ServerResponse<SysRoleCustom> updateRecordStatus(SysRoleCustom sysRoleCustom) {
+    public ServerResponse<SysRoleCustom> updateRecordStatus(@RequestBody SysRoleCustom sysRoleCustom) {
         //权限校验
         authorityValidate(UPDATE_RECORDSTATUS_OPRT);
 
@@ -57,20 +58,20 @@ public class SysRoleController extends BaseController<SysRoleCustom, SysRoleQuer
     /****************************以下是重新父类的方法*****************************/
 
     //根据oprt返回对应的页面
-    @Override
-    protected String getPage(String oprt) {
-        String prefix = "sys/sysRole/";
-        if (oprt.equals(QUERY_OPRT)) {
-            return prefix + "sysRoleQuery";
-        }
-        if (oprt.equals(UPDATE_OPRT)) {
-            return prefix + "sysRole";
-        }
-        if (oprt.equals(ADD_OPRT)) {
-            return prefix + "sysRole";
-        }
-        return super.getPage(oprt);
-    }
+//    @Override
+//    protected String getPage(String oprt) {
+//        String prefix = "sys/sysRole/";
+//        if (oprt.equals(QUERY_OPRT)) {
+//            return prefix + "sysRoleQuery";
+//        }
+//        if (oprt.equals(UPDATE_OPRT)) {
+//            return prefix + "sysRole";
+//        }
+//        if (oprt.equals(ADD_OPRT)) {
+//            return prefix + "sysRole";
+//        }
+//        return super.getPage(oprt);
+//    }
 
     //参数检验
     @Override

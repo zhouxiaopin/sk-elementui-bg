@@ -7,6 +7,7 @@ import cn.sk.temp.sys.pojo.SysResourceCustom;
 import cn.sk.temp.sys.pojo.SysResourceQueryVo;
 import cn.sk.temp.sys.service.ISysResourceService;
 import cn.sk.temp.sys.utils.SysUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -35,7 +36,7 @@ public class SysResourceController extends BaseController<SysResourceCustom, Sys
 
     //更新记录状态，禁用启用切换
     @PostMapping(value = "updateRecordStatus")
-    public ServerResponse<SysResourceCustom> updateRecordStatus(SysResourceCustom sysResourceCustom) {
+    public ServerResponse<SysResourceCustom> updateRecordStatus(@RequestBody SysResourceCustom sysResourceCustom) {
         //权限校验
         authorityValidate(UPDATE_RECORDSTATUS_OPRT);
 
@@ -73,20 +74,20 @@ public class SysResourceController extends BaseController<SysResourceCustom, Sys
     /****************************以下是重新父类的方法*****************************/
 
     //根据oprt返回对应的页面
-    @Override
-    protected String getPage(String oprt) {
-        String prefix = "sys/sysResource/";
-        if (oprt.equals(QUERY_OPRT)) {
-            return prefix + "sysResourceQuery";
-        }
-        if (oprt.equals(UPDATE_OPRT)) {
-            return prefix + "sysResource";
-        }
-        if (oprt.equals(ADD_OPRT)) {
-            return prefix + "sysResource";
-        }
-        return super.getPage(oprt);
-    }
+//    @Override
+//    protected String getPage(String oprt) {
+//        String prefix = "sys/sysResource/";
+//        if (oprt.equals(QUERY_OPRT)) {
+//            return prefix + "sysResourceQuery";
+//        }
+//        if (oprt.equals(UPDATE_OPRT)) {
+//            return prefix + "sysResource";
+//        }
+//        if (oprt.equals(ADD_OPRT)) {
+//            return prefix + "sysResource";
+//        }
+//        return super.getPage(oprt);
+//    }
 
     //参数检验
     @Override
@@ -96,6 +97,20 @@ public class SysResourceController extends BaseController<SysResourceCustom, Sys
 //                if (StringUtils.isEmpty(sysRoleCustom.getRoleFlag())||StringUtils.isEmpty(sysRoleCustom.getRoleName())) {
 //                    return ServerResponse.createByParamError();
 //                }
+
+
+                SysResourceQueryVo sysResourceQueryVo = SysResourceQueryVo.newInstance();
+                SysResourceCustom condition = sysResourceQueryVo.getCdtCustom();
+
+                sysResourceQueryVo.getIsNoLike().put("routePath",true);
+
+                condition.setRoutePath(sysResourceCustom.getRoutePath());
+
+                ServerResponse<List<SysResourceCustom>> serverResponse = this.queryAllByCondition(sysResourceQueryVo);
+                if(!CollectionUtils.isEmpty(serverResponse.getData())){
+                    return ServerResponse.createByErrorMessage("路由路径已存在");
+                }
+
 
                 if(ObjectUtils.isEmpty(sysResourceCustom.getParentId())) {
                     sysResourceCustom.setParentId(SysConst.Permis.DEFAULT_PARENTID);

@@ -9,7 +9,7 @@ import cn.sk.temp.sys.pojo.*;
 import cn.sk.temp.sys.service.ISysResourceService;
 import cn.sk.temp.sys.utils.SysUtils;
 import cn.sk.temp.sys.utils.TreeUtil;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -25,7 +25,7 @@ import java.util.Set;
  * 系统资源业务逻辑接口实现类
  */
 @Service
-public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, SysResourceQueryVo> implements ISysResourceService {
+public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, SysResourceQueryVo, SysResourceMapper> implements ISysResourceService {
     @Autowired
     private SysResourceMapper sysResourceMapper;
     @Autowired
@@ -40,10 +40,10 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, S
 //            {id:6, pId:0, name:"福建省", open:true, nocheck:true},
 //            { id:1, pId:0, name:"一级分类", open:true},
             Map<String,Object> item = Maps.newHashMap();
-            item.put("id",sysResourceCustom.getrId());
+            item.put("id",sysResourceCustom.getResId());
             item.put("pId",sysResourceCustom.getParentId());
-            item.put("name",sysResourceCustom.getrName());
-            item.put("level",sysResourceCustom.getrLevel());
+            item.put("name",sysResourceCustom.getResName());
+            item.put("level",sysResourceCustom.getResLevel());
             item.put("open",true);
             data.add(item);
 //
@@ -56,7 +56,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, S
 
         SysUserCustom sysUserInfo = SysUtils.getSysUser();
         Map<String,Object> params = Maps.newHashMap();
-        params.put("userId",sysUserInfo.getuId());
+        params.put("userId",sysUserInfo.getUserId());
         params.put("recordStatus", SysConst.RecordStatus.ABLE);
         List<Map<String,Object>> sysRoleCustoms = sysRoleMapper.selectListByUserId(params);
 
@@ -73,8 +73,8 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, S
             params.clear();
             params.put("roleIds", roleIds);
             params.put("recordStatus", SysConst.RecordStatus.ABLE);
-            params.put("rType", SysConst.Permis.MENU);
-            params.put("orderBy", "r_sort");
+            params.put("resType", SysConst.Permis.MENU);
+            params.put("orderBy", "res_sort");
 //            List<Map<String,Object>> sysPermisCustoms = sysPermisMapper.selectListByRoleId(params);
             List<Map<String, Object>> sysResourceCustoms = sysResourceMapper.selectListByRoleId(params);
             List<TreeNode> treeNodes = Lists.newArrayList();
@@ -82,16 +82,31 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, S
             TreeNode treeNode;
 
             //获取左边图片key-value对
-            SysDictQueryVo sysDictQueryVo = new SysDictQueryVo();
-            SysDictCustom condition = new SysDictCustom();
+//            SysDictQueryVo sysDictQueryVo = new SysDictQueryVo();
+//            SysDictCustom condition = new SysDictCustom();
+//
+//            sysDictQueryVo.getIsNoLike().put("dictType", true);
+//
+//            condition.setDictType(SysConst.Dict.SysResource.LEFT_ICON);
+//            condition.setRecordStatus(SysConst.RecordStatus.ABLE);
+//
+//            sysDictQueryVo.setSysDictCustom(condition);
 
-            sysDictQueryVo.getIsNoLike().put("dictType", true);
+            SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
+            SysDictCustom condition = sysDictQueryVo.getCdtCustom();
+
+            sysDictQueryVo.getIsNoLike().put("dictType",true);
 
             condition.setDictType(SysConst.Dict.SysResource.LEFT_ICON);
             condition.setRecordStatus(SysConst.RecordStatus.ABLE);
 
-            sysDictQueryVo.setSysDictCustom(condition);
-            List<SysDictCustom> sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
+            LambdaQueryWrapper<SysDictCustom> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(SysDictCustom::getDictType,SysConst.Dict.SysResource.LEFT_ICON)
+                    .eq(SysDictCustom::getRecordStatus,SysConst.RecordStatus.ABLE);
+
+//            List<SysDictCustom> sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
+            List<SysDictCustom> sysDictCustoms = sysDictMapper.selectList(queryWrapper);
+
             //左边图标
             Map<String, String> leftIconMap = Maps.newHashMap();
             for (int i = 0, len = sysDictCustoms.size(); i < len; i++) {
@@ -102,10 +117,10 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, S
             for (int i = 0, len = sysResourceCustoms.size(); i < len; i++) {
                 sysResourceItem = sysResourceCustoms.get(i);
                 treeNode = new TreeNode();
-                treeNode.setId(sysResourceItem.get("rId").toString());
-                treeNode.setLevel(Integer.valueOf(sysResourceItem.get("rLevel").toString()));
+                treeNode.setId(sysResourceItem.get("resId").toString());
+                treeNode.setLevel(Integer.valueOf(sysResourceItem.get("resLevel").toString()));
                 treeNode.setParentId(sysResourceItem.get("parentId").toString());
-                treeNode.setName(sysResourceItem.get("rName").toString());
+                treeNode.setName(sysResourceItem.get("resName").toString());
                 Map<String, Object> attrs = Maps.newHashMap();
                 attrs.put("leftIcon", leftIconMap.get(sysResourceItem.get("leftIcon").toString()));
                 attrs.put("routePath", sysResourceItem.get("routePath"));
@@ -125,16 +140,24 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, S
     }
 
     @Override
-    public ServerResponse<PageInfo<SysResourceCustom>> queryObjsByPage(SysResourceQueryVo entityQueryVo) {
-        SysDictQueryVo sysDictQueryVo = new SysDictQueryVo();
-        SysDictCustom condition = new SysDictCustom();
+    public ServerResponse<SkPageVo<SysResourceCustom>> queryObjsByPage(SysResourceQueryVo baseQueryVo) {
+//        SysDictQueryVo sysDictQueryVo = new SysDictQueryVo();
+//        SysDictCustom condition = new SysDictCustom();
+//
+//        sysDictQueryVo.getIsNoLike().put("dictType",true);
+//
+//        condition.setDictType(SysConst.Dict.SysResource.RES_TYPE);
+//        condition.setRecordStatus(SysConst.RecordStatus.ABLE);
+//
+//        sysDictQueryVo.setSysDictCustom(condition);
+        SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
+        SysDictCustom condition = sysDictQueryVo.getCdtCustom();
 
         sysDictQueryVo.getIsNoLike().put("dictType",true);
 
         condition.setDictType(SysConst.Dict.SysResource.RES_TYPE);
         condition.setRecordStatus(SysConst.RecordStatus.ABLE);
 
-        sysDictQueryVo.setSysDictCustom(condition);
         List<SysDictCustom> sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
         //类型
         Map<String,String> menuTypeMap = Maps.newHashMap();
@@ -160,12 +183,12 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceCustom, S
         }
 
         //数据封装
-        ServerResponse<PageInfo<SysResourceCustom>> pageInfo = super.queryObjsByPage(entityQueryVo);
+        ServerResponse<SkPageVo<SysResourceCustom>> pageInfo = super.queryObjsByPage(baseQueryVo);
         List<SysResourceCustom> data = pageInfo.getData().getList();
         for(int i = 0,len = data.size(); i < len; i++) {
             SysResourceCustom sysResourceCustom = data.get(i);
-            sysResourceCustom.setrType(menuTypeMap.get(sysResourceCustom.getrType()));
-            sysResourceCustom.setRLevelStr(menuLevelMap.get(sysResourceCustom.getrLevel().toString()));
+            sysResourceCustom.setResType(menuTypeMap.get(sysResourceCustom.getResType()));
+            sysResourceCustom.setResLevelStr(menuLevelMap.get(sysResourceCustom.getResLevel().toString()));
             sysResourceCustom.setLeftIcon(leftIconMap.get(sysResourceCustom.getLeftIcon()));
         }
         return pageInfo;

@@ -1,242 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.sk.temp.sys.mapper.SysLogMapper">
+
+  <!-- 通用查询映射结果 -->
   <resultMap id="BaseResultMap" type="cn.sk.temp.sys.pojo.SysLog">
-    <constructor>
-      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="user_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="operation" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="method_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="params" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="ip" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="request_url" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="request_type" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="expan_1" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="expan_2" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="expan_3" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="expan_4" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="expan_5" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="expan_6" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="record_status" javaType="java.lang.String" jdbcType="CHAR" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
+    <id column="id" property="id" />
+    <result column="user_id" property="userId" />
+    <result column="user_name" property="userName" />
+    <result column="operation" property="operation" />
+    <result column="method_name" property="methodName" />
+    <result column="params" property="params" />
+    <result column="ip" property="ip" />
+    <result column="request_url" property="requestUrl" />
+    <result column="request_type" property="requestType" />
+    <result column="expan1" property="expan1" />
+    <result column="expan2" property="expan2" />
+    <result column="expan3" property="expan3" />
+    <result column="expan4" property="expan4" />
+    <result column="expan5" property="expan5" />
+    <result column="expan6" property="expan6" />
+    <result column="record_status" property="recordStatus" />
+    <result column="update_time" property="updateTime" />
+    <result column="create_time" property="createTime" />
   </resultMap>
+
+  <!-- 通用查询结果列 -->
   <sql id="Base_Column_List">
-    id, user_id, user_name, operation, method_name, params, ip, request_url, request_type,
-    expan_1, expan_2, expan_3, expan_4, expan_5, expan_6, record_status, update_time, 
-    create_time
+        id, user_id, user_name, operation, method_name, params, ip, request_url, request_type, expan1, expan2, expan3, expan4, expan5, expan6 , record_status  , update_time  , create_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapCustom">
-    select 
-    <include refid="Base_Column_List" />
-    from tb_sys_log
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from tb_sys_log
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="cn.sk.temp.sys.pojo.SysLog">
-    insert into tb_sys_log (id, user_id, user_name, 
-      operation, method_name, params, 
-      ip, request_url, request_type,
-      expan_1, expan_2, expan_3, 
-      expan_4, expan_5, expan_6, 
-      record_status, update_time, create_time
-      )
-    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
-      #{operation,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, #{params,jdbcType=VARCHAR}, 
-      #{ip,jdbcType=VARCHAR}, #{requestUrl,jdbcType=VARCHAR}, #{requestType,jdbcType=VARCHAR},
-      #{expan1,jdbcType=VARCHAR}, #{expan2,jdbcType=VARCHAR}, #{expan3,jdbcType=VARCHAR}, 
-      #{expan4,jdbcType=VARCHAR}, #{expan5,jdbcType=VARCHAR}, #{expan6,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=CHAR}, now(), now()
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="cn.sk.temp.sys.pojo.SysLog">
-    insert into tb_sys_log
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="userName != null">
-        user_name,
-      </if>
-      <if test="operation != null">
-        operation,
-      </if>
-      <if test="methodName != null">
-        method_name,
-      </if>
-      <if test="params != null">
-        params,
-      </if>
-      <if test="ip != null">
-        ip,
-      </if>
-      <if test="requestUrl != null">
-        request_url,
-      </if>
-      <if test="requestType != null">
-        request_type,
-      </if>
-      <if test="expan1 != null">
-        expan_1,
-      </if>
-      <if test="expan2 != null">
-        expan_2,
-      </if>
-      <if test="expan3 != null">
-        expan_3,
-      </if>
-      <if test="expan4 != null">
-        expan_4,
-      </if>
-      <if test="expan5 != null">
-        expan_5,
-      </if>
-      <if test="expan6 != null">
-        expan_6,
-      </if>
-      <if test="recordStatus != null">
-        record_status,
-      </if>
-        update_time,
-        create_time,
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="operation != null">
-        #{operation,jdbcType=VARCHAR},
-      </if>
-      <if test="methodName != null">
-        #{methodName,jdbcType=VARCHAR},
-      </if>
-      <if test="params != null">
-        #{params,jdbcType=VARCHAR},
-      </if>
-      <if test="ip != null">
-        #{ip,jdbcType=VARCHAR},
-      </if>
-      <if test="requestUrl != null">
-        #{requestUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="requestType != null">
-        #{requestType,jdbcType=VARCHAR},
-      </if>
-      <if test="expan1 != null">
-        #{expan1,jdbcType=VARCHAR},
-      </if>
-      <if test="expan2 != null">
-        #{expan2,jdbcType=VARCHAR},
-      </if>
-      <if test="expan3 != null">
-        #{expan3,jdbcType=VARCHAR},
-      </if>
-      <if test="expan4 != null">
-        #{expan4,jdbcType=VARCHAR},
-      </if>
-      <if test="expan5 != null">
-        #{expan5,jdbcType=VARCHAR},
-      </if>
-      <if test="expan6 != null">
-        #{expan6,jdbcType=VARCHAR},
-      </if>
-      <if test="recordStatus != null">
-        #{recordStatus,jdbcType=CHAR},
-      </if>
-      now(),
-      now(),
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.sk.temp.sys.pojo.SysLog">
-    update tb_sys_log
-    <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="operation != null">
-        operation = #{operation,jdbcType=VARCHAR},
-      </if>
-      <if test="methodName != null">
-        method_name = #{methodName,jdbcType=VARCHAR},
-      </if>
-      <if test="params != null">
-        params = #{params,jdbcType=VARCHAR},
-      </if>
-      <if test="ip != null">
-        ip = #{ip,jdbcType=VARCHAR},
-      </if>
-      <if test="requestUrl != null">
-        request_url = #{requestUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="requestType != null">
-        request_type = #{requestType,jdbcType=VARCHAR},
-      </if>
-      <if test="expan1 != null">
-        expan_1 = #{expan1,jdbcType=VARCHAR},
-      </if>
-      <if test="expan2 != null">
-        expan_2 = #{expan2,jdbcType=VARCHAR},
-      </if>
-      <if test="expan3 != null">
-        expan_3 = #{expan3,jdbcType=VARCHAR},
-      </if>
-      <if test="expan4 != null">
-        expan_4 = #{expan4,jdbcType=VARCHAR},
-      </if>
-      <if test="expan5 != null">
-        expan_5 = #{expan5,jdbcType=VARCHAR},
-      </if>
-      <if test="expan6 != null">
-        expan_6 = #{expan6,jdbcType=VARCHAR},
-      </if>
-      <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=CHAR},
-      </if>
-        update_time = now(),
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.sk.temp.sys.pojo.SysLog">
-    update tb_sys_log
-    set user_id = #{userId,jdbcType=INTEGER},
-      user_name = #{userName,jdbcType=VARCHAR},
-      operation = #{operation,jdbcType=VARCHAR},
-      method_name = #{methodName,jdbcType=VARCHAR},
-      params = #{params,jdbcType=VARCHAR},
-      ip = #{ip,jdbcType=VARCHAR},
-      request_url = #{requestUrl,jdbcType=VARCHAR},
-      request_type = #{requestType,jdbcType=VARCHAR},
-      expan_1 = #{expan1,jdbcType=VARCHAR},
-      expan_2 = #{expan2,jdbcType=VARCHAR},
-      expan_3 = #{expan3,jdbcType=VARCHAR},
-      expan_4 = #{expan4,jdbcType=VARCHAR},
-      expan_5 = #{expan5,jdbcType=VARCHAR},
-      expan_6 = #{expan6,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=CHAR},
-      update_time = now(),
-      create_time = #{createTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
 
 
   <!--以下是自定义的-->
@@ -266,6 +57,17 @@
     </if>
   </sql>
 
+
+  <!--根据条件统计条数-->
+  <select id="selectCountByQueryVo" parameterType="cn.sk.temp.sys.pojo.SysLogQueryVo" resultType="long">
+    select count(1) from tb_sys_log
+    <where>
+      <!-- 引用sql片段 的id,如果refid指定的id不在本mapper文件中,要前边加namespace -->
+      <include refid="base_query_condition"></include>
+      AND record_status != '00'
+    </where>
+  </select>
+
   <!--根据条件查询-->
   <select id="selectListByQueryVo" parameterType="cn.sk.temp.sys.pojo.SysLogQueryVo" resultMap="ResultMapCustom">
     select
@@ -277,6 +79,7 @@
       AND record_status != '00'
     </where>
     <include refid="cn.sk.temp.base.mapper.IBaseMapper.base_order"/>
+    <include refid="cn.sk.temp.base.mapper.IBaseMapper.base_query_page"></include>
   </select>
 
   <!--根据主键软删除-->

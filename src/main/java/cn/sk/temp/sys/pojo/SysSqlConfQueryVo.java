@@ -10,5 +10,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SysSqlConfQueryVo extends BaseQueryVo {
-    private SysSqlConfCustom sysSqlConfCustom;
+    private SysSqlConfCustom cdtCustom = new SysSqlConfCustom();
+
+    public static SysSqlConfQueryVo newInstance() {
+        return new SysSqlConfQueryVo();
+    }
 }

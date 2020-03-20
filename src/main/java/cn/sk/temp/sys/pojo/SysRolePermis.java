@@ -1,43 +1,36 @@
 package cn.sk.temp.sys.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@TableName("tb_sys_role_permis")
+@AllArgsConstructor
 public class SysRolePermis {
+    /**
+     * id
+     */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    /**
+     * 角色id
+     */
     private Integer roleId;
 
+    /**
+     * 权限id
+     */
     private Integer permisId;
 
-    public SysRolePermis(Integer id, Integer roleId, Integer permisId) {
-        this.id = id;
-        this.roleId = roleId;
-        this.permisId = permisId;
-    }
+//
+//    @Override
+//    protected Serializable getPkVal() {
+//        return id;
+//    }
 
-    public SysRolePermis() {
-        super();
-    }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public Integer getPermisId() {
-        return permisId;
-    }
-
-    public void setPermisId(Integer permisId) {
-        this.permisId = permisId;
-    }
 }

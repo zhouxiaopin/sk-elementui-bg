@@ -1,10 +1,10 @@
 package cn.sk.temp.sys.service.impl;
 
 import cn.sk.temp.base.service.impl.BaseServiceImpl;
-import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.common.CustomException;
 import cn.sk.temp.sys.common.ResponseCode;
 import cn.sk.temp.sys.common.ServerResponse;
+import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.mapper.SysRoleMapper;
 import cn.sk.temp.sys.mapper.SysUserMapper;
 import cn.sk.temp.sys.mapper.SysUserRoleMapper;
@@ -28,7 +28,7 @@ import java.util.Map;
  * 系统用户业务逻辑接口实现类
  */
 @Service
-public class SysUserServiceImpl extends BaseServiceImpl<SysUserCustom, SysUserQueryVo> implements ISysUserService {
+public class SysUserServiceImpl extends BaseServiceImpl<SysUserCustom, SysUserQueryVo,SysUserMapper> implements ISysUserService {
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
@@ -57,7 +57,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserCustom, SysUserQu
         if(!ArrayUtils.isEmpty(roleIds)) {
             List<SysUserRole> sysUserRoles = Lists.newArrayList();
             for(int i = 0,len = roleIds.length; i < len; i++) {
-                SysUserRole sysUserRole = new SysUserRole(null,sysUserCustom.getuId(),
+                SysUserRole sysUserRole = new SysUserRole(null,sysUserCustom.getUserId(),
                         Integer.valueOf(roleIds[i]));
                 sysUserRoles.add(sysUserRole);
             }
@@ -73,7 +73,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserCustom, SysUserQu
     public ServerResponse<SysUserCustom> queryObj(SysUserCustom entityCustom) {
         ServerResponse<SysUserCustom> serverResponse = super.queryObj(entityCustom);
         //查询用户角色
-        List<SysUserRole> sysUserRoles = sysUserRoleMapper.selectByUserId(entityCustom.getuId());
+        List<SysUserRole> sysUserRoles = sysUserRoleMapper.selectByUserId(entityCustom.getUserId());
         StringBuilder roleIds = new StringBuilder();
         for(int i = 0,len = sysUserRoles.size(); i < len; i++) {
             roleIds.append(sysUserRoles.get(i).getRoleId()).append(",");
@@ -93,7 +93,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserCustom, SysUserQu
         }
 
         //查询系统用户之前是有拥有角色
-        Integer userId = sysUserCustom.getuId();
+        Integer userId = sysUserCustom.getUserId();
         List<SysUserRole> sysUserRoles = sysUserRoleMapper.selectByUserId(userId);
         if(!CollectionUtils.isEmpty(sysUserRoles)) {
             //清除原来的角色
@@ -109,7 +109,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserCustom, SysUserQu
         if(!ArrayUtils.isEmpty(roleIds)) {
             sysUserRoles = Lists.newArrayList();
             for(int i = 0,len = roleIds.length; i < len; i++) {
-                SysUserRole sysUserRole = new SysUserRole(null,sysUserCustom.getuId(),
+                SysUserRole sysUserRole = new SysUserRole(null,sysUserCustom.getUserId(),
                         Integer.valueOf(roleIds[i]));
                 sysUserRoles.add(sysUserRole);
             }
@@ -124,7 +124,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserCustom, SysUserQu
     @Override
     public ServerResponse<List<SysUserCustom>> queryObjs(SysUserQueryVo entityQueryVo) {
 
-        List<SysUserCustom> list = baseMapper.selectListByQueryVo(entityQueryVo);
+        List<SysUserCustom> list = skBaseMapper.selectListByQueryVo(entityQueryVo);
 
         Map<String,Object> params = Maps.newHashMap();
         params.put("recordStatus", SysConst.RecordStatus.ABLE);
@@ -132,7 +132,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserCustom, SysUserQu
         for(int i = 0,len = list.size(); i < len; i++) {
             SysUserCustom sysUserCustom = list.get(i);
 
-            params.put("userId",sysUserCustom.getuId());
+            params.put("userId",sysUserCustom.getUserId());
             //根据用户id查找权限
             List<Map<String,Object>> sysRoles = sysRoleMapper.selectListByUserId(params);
             roleNames.delete(0,roleNames.length());

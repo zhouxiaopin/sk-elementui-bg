@@ -56,7 +56,7 @@ public class LogUtil {
         //获取用户名
         SysUserCustom sysUserInfo = (SysUserCustom) SecurityUtils.getSubject().getPrincipal();
         if(!ObjectUtils.isEmpty(sysUserInfo)) {
-            sysLogCustom.setUserId(sysUserInfo.getuId());
+            sysLogCustom.setUserId(sysUserInfo.getUserId());
             sysLogCustom.setUserName(sysUserInfo.getUserName());
         }
         //获取用户ip地址

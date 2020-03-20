@@ -1,43 +1,39 @@
 package cn.sk.temp.sys.pojo;
 
-public class SysUserRole {
+import cn.sk.temp.base.pojo.BaseModel;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+@TableName("tb_sys_user_role")
+@AllArgsConstructor
+public class SysUserRole extends BaseModel {
+    /**
+     * id
+     */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    /**
+     * 用户id
+     */
     private Integer userId;
 
+    /**
+     * 角色id
+     */
     private Integer roleId;
 
-    public SysUserRole(Integer id, Integer userId, Integer roleId) {
-        this.id = id;
-        this.userId = userId;
-        this.roleId = roleId;
-    }
 
-    public SysUserRole() {
-        super();
-    }
-
-    public Integer getId() {
+    @Override
+    public Serializable getPkVal() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
     }
 }

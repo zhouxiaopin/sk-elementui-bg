@@ -1,8 +1,8 @@
 package cn.sk.temp.sys.controller;
 
 import cn.sk.temp.base.controller.BaseController;
-import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.common.ServerResponse;
+import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.pojo.SysPermisCustom;
 import cn.sk.temp.sys.pojo.SysPermisQueryVo;
 import cn.sk.temp.sys.service.ISysPermisService;
@@ -13,6 +13,7 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +35,7 @@ public class SysPermisController extends BaseController<SysPermisCustom, SysPerm
 
     //更新记录状态，禁用启用切换
     @PostMapping(value = "updateRecordStatus")
-    public ServerResponse<SysPermisCustom> updateRecordStatus(SysPermisCustom sysPermisCustom) {
+    public ServerResponse<SysPermisCustom> updateRecordStatus(@RequestBody SysPermisCustom sysPermisCustom) {
         //权限校验
         authorityValidate(UPDATE_RECORDSTATUS_OPRT);
 
@@ -62,25 +63,31 @@ public class SysPermisController extends BaseController<SysPermisCustom, SysPerm
         return sysPermisService.querySysPermisTree(sysPermisQueryVo);
     }
 
+    //获取权限
+    @PostMapping(value = "getPermis")
+    public ServerResponse getPermis() {
+        return sysPermisService.getPermis();
+    }
+
 
 
     /****************************以下是重新父类的方法*****************************/
 
     //根据oprt返回对应的页面
-    @Override
-    protected String getPage(String oprt) {
-        String prefix = "sys/sysPermis/";
-        if (oprt.equals(QUERY_OPRT)) {
-            return prefix + "sysPermisQuery";
-        }
-        if (oprt.equals(UPDATE_OPRT)) {
-            return prefix + "sysPermis";
-        }
-        if (oprt.equals(ADD_OPRT)) {
-            return prefix + "sysPermis";
-        }
-        return super.getPage(oprt);
-    }
+//    @Override
+//    protected String getPage(String oprt) {
+//        String prefix = "sys/sysPermis/";
+//        if (oprt.equals(QUERY_OPRT)) {
+//            return prefix + "sysPermisQuery";
+//        }
+//        if (oprt.equals(UPDATE_OPRT)) {
+//            return prefix + "sysPermis";
+//        }
+//        if (oprt.equals(ADD_OPRT)) {
+//            return prefix + "sysPermis";
+//        }
+//        return super.getPage(oprt);
+//    }
 
     //参数检验
     @Override

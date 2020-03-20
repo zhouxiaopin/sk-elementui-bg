@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 系统数字字典业务逻辑接口
  */
-public interface ISysDictService extends IBaseService<SysDictCustom,SysDictQueryVo>{
+public interface ISysDictService extends IBaseService<SysDictCustom, SysDictQueryVo>{
     /**
      * 获取字典kv键值对
      * @param dictType

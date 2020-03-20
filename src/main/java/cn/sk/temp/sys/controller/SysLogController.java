@@ -25,16 +25,15 @@ public class SysLogController extends BaseController<SysLogCustom, SysLogQueryVo
     /****************************以下是重新父类的方法*****************************/
 
     //根据oprt返回对应的页面
-    @Override
-    protected String getPage(String oprt) {
-        String prefix = "sys/sysLog/";
-        if (oprt.equals(QUERY_OPRT)) {
-            return prefix + "sysLogQuery";
-        }
-        return super.getPage(oprt);
-    }
+//    @Override
+//    protected String getPage(String oprt) {
 
-    //权限校验
+    //权限校验//        String prefix = "sys/sysLog/";
+    ////        if (oprt.equals(QUERY_OPRT)) {
+    ////            return prefix + "sysLogQuery";
+    ////        }
+    ////        return super.getPage(oprt);
+    ////    }
     @Override
     protected void authorityValidate(String oprt) {
         switch (oprt) {

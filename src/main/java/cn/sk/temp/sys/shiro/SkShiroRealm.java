@@ -1,13 +1,14 @@
 package cn.sk.temp.sys.shiro;
 
+import cn.sk.temp.sys.common.ResponseCode;
 import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.common.TokenCache;
 import cn.sk.temp.sys.mapper.SysPermisMapper;
 import cn.sk.temp.sys.mapper.SysRoleMapper;
 import cn.sk.temp.sys.pojo.SysUserCustom;
-import cn.sk.temp.sys.pojo.SysUserQueryVo;
 import cn.sk.temp.sys.service.ISysUserService;
 import cn.sk.temp.sys.utils.JwtUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
@@ -62,13 +63,13 @@ public class SkShiroRealm extends AuthorizingRealm {
         String token = (String) auth.getCredentials();
         if (token == null) {
             log.info("token为空!");
-            throw new AuthenticationException("token为空!");
+            throw new AuthenticationException(ResponseCode.TOKEN_LOSE_EFFICACY.getMsg());
         }
         // 解密获得username，用于和数据库进行对比
         String username = JwtUtil.getUsername(token);
         if (username == null) {
             log.info("token非法无效!");
-            throw new AuthenticationException("token非法无效!");
+            throw new AuthenticationException(ResponseCode.TOKEN_ILLEGAL.getMsg());
         }
 
 
@@ -78,9 +79,9 @@ public class SkShiroRealm extends AuthorizingRealm {
         //2. 从 UsernamePasswordToken 中来获取 username
 //        String username = upToken.getUsername();
 
-        SysUserQueryVo sysUserQueryVo = SysUserQueryVo.newInstance();
-        sysUserQueryVo.getCdtCustom().setUserName(username);
-        sysUserQueryVo.getIsNoLike().put("userName",true);
+//        SysUserQueryVo sysUserQueryVo = SysUserQueryVo.newInstance();
+//        sysUserQueryVo.getCdtCustom().setUserName(username);
+//        sysUserQueryVo.getIsNoLike().put("userName",true);
 
 //        SysUserQueryVo sysUserQueryVo = new SysUserQueryVo();
 //
@@ -90,18 +91,23 @@ public class SkShiroRealm extends AuthorizingRealm {
 //        sysUserQueryVo.setSysUserCustom(condition);
 
 
-        List<SysUserCustom> sysUserCustoms = sysUserService.queryObjs(sysUserQueryVo).getData();
+//        List<SysUserCustom> sysUserCustoms = sysUserService.queryObjs(sysUserQueryVo).getData();
+
+        LambdaQueryWrapper<SysUserCustom> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUserCustom::getUserName,username);
+        SysUserCustom sysUserCustom = sysUserService.getOne(queryWrapper);
+
 
         //3. 调用数据库的方法, 从数据库中查询 username 对应的用户记录
         log.info("从数据库中获取 username: " + username + " 所对应的用户信息.");
 
 
         //4. 若用户不存在, 则可以抛出 UnknownAccountException 异常
-        if(CollectionUtils.isEmpty(sysUserCustoms)) {
+        if(null == sysUserCustom) {
             throw new UnknownAccountException("用户不存在!");
         }
 
-        SysUserCustom sysUserCustom = sysUserCustoms.get(0);
+//        SysUserCustom sysUserCustom = sysUserCustoms.get(0);
 
         //5. 根据用户信息的情况, 决定是否需要抛出其他的 AuthenticationException 异常.
 
@@ -164,7 +170,7 @@ public class SkShiroRealm extends AuthorizingRealm {
 //        Object principal = principals.getPrimaryPrincipal();
         SysUserCustom sysUserCustom = (SysUserCustom) principals.getPrimaryPrincipal();
         Map<String,Object> params = Maps.newHashMap();
-        params.put("userId",sysUserCustom.getuId());
+        params.put("userId",sysUserCustom.getUserId());
         params.put("recordStatus", SysConst.RecordStatus.ABLE);
         List<Map<String,Object>> sysRoleCustoms = sysRoleMapper.selectListByUserId(params);
         //2. 利用登录的用户的信息来用户当前用户的角色或权限(可能需要查询数据库)
@@ -190,7 +196,7 @@ public class SkShiroRealm extends AuthorizingRealm {
             for (int i = 0, len = sysPermisCustoms.size(); i < len; i++){
                 sysPermisItem = sysPermisCustoms.get(i);
 //                permissions.add(sysMenuSysRole.getSysRoleNo()+":"+sysMenuSysRole.getSysMenuNo());
-                permissions.add(sysPermisItem.get("pFlag").toString());
+                permissions.add(sysPermisItem.get("perFlag").toString());
             }
         }
 

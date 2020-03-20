@@ -1,32 +1,82 @@
 package cn.sk.temp.sys.pojo;
 
-import java.util.Date;
+import cn.sk.temp.base.pojo.BaseModel;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-public class SysResource {
-    private Integer rId;
+import java.io.Serializable;
 
-    private String rName;
+@Data
+@EqualsAndHashCode(callSuper = true)
+@TableName("tb_sys_sesource")
+public class SysResource extends BaseModel {
+    /**
+     * 资源id
+     */
+    @TableId(value = "res_id", type = IdType.AUTO)
+    private Integer resId;
 
-    private String rUrl;
+    /**
+     * 资源名
+     */
+    private String resName;
 
+    /**
+     * 资源url
+     */
+    private String resUrl;
+
+    /**
+     * 前端路由路径
+     */
     private String routePath;
 
+    /**
+     * 前端路由名
+     */
     private String routeName;
 
+    /**
+     * 前端路由组件名
+     */
     private String routeComponent;
 
+    /**
+     * 父id
+     */
     private Integer parentId;
 
-    private String rType;
+    /**
+     * 资源类型
+     */
+    private String resType;
 
-    private Integer rLevel;
+    /**
+     * 资源级别（菜单类型）
+     */
+    private Integer resLevel;
 
-    private Integer rSort;
+    /**
+     * 排序
+     */
+    private Integer resSort;
 
+    /**
+     * 描述
+     */
     private String descri;
 
+    /**
+     * 操作者id
+     */
     private Integer optId;
 
+    /**
+     * 左边的icon
+     */
     private String leftIcon;
 
     private String expand1;
@@ -35,187 +85,10 @@ public class SysResource {
 
     private String expand3;
 
-    private String recordStatus;
 
-    private Date updateTime;
-
-    private Date createTime;
-
-    public SysResource(Integer rId, String rName, String rUrl, String routePath, String routeName, String routeComponent, Integer parentId, String rType, Integer rLevel, Integer rSort, String descri, Integer optId, String leftIcon, String expand1, String expand2, String expand3, String recordStatus, Date updateTime, Date createTime) {
-        this.rId = rId;
-        this.rName = rName;
-        this.rUrl = rUrl;
-        this.routePath = routePath;
-        this.routeName = routeName;
-        this.routeComponent = routeComponent;
-        this.parentId = parentId;
-        this.rType = rType;
-        this.rLevel = rLevel;
-        this.rSort = rSort;
-        this.descri = descri;
-        this.optId = optId;
-        this.leftIcon = leftIcon;
-        this.expand1 = expand1;
-        this.expand2 = expand2;
-        this.expand3 = expand3;
-        this.recordStatus = recordStatus;
-        this.updateTime = updateTime;
-        this.createTime = createTime;
+    @Override
+    public Serializable getPkVal() {
+        return resId;
     }
 
-    public SysResource() {
-        super();
-    }
-
-    public Integer getrId() {
-        return rId;
-    }
-
-    public void setrId(Integer rId) {
-        this.rId = rId;
-    }
-
-    public String getrName() {
-        return rName;
-    }
-
-    public void setrName(String rName) {
-        this.rName = rName == null ? null : rName.trim();
-    }
-
-    public String getrUrl() {
-        return rUrl;
-    }
-
-    public void setrUrl(String rUrl) {
-        this.rUrl = rUrl == null ? null : rUrl.trim();
-    }
-
-    public String getRoutePath() {
-        return routePath;
-    }
-
-    public void setRoutePath(String routePath) {
-        this.routePath = routePath;
-    }
-
-    public String getRouteName() {
-        return routeName;
-    }
-
-    public void setRouteName(String routeName) {
-        this.routeName = routeName;
-    }
-
-    public String getRouteComponent() {
-        return routeComponent;
-    }
-
-    public void setRouteComponent(String routeComponent) {
-        this.routeComponent = routeComponent;
-    }
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getrType() {
-        return rType;
-    }
-
-    public void setrType(String rType) {
-        this.rType = rType == null ? null : rType.trim();
-    }
-
-    public Integer getrLevel() {
-        return rLevel;
-    }
-
-    public void setrLevel(Integer rLevel) {
-        this.rLevel = rLevel;
-    }
-
-    public Integer getrSort() {
-        return rSort;
-    }
-
-    public void setrSort(Integer rSort) {
-        this.rSort = rSort;
-    }
-
-    public String getDescri() {
-        return descri;
-    }
-
-    public void setDescri(String descri) {
-        this.descri = descri == null ? null : descri.trim();
-    }
-
-    public Integer getOptId() {
-        return optId;
-    }
-
-    public void setOptId(Integer optId) {
-        this.optId = optId;
-    }
-
-    public String getLeftIcon() {
-        return leftIcon;
-    }
-
-    public void setLeftIcon(String leftIcon) {
-        this.leftIcon = leftIcon == null ? null : leftIcon.trim();
-    }
-
-    public String getExpand1() {
-        return expand1;
-    }
-
-    public void setExpand1(String expand1) {
-        this.expand1 = expand1 == null ? null : expand1.trim();
-    }
-
-    public String getExpand2() {
-        return expand2;
-    }
-
-    public void setExpand2(String expand2) {
-        this.expand2 = expand2 == null ? null : expand2.trim();
-    }
-
-    public String getExpand3() {
-        return expand3;
-    }
-
-    public void setExpand3(String expand3) {
-        this.expand3 = expand3 == null ? null : expand3.trim();
-    }
-
-    public String getRecordStatus() {
-        return recordStatus;
-    }
-
-    public void setRecordStatus(String recordStatus) {
-        this.recordStatus = recordStatus == null ? null : recordStatus.trim();
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }

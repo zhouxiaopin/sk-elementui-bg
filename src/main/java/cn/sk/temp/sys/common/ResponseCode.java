@@ -7,7 +7,7 @@ public enum ResponseCode {
 
     SUCCESS(0,"SUCCESS"),
     ERROR(1,"ERROR"),
-    ILLEGAL_ARGUMENT(2,"参数错误"),
+    ILLEGAL_ARGUMENT(2,"参数不合法"),
     LOGIN_SUCCESS(10,"登录成功"),
     LOGOUT_SUCCESS(11,"退出系统成功"),
 
@@ -25,6 +25,7 @@ public enum ResponseCode {
     NO_AUTHENTICATED(-12,"请先登录"),
     LOGOUT_FAIL(-13,"退出系统失败"),
     TOKEN_LOSE_EFFICACY(-14,"token失效，请重新登录"),
+    TOKEN_ILLEGAL(-15,"token非法"),
     SYS_UNKNOWN_ERROR(-200,"系统繁忙,请稍后再试");
 
     private final int code;

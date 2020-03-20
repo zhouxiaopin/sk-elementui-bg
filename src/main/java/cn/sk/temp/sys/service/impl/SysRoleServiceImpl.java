@@ -25,7 +25,7 @@ import java.util.List;
  * 系统角色业务逻辑接口实现类
  */
 @Service
-public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQueryVo> implements ISysRoleService {
+public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQueryVo, SysRoleMapper> implements ISysRoleService {
     @Autowired
     private SysRoleMapper sysRoleMapper;
     @Autowired
@@ -81,6 +81,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQu
         }
         SysRoleCustom sysRoleCustom = serverResponse.getData();
         sysRoleCustom.setPermisIds(permisIds.toString());
+        sysRoleCustom.setOldPermisIds(permisIds.toString());
 
         //查询角色资源
         List<SysRoleResource> sysRoleResourceList = sysRoleResourceMapper.selectByRoleId(entityCustom.getRoleId());
@@ -92,6 +93,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQu
             resIds.deleteCharAt(resIds.length()-1);
         }
         sysRoleCustom.setResIds(resIds.toString());
+        sysRoleCustom.setOldResIds(resIds.toString());
         return serverResponse;
     }
 

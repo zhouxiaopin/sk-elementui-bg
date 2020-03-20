@@ -61,7 +61,7 @@ public class SysToPageServiceImpl implements ISysToPageService {
         //        SysUserCustom sysUserInfo = (SysUserCustom)SecurityUtils.getSubject().getPrincipal();
 
         Map<String,Object> params = Maps.newHashMap();
-        params.put("userId",sysUserInfo.getuId());
+        params.put("userId",sysUserInfo.getUserId());
         params.put("recordStatus", SysConst.RecordStatus.ABLE);
         List<Map<String,Object>> sysRoleCustoms = sysRoleMapper.selectListByUserId(params);
 
@@ -78,8 +78,8 @@ public class SysToPageServiceImpl implements ISysToPageService {
             params.clear();
             params.put("roleIds",roleIds);
             params.put("recordStatus", SysConst.RecordStatus.ABLE);
-            params.put("rType", SysConst.Permis.MENU);
-            params.put("orderBy", "r_sort");
+            params.put("resType", SysConst.Permis.MENU);
+            params.put("orderBy", "res_sort");
 //            List<Map<String,Object>> sysPermisCustoms = sysPermisMapper.selectListByRoleId(params);
             List<Map<String,Object>> sysResourceCustoms = sysResourceMapper.selectListByRoleId(params);
             List<TreeNode> treeNodes = Lists.newArrayList();
@@ -87,15 +87,23 @@ public class SysToPageServiceImpl implements ISysToPageService {
             TreeNode treeNode;
 
             //获取左边图片key-value对
-            SysDictQueryVo sysDictQueryVo = new SysDictQueryVo();
-            SysDictCustom condition = new SysDictCustom();
+            SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
+            SysDictCustom condition = sysDictQueryVo.getCdtCustom();
 
             sysDictQueryVo.getIsNoLike().put("dictType",true);
 
             condition.setDictType(SysConst.Dict.SysResource.LEFT_ICON);
             condition.setRecordStatus(SysConst.RecordStatus.ABLE);
 
-            sysDictQueryVo.setSysDictCustom(condition);
+//            SysDictQueryVo sysDictQueryVo = new SysDictQueryVo();
+//            SysDictCustom condition = new SysDictCustom();
+//
+//            sysDictQueryVo.getIsNoLike().put("dictType",true);
+//
+//            condition.setDictType(SysConst.Dict.SysResource.LEFT_ICON);
+//            condition.setRecordStatus(SysConst.RecordStatus.ABLE);
+//
+//            sysDictQueryVo.setSysDictCustom(condition);
             List<SysDictCustom> sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
             //左边图标
             Map<String,String> leftIconMap = Maps.newHashMap();

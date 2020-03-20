@@ -10,5 +10,15 @@
     </if>
   </sql>
 
+  <!--分页sql片段-->
+  <sql id="base_query_page">
+    <if test="null != start">
+      limit #{start}
+      <if test="null != length">
+        , #{length}
+      </if>
+    </if>
+  </sql>
+
 
 </mapper>

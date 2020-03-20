@@ -1,8 +1,8 @@
 package cn.sk.temp.sys.controller;
 
 import cn.sk.temp.base.controller.BaseController;
-import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.common.ServerResponse;
+import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.pojo.SysSqlConfCustom;
 import cn.sk.temp.sys.pojo.SysSqlConfQueryVo;
 import cn.sk.temp.sys.service.ISysSqlConfService;
@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +30,7 @@ public class SysSqlConfController extends BaseController<SysSqlConfCustom, SysSq
 
     //更新记录状态，禁用启用切换
     @PostMapping(value = "updateRecordStatus")
-    public ServerResponse<SysSqlConfCustom> updateRecordStatus(SysSqlConfCustom sysSqlConfCustom) {
+    public ServerResponse<SysSqlConfCustom> updateRecordStatus(@RequestBody SysSqlConfCustom sysSqlConfCustom) {
         //权限校验
         authorityValidate(UPDATE_RECORDSTATUS_OPRT);
 
@@ -50,38 +51,46 @@ public class SysSqlConfController extends BaseController<SysSqlConfCustom, SysSq
         }
         return serverResponse;
     }
+    //根据sql配置编码查询真正的数据
+    @PostMapping(value = "queryRealByScCode")
+    public ServerResponse<SysSqlConfCustom> queryRealByScCode(@RequestBody SysSqlConfCustom sysSqlConfCustom) {
+        //权限校验
+//        authorityValidate(UPDATE_RECORDSTATUS_OPRT);
+            String scCode = sysSqlConfCustom.getScCode();
+            if(StringUtils.isBlank(scCode)) {
+                return ServerResponse.createByParamError();
+            }
+        return sysSqlConfService.queryRealByScCode(scCode);
+    }
 
 
     /****************************以下是重新父类的方法*****************************/
 
     //根据oprt返回对应的页面
-    @Override
-    protected String getPage(String oprt) {
-        String prefix = "sys/sysSqlConf/";
-        if (oprt.equals(QUERY_OPRT)) {
-            return prefix + "sysSqlConfQuery";
-        }
-        if (oprt.equals(UPDATE_OPRT)) {
-            return prefix + "sysSqlConf";
-        }
-        if (oprt.equals(ADD_OPRT)) {
-            return prefix + "sysSqlConf";
-        }
-        return super.getPage(oprt);
-    }
+//    @Override
+//    protected String getPage(String oprt) {
+//        String prefix = "sys/sysSqlConf/";
+//        if (oprt.equals(QUERY_OPRT)) {
+//            return prefix + "sysSqlConfQuery";
+//        }
+//        if (oprt.equals(UPDATE_OPRT)) {
+//            return prefix + "sysSqlConf";
+//        }
+//        if (oprt.equals(ADD_OPRT)) {
+//            return prefix + "sysSqlConf";
+//        }
+//        return super.getPage(oprt);
+//    }
     //参数检验
     @Override
     protected ServerResponse<SysSqlConfCustom> paramValidate(String oprt, SysSqlConfCustom sysSqlConfCustom) {
         if(StringUtils.equals(oprt,ADD_OPRT)) {//添加
             //判断语句编码是否存在
-            SysSqlConfQueryVo sysSqlConfQueryVo = new SysSqlConfQueryVo();
-            SysSqlConfCustom condition = new SysSqlConfCustom();
-
+            SysSqlConfQueryVo sysSqlConfQueryVo = SysSqlConfQueryVo.newInstance();
+            sysSqlConfQueryVo.getCdtCustom().setScCode(sysSqlConfCustom.getScCode());
             sysSqlConfQueryVo.getIsNoLike().put("dictType",true);
 
-            condition.setScCode(sysSqlConfCustom.getScCode());
 
-            sysSqlConfQueryVo.setSysSqlConfCustom(condition);
             ServerResponse<List<SysSqlConfCustom>> serverResponse = this.queryAllByCondition(sysSqlConfQueryVo);
             if(!CollectionUtils.isEmpty(serverResponse.getData())){
                 return ServerResponse.createByErrorMessage("语句编码已存在");
@@ -92,14 +101,12 @@ public class SysSqlConfController extends BaseController<SysSqlConfCustom, SysSq
         }
         if(StringUtils.equals(oprt,UPDATE_OPRT)) {//修改
             //判断语句编码是否存在
-            SysSqlConfQueryVo sysSqlConfQueryVo = new SysSqlConfQueryVo();
-            SysSqlConfCustom condition = new SysSqlConfCustom();
-
+            SysSqlConfQueryVo sysSqlConfQueryVo = SysSqlConfQueryVo.newInstance();
+            sysSqlConfQueryVo.getCdtCustom().setScCode(sysSqlConfCustom.getScCode());
             sysSqlConfQueryVo.getIsNoLike().put("dictType",true);
 
-            condition.setScCode(sysSqlConfCustom.getScCode());
 
-            sysSqlConfQueryVo.setSysSqlConfCustom(condition);
+
             ServerResponse<List<SysSqlConfCustom>> serverResponse = this.queryAllByCondition(sysSqlConfQueryVo);
             List<SysSqlConfCustom> sysSqlConfCustoms = serverResponse.getData();
             if(!CollectionUtils.isEmpty(sysSqlConfCustoms)){

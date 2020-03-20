@@ -10,7 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SysDictQueryVo extends BaseQueryVo {
-    private SysDictCustom sysDictCustom;
+    private SysDictCustom cdtCustom = new SysDictCustom();
+
+    public static SysDictQueryVo newInstance() {
+        return new SysDictQueryVo();
+    }
 
     public static void getQueryKvInstance(String dictType) {
 

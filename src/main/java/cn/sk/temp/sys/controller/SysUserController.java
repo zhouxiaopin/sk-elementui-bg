@@ -8,13 +8,13 @@ import cn.sk.temp.sys.service.ISysUserService;
 import cn.sk.temp.sys.utils.DateUtils;
 import cn.sk.temp.sys.utils.JwtUtil;
 import cn.sk.temp.sys.utils.ShiroUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,12 +38,12 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
 
 
     //进入登录页面
-    @GetMapping(value = "/initLogin")
-    public ModelAndView initLogin(ModelAndView model){
-        model.addObject(OPRT_KEY, LOGIN_OPRT);
-        model.setViewName(page(LOGIN_OPRT));
-        return model;
-    }
+//    @GetMapping(value = "/initLogin")
+//    public ModelAndView initLogin(ModelAndView model){
+//        model.addObject(OPRT_KEY, LOGIN_OPRT);
+//        model.setViewName(page(LOGIN_OPRT));
+//        return model;
+//    }
 
     @SkLog(value ="登录系统", saveParams=false)
     @PostMapping(value = "/login")
@@ -51,25 +51,20 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
         String userName = sc.getUserName();
         String password = sc.getPassword();
 
-        SysUserQueryVo sysUserQueryVo = SysUserQueryVo.newInstance();
-        sysUserQueryVo.getCdtCustom().setUserName(userName);
-        sysUserQueryVo.getIsNoLike().put("userName",true);
-//        SysUserQueryVo sysUserQueryVo = new SysUserQueryVo().getEntityCustom();
-//        SysUserCustom condition = new SysUserCustom();
-//        condition.setUserName(userName);
+//        SysUserQueryVo sysUserQueryVo = SysUserQueryVo.newInstance();
+//        sysUserQueryVo.getCdtCustom().setUserName(userName);
 //        sysUserQueryVo.getIsNoLike().put("userName",true);
-//        sysUserQueryVo.setEntityCustom(condition);
 
-
-        List<SysUserCustom> sysUserCustoms = sysUserService.queryObjs(sysUserQueryVo).getData();
+//        sysUserService.getObj();
+        LambdaQueryWrapper<SysUserCustom> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUserCustom::getUserName,userName);
+        SysUserCustom sysUserCustom = sysUserService.getOne(queryWrapper);
 
 
         //4. 若用户不存在, 则可以抛出 UnknownAccountException 异常
-        if(CollectionUtils.isEmpty(sysUserCustoms)) {
+        if(null == sysUserCustom) {
             return ServerResponse.createByError(ResponseCode.LOGIN_NO_EXIST);
         }
-
-        SysUserCustom sysUserCustom = sysUserCustoms.get(0);
 
         String salt = sysUserCustom.getSalt();
         if(!sysUserCustom.getPassword().equals(ShiroUtils.getMd5Pwd(salt,new String(password)))) {
@@ -133,7 +128,7 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
 
     //更新记录状态，禁用启用切换
     @PostMapping(value = "updateRecordStatus")
-    public ServerResponse<SysUserCustom> updateRecordStatus(SysUserCustom sysUserCustom) {
+    public ServerResponse<SysUserCustom> updateRecordStatus(@RequestBody SysUserCustom sysUserCustom) {
         //权限校验
         authorityValidate(UPDATE_RECORDSTATUS_OPRT);
 
@@ -160,24 +155,24 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
     }
 
     //进入修改密码页面
-    @GetMapping(value = "/initUpdatePassword")
-    public ModelAndView initUpdatePassword(ModelAndView model, SysUserCustom sysUserCustom) throws Exception {
-        //权限校验
-        authorityValidate(UPDATE_PASSWORD_OPRT);
-        model.addObject(OPRT_KEY, UPDATE_PASSWORD_OPRT);
-        try {
-            init(model, sysUserCustom);
-        } catch (Exception e) {
-            model.addObject("msg", SysConst.ResponseMsg.OPRT_FAIL);
-        }
-        model.setViewName(page(UPDATE_PASSWORD_OPRT));
-        return model;
-    }
+//    @GetMapping(value = "/initUpdatePassword")
+//    public ModelAndView initUpdatePassword(ModelAndView model, SysUserCustom sysUserCustom) throws Exception {
+//        //权限校验
+//        authorityValidate(UPDATE_PASSWORD_OPRT);
+//        model.addObject(OPRT_KEY, UPDATE_PASSWORD_OPRT);
+//        try {
+//            init(model, sysUserCustom);
+//        } catch (Exception e) {
+//            model.addObject("msg", SysConst.ResponseMsg.OPRT_FAIL);
+//        }
+//        model.setViewName(page(UPDATE_PASSWORD_OPRT));
+//        return model;
+//    }
 
     //修改密码
     @SkLog(value ="修改密码", saveParams=false)
     @PostMapping(value = "updatePassword")
-    public ServerResponse<SysUserCustom> updatePassword(SysUserCustom sysUserCustom) {
+    public ServerResponse<SysUserCustom> updatePassword(@RequestBody SysUserCustom sysUserCustom) {
         //权限校验
         authorityValidate(UPDATE_PASSWORD_OPRT);
         //参数检验
@@ -219,26 +214,26 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
     }
 
     //根据oprt返回对应的页面
-    @Override
-    protected String getPage(String oprt) {
-        String prefix = "sys/sysUser/";
-        if (oprt.equals(LOGIN_OPRT)) {
-            return "login";
-        }
-        if (oprt.equals(QUERY_OPRT)) {
-            return prefix + "sysUserQuery";
-        }
-        if (oprt.equals(UPDATE_OPRT)) {
-            return prefix + "sysUser";
-        }
-        if (oprt.equals(ADD_OPRT)) {
-            return prefix + "sysUser";
-        }
-        if (oprt.equals(UPDATE_PASSWORD_OPRT)) {
-            return prefix + "sysUser";
-        }
-        return super.getPage(oprt);
-    }
+//    @Override
+//    protected String getPage(String oprt) {
+//        String prefix = "sys/sysUser/";
+//        if (oprt.equals(LOGIN_OPRT)) {
+//            return "login";
+//        }
+//        if (oprt.equals(QUERY_OPRT)) {
+//            return prefix + "sysUserQuery";
+//        }
+//        if (oprt.equals(UPDATE_OPRT)) {
+//            return prefix + "sysUser";
+//        }
+//        if (oprt.equals(ADD_OPRT)) {
+//            return prefix + "sysUser";
+//        }
+//        if (oprt.equals(UPDATE_PASSWORD_OPRT)) {
+//            return prefix + "sysUser";
+//        }
+//        return super.getPage(oprt);
+//    }
 
     //参数检验
     @Override
@@ -289,7 +284,7 @@ public class SysUserController extends BaseController<SysUserCustom, SysUserQuer
                 List<SysUserCustom> sysUserCustoms = serverResponse.getData();
                 if(!CollectionUtils.isEmpty(sysUserCustoms)){
                     for (int i = 0, len = sysUserCustoms.size(); i < len; i++){
-                        if(sysUserCustom.getuId() != sysUserCustoms.get(i).getuId()) {
+                        if(sysUserCustom.getUserId() != sysUserCustoms.get(i).getUserId()) {
                             return ServerResponse.createByErrorMessage("用户名已存在");
                         }
                     }

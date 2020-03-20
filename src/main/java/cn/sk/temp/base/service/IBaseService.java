@@ -1,16 +1,16 @@
 package cn.sk.temp.base.service;
 
 import cn.sk.temp.sys.common.ServerResponse;
-import com.github.pagehelper.PageInfo;
+import cn.sk.temp.sys.pojo.SkPageVo;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
 /**
  * 基本Service
  * @param <T>   实体扩展类
- * @param <V>   实体包装类
  */
-public interface IBaseService<T,V> {
+public interface IBaseService<T,V> extends IService<T> {
     //添加单个对象
     ServerResponse<T> insert(T entityCustom);
 
@@ -31,7 +31,7 @@ public interface IBaseService<T,V> {
 
     //分页查询数据列表
 //    ServerResponse<DataTableVo> queryObjsByPage(V entityQueryVo);
-    ServerResponse<PageInfo<T>> queryObjsByPage(V entityQueryVo);
+    ServerResponse<SkPageVo<T>> queryObjsByPage(V entityQueryVo);
 
     //分页查询数据列表
 //    ServerResponse<DataTableVo> queryObjsByPage(V entityQueryVo);

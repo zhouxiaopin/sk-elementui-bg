@@ -1,124 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.sk.temp.sys.mapper.SysRoleMapper">
+    <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.sk.temp.sys.pojo.SysRole">
-        <constructor>
-            <idArg column="role_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="role_flag" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="role_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="descri" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="opt_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="record_status" javaType="java.lang.String" jdbcType="CHAR"/>
-            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
-            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
-        </constructor>
+        <id column="role_id" property="roleId" />
+        <result column="role_flag" property="roleFlag" />
+        <result column="role_name" property="roleName" />
+        <result column="descri" property="descri" />
+        <result column="opt_id" property="optId" />
+        <result column="record_status" property="recordStatus" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
     </resultMap>
+
+    <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
     role_id, role_flag, role_name, sr.descri, opt_id, sr.record_status, sr.update_time, sr.create_time
   </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapCustom">
-        select
-        <include refid="Base_Column_List"/>
-        from tb_sys_role sr
-        where role_id = #{roleId,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from tb_sys_role
-    where role_id = #{roleId,jdbcType=INTEGER}
-  </delete>
-    <insert id="insert" parameterType="cn.sk.temp.sys.pojo.SysRole" useGeneratedKeys="true"
-            keyProperty="roleId">
-    insert into tb_sys_role (role_id, role_flag, role_name, 
-      descri, opt_id, record_status, 
-      update_time, create_time)
-    values (#{roleId,jdbcType=INTEGER}, #{roleFlag,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
-      #{descri,jdbcType=VARCHAR}, #{optId,jdbcType=INTEGER}, #{recordStatus,jdbcType=CHAR}, 
-      now(), now())
-  </insert>
-    <insert id="insertSelective" parameterType="cn.sk.temp.sys.pojo.SysRole" useGeneratedKeys="true"
-            keyProperty="roleId">
-        insert into tb_sys_role
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="roleId != null">
-                role_id,
-            </if>
-            <if test="roleFlag != null">
-                role_flag,
-            </if>
-            <if test="roleName != null">
-                role_name,
-            </if>
-            <if test="descri != null">
-                descri,
-            </if>
-            <if test="optId != null">
-                opt_id,
-            </if>
-            <if test="recordStatus != null">
-                record_status,
-            </if>
-            update_time,
-            create_time,
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="roleId != null">
-                #{roleId,jdbcType=INTEGER},
-            </if>
-            <if test="roleFlag != null">
-                #{roleFlag,jdbcType=VARCHAR},
-            </if>
-            <if test="roleName != null">
-                #{roleName,jdbcType=VARCHAR},
-            </if>
-            <if test="descri != null">
-                #{descri,jdbcType=VARCHAR},
-            </if>
-            <if test="optId != null">
-                #{optId,jdbcType=INTEGER},
-            </if>
-            <if test="recordStatus != null">
-                #{recordStatus,jdbcType=CHAR},
-            </if>
-            now(),
-            now(),
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="cn.sk.temp.sys.pojo.SysRole">
-        update tb_sys_role
-        <set>
-            <if test="roleFlag != null">
-                role_flag = #{roleFlag,jdbcType=VARCHAR},
-            </if>
-            <if test="roleName != null">
-                role_name = #{roleName,jdbcType=VARCHAR},
-            </if>
-            <if test="descri != null">
-                descri = #{descri,jdbcType=VARCHAR},
-            </if>
-            <if test="optId != null">
-                opt_id = #{optId,jdbcType=INTEGER},
-            </if>
-            <if test="recordStatus != null">
-                record_status = #{recordStatus,jdbcType=CHAR},
-            </if>
-            update_time = now(),
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where role_id = #{roleId,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="cn.sk.temp.sys.pojo.SysRole">
-    update tb_sys_role
-    set role_flag = #{roleFlag,jdbcType=VARCHAR},
-      role_name = #{roleName,jdbcType=VARCHAR},
-      descri = #{descri,jdbcType=VARCHAR},
-      opt_id = #{optId,jdbcType=INTEGER},
-      record_status = #{recordStatus,jdbcType=CHAR},
-      update_time = now(),
-      create_time = #{createTime,jdbcType=TIMESTAMP}
-    where role_id = #{roleId,jdbcType=INTEGER}
-  </update>
 
 
     <!-- 表与实体映射 -->
@@ -145,18 +43,29 @@
         </if>
     </sql>
 
+    <!--根据条件统计条数-->
+    <select id="selectCountByQueryVo" parameterType="cn.sk.temp.sys.pojo.SysRoleQueryVo" resultType="long">
+        select count(1) from tb_sys_role
+        <where>
+            <!-- 引用sql片段 的id,如果refid指定的id不在本mapper文件中,要前边加namespace -->
+            <include refid="base_query_condition"></include>
+            AND record_status != '00'
+        </where>
+    </select>
+
     <!--根据条件查询-->
     <select id="selectListByQueryVo" parameterType="cn.sk.temp.sys.pojo.SysRoleQueryVo" resultMap="ResultMapCustom">
         select
         <include refid="Base_Column_List"/>,su.user_name
         from tb_sys_role sr LEFT JOIN tb_sys_user su
-        on sr.opt_id = su.u_id
+        on sr.opt_id = su.user_id
         <where>
             <!-- 引用sql片段 的id,如果refid指定的id不在本mapper文件中,要前边加namespace -->
             <include refid="base_query_condition"></include>
             AND sr.record_status != '00'
         </where>
         <include refid="cn.sk.temp.base.mapper.IBaseMapper.base_order"/>
+        <include refid="cn.sk.temp.base.mapper.IBaseMapper.base_query_page"></include>
     </select>
 
     <!--根据用户id查找角色-->

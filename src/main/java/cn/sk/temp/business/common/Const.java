@@ -49,21 +49,12 @@ public class Const {
 
     //字典类型
     public interface Dict{
+        String RECORD_STATUS = "record_status";
         //机构
         class Organ{
             //类型
             public static final String ORG_TYPE = "org_type";
         }
-        //报修
-        class Repair{
-            //报修类型
-            public static final String REPAIR_TYPE = "repair_type";
-            //报修位置（楼层）
-            public static final String REPAIR_POSI_STOREY = "repair_posi_storey";
-            //报修记录状态
-            public static final String REPAIR_RECORD_STATUS = "repair_record_status";
-        }
-
     }
 
     //shiro权限配置

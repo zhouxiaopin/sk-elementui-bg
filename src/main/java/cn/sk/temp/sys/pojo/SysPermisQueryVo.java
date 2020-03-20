@@ -10,7 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SysPermisQueryVo extends BaseQueryVo {
-    private SysPermisCustom sysPermisCustom;
+    private SysPermisCustom cdtCustom = new SysPermisCustom();
+
+    public static SysPermisQueryVo newInstance() {
+        return new SysPermisQueryVo();
+    }
     //权限级别
 //    private Integer greaterThanPLevel;
 

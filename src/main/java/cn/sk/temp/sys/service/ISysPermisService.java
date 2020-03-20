@@ -11,7 +11,9 @@ import java.util.Map;
 /**
  * 系统权限业务逻辑接口
  */
-public interface ISysPermisService extends IBaseService<SysPermisCustom,SysPermisQueryVo>{
+public interface ISysPermisService extends IBaseService<SysPermisCustom, SysPermisQueryVo>{
     //根据条件获取树形
     ServerResponse<List<Map<String,Object>>> querySysPermisTree(SysPermisQueryVo sysPermisQueryVo);
+    //获取权限
+    ServerResponse getPermis();
 }

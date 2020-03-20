@@ -1,28 +1,87 @@
 package cn.sk.temp.sys.pojo;
 
-import java.util.Date;
+import cn.sk.temp.base.pojo.BaseModel;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-public class SysPermis {
-    private Integer pId;
+import java.io.Serializable;
 
-    private String pFlag;
+@Data
+@EqualsAndHashCode(callSuper = true)
+@TableName("tb_sys_permis")
+public class SysPermis extends BaseModel {
+    /**
+     * 权限id
+     */
+    @TableId(value = "per_id", type = IdType.AUTO)
+    private Integer perId;
 
-    private String pName;
+    /**
+     * 权限标识
+     */
+    private String perFlag;
 
-    private String pUrl;
+    /**
+     * 菜单名
+     */
+    private String perName;
 
+    /**
+     * 菜单url
+     */
+    private String perUrl;
+
+    /**
+     * 前端路由路径
+     */
+    private String routePath;
+
+    /**
+     * 前端路由名
+     */
+    private String routeName;
+
+    /**
+     * 前端路由组件名
+     */
+    private String routeComponent;
+
+    /**
+     * 父id
+     */
     private Integer parentId;
 
-    private String pType;
+    /**
+     * 权限类型
+     */
+    private String perType;
 
-    private Integer pLevel;
+    /**
+     * 权限级别（菜单类型）
+     */
+    private Integer perLevel;
 
-    private Integer pSort;
+    /**
+     * 排序
+     */
+    private Integer perSort;
 
+    /**
+     * 描述
+     */
     private String descri;
 
+    /**
+     * 操作者id
+     */
     private Integer optId;
 
+    /**
+     * 左边的icon
+     */
     private String leftIcon;
 
     private String expand1;
@@ -31,169 +90,11 @@ public class SysPermis {
 
     private String expand3;
 
-    private String recordStatus;
 
-    private Date updateTime;
 
-    private Date createTime;
-
-    public SysPermis(Integer pId, String pFlag, String pName, String pUrl, Integer parentId, String pType, Integer pLevel, Integer pSort, String descri, Integer optId, String leftIcon, String expand1, String expand2, String expand3, String recordStatus, Date updateTime, Date createTime) {
-        this.pId = pId;
-        this.pFlag = pFlag;
-        this.pName = pName;
-        this.pUrl = pUrl;
-        this.parentId = parentId;
-        this.pType = pType;
-        this.pLevel = pLevel;
-        this.pSort = pSort;
-        this.descri = descri;
-        this.optId = optId;
-        this.leftIcon = leftIcon;
-        this.expand1 = expand1;
-        this.expand2 = expand2;
-        this.expand3 = expand3;
-        this.recordStatus = recordStatus;
-        this.updateTime = updateTime;
-        this.createTime = createTime;
+    @Override
+    public Serializable getPkVal() {
+        return perId;
     }
 
-    public SysPermis() {
-        super();
-    }
-
-    public Integer getpId() {
-        return pId;
-    }
-
-    public void setpId(Integer pId) {
-        this.pId = pId;
-    }
-
-    public String getpFlag() {
-        return pFlag;
-    }
-
-    public void setpFlag(String pFlag) {
-        this.pFlag = pFlag == null ? null : pFlag.trim();
-    }
-
-    public String getpName() {
-        return pName;
-    }
-
-    public void setpName(String pName) {
-        this.pName = pName == null ? null : pName.trim();
-    }
-
-    public String getpUrl() {
-        return pUrl;
-    }
-
-    public void setpUrl(String pUrl) {
-        this.pUrl = pUrl;
-    }
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getpType() {
-        return pType;
-    }
-
-    public void setpType(String pType) {
-        this.pType = pType == null ? null : pType.trim();
-    }
-
-    public Integer getpLevel() {
-        return pLevel;
-    }
-
-    public void setpLevel(Integer pLevel) {
-        this.pLevel = pLevel;
-    }
-
-    public Integer getpSort() {
-        return pSort;
-    }
-
-    public void setpSort(Integer pSort) {
-        this.pSort = pSort;
-    }
-
-    public String getDescri() {
-        return descri;
-    }
-
-    public void setDescri(String descri) {
-        this.descri = descri == null ? null : descri.trim();
-    }
-
-    public Integer getOptId() {
-        return optId;
-    }
-
-    public void setOptId(Integer optId) {
-        this.optId = optId;
-    }
-
-    public String getLeftIcon() {
-        return leftIcon;
-    }
-
-    public void setLeftIcon(String leftIcon) {
-        this.leftIcon = leftIcon == null ? null : leftIcon.trim();
-    }
-
-    public String getExpand1() {
-        return expand1;
-    }
-
-    public void setExpand1(String expand1) {
-        this.expand1 = expand1 == null ? null : expand1.trim();
-    }
-
-    public String getExpand2() {
-        return expand2;
-    }
-
-    public void setExpand2(String expand2) {
-        this.expand2 = expand2 == null ? null : expand2.trim();
-    }
-
-    public String getExpand3() {
-        return expand3;
-    }
-
-    public void setExpand3(String expand3) {
-        this.expand3 = expand3 == null ? null : expand3.trim();
-    }
-
-    public String getRecordStatus() {
-        return recordStatus;
-    }
-
-    public void setRecordStatus(String recordStatus) {
-        this.recordStatus = recordStatus == null ? null : recordStatus.trim();
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }

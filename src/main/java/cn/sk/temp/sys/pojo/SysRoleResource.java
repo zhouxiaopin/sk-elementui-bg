@@ -1,43 +1,35 @@
 package cn.sk.temp.sys.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@TableName("tb_sys_role_resource")
+@AllArgsConstructor
 public class SysRoleResource {
+    /**
+     * id
+     */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    /**
+     * 角色id
+     */
     private Integer roleId;
 
+    /**
+     * 资源id
+     */
     private Integer resId;
 
-    public SysRoleResource(Integer id, Integer roleId, Integer resId) {
-        this.id = id;
-        this.roleId = roleId;
-        this.resId = resId;
-    }
+//
+//    @Override
+//    protected Serializable getPkVal() {
+//        return id;
+//    }
 
-    public SysRoleResource() {
-        super();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public Integer getResId() {
-        return resId;
-    }
-
-    public void setResId(Integer resId) {
-        this.resId = resId;
-    }
 }
