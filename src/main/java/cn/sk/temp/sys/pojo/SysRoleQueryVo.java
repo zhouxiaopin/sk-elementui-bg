@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SysRoleQueryVo extends BaseQueryVo {
-    private SysRoleCustom cdtCustom = new SysRoleCustom();
+    private SysRole cdtCustom = new SysRole();
 
     public static SysRoleQueryVo newInstance() {
         return new SysRoleQueryVo();

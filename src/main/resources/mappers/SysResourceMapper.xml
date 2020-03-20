@@ -34,7 +34,7 @@
     <!--以下是自定义的-->
 
     <!-- 表与实体映射 -->
-    <resultMap id="ResultMapCustom" type="cn.sk.temp.sys.pojo.SysResourceCustom" extends="BaseResultMap">
+    <resultMap id="ResultMapCustom" type="cn.sk.temp.sys.pojo.SysResource" extends="BaseResultMap">
         <result property="userName" column="user_name"/>
     </resultMap>
 

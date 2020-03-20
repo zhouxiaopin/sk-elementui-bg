@@ -22,38 +22,38 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class SysSqlConfServiceImpl extends BaseServiceImpl<SysSqlConfCustom, SysSqlConfQueryVo, SysSqlConfMapper> implements ISysSqlConfService {
+public class SysSqlConfServiceImpl extends BaseServiceImpl<SysSqlConf, SysSqlConfQueryVo, SysSqlConfMapper> implements ISysSqlConfService {
     @Autowired
     private SysSqlConfMapper sysSqlConfMapper;
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public ServerResponse<SkPageVo<SysSqlConfCustom>> queryObjsByPage(SysSqlConfQueryVo baseQueryVo) {
+    public ServerResponse<SkPageVo<SysSqlConf>> queryObjsByPage(SysSqlConfQueryVo baseQueryVo) {
 
         SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
         sysDictQueryVo.getIsNoLike().put("dictType",true);
-        SysDictCustom condition = sysDictQueryVo.getCdtCustom();
+        SysDict condition = sysDictQueryVo.getCdtCustom();
         condition.setDictType(SysConst.Dict.SysSqlConf.STATEMENT_TYPE);
         condition.setRecordStatus(SysConst.RecordStatus.ABLE);
 
 
-        List<SysDictCustom> sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
+        List<SysDict> sysDicts = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
         //类型
         Map<String,String> statementTypeMap = Maps.newHashMap();
-        for(int i = 0,len = sysDictCustoms.size(); i < len; i++) {
-            SysDictCustom sysDictCustom = sysDictCustoms.get(i);
-            statementTypeMap.put(sysDictCustom.getDictCode(),sysDictCustom.getCodeName());
+        for(int i = 0,len = sysDicts.size(); i < len; i++) {
+            SysDict sysDict = sysDicts.get(i);
+            statementTypeMap.put(sysDict.getDictCode(),sysDict.getCodeName());
         }
 
         //数据封装
 //        DataTableVo<SysSqlConfCustom> dataTableVo = super.queryObjsByPage(entityQueryVo);
 //        List<SysSqlConfCustom> data = dataTableVo.getData();
-        ServerResponse<SkPageVo<SysSqlConfCustom>> pageInfo = super.queryObjsByPage(baseQueryVo);
-        List<SysSqlConfCustom> data = pageInfo.getData().getList();
+        ServerResponse<SkPageVo<SysSqlConf>> pageInfo = super.queryObjsByPage(baseQueryVo);
+        List<SysSqlConf> data = pageInfo.getData().getList();
         for(int i = 0,len = data.size(); i < len; i++) {
-            SysSqlConfCustom sysSqlConfCustom = data.get(i);
-            sysSqlConfCustom.setScType(statementTypeMap.get(sysSqlConfCustom.getScType()));
+            SysSqlConf sysSqlConf = data.get(i);
+            sysSqlConf.setScType(statementTypeMap.get(sysSqlConf.getScType()));
         }
         return pageInfo;
     }
@@ -62,23 +62,23 @@ public class SysSqlConfServiceImpl extends BaseServiceImpl<SysSqlConfCustom, Sys
     public ServerResponse queryRealByScCode(String scCode) {
         SysSqlConfQueryVo sysSqlConfQueryVo = SysSqlConfQueryVo.newInstance();
 
-        SysSqlConfCustom sysSqlConfCustom = sysSqlConfQueryVo.getCdtCustom();
-        sysSqlConfCustom.setScCode(scCode);
-        sysSqlConfCustom.setRecordStatus(SysConst.RecordStatus.ABLE);
+        SysSqlConf sysSqlConf = sysSqlConfQueryVo.getCdtCustom();
+        sysSqlConf.setScCode(scCode);
+        sysSqlConf.setRecordStatus(SysConst.RecordStatus.ABLE);
 
-        List<SysSqlConfCustom> sysSqlConfCustoms =  sysSqlConfMapper.selectListByQueryVo(sysSqlConfQueryVo);
-        if(CollectionUtils.isEmpty(sysSqlConfCustoms)) {
-            String sc = sysSqlConfCustom.getScCode();
+        List<SysSqlConf> sysSqlConfs =  sysSqlConfMapper.selectListByQueryVo(sysSqlConfQueryVo);
+        if(CollectionUtils.isEmpty(sysSqlConfs)) {
+            String sc = sysSqlConf.getScCode();
             log.error("sql语句没有配置:语句码为{}",sc);
             return ServerResponse.createByErrorMessage("sql语句没有配置:语句码为"+sc);
         }
-        String sql = sysSqlConfCustoms.get(0).getScStatement();
+        String sql = sysSqlConfs.get(0).getScStatement();
 
         try {
             List<Map<String,Object>> data = jdbcTemplate.queryForList(sql);
             return ServerResponse.createBySuccess(data);
         }catch (DataAccessException e){
-            String sc = sysSqlConfCustom.getScCode();
+            String sc = sysSqlConf.getScCode();
             log.error("sql语句没有配置:语句码为{}",sc);
             return ServerResponse.createByErrorMessage("sql语句没有配置:语句码为"+sc);
         }

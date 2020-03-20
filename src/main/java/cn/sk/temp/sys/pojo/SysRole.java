@@ -2,6 +2,7 @@ package cn.sk.temp.sys.pojo;
 
 import cn.sk.temp.base.pojo.BaseModel;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -38,6 +39,25 @@ public class SysRole extends BaseModel {
      * 操作者id
      */
     private Integer optId;
+
+
+    //权限ID
+    @TableField(exist = false)
+    private String permisIds;
+    //旧权限ID
+    @TableField(exist = false)
+    private String oldPermisIds;
+    //用户名
+    @TableField(exist = false)
+    private String userName;
+    //资源ID
+    @TableField(exist = false)
+    private String resIds;
+    //旧资源ID
+    @TableField(exist = false)
+    private String oldResIds;
+    @TableField(exist = false)
+    private String recordStatusStr;
 
 
     @Override

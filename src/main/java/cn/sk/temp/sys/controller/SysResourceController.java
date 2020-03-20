@@ -3,7 +3,7 @@ package cn.sk.temp.sys.controller;
 import cn.sk.temp.base.controller.BaseController;
 import cn.sk.temp.sys.common.ServerResponse;
 import cn.sk.temp.sys.common.SysConst;
-import cn.sk.temp.sys.pojo.SysResourceCustom;
+import cn.sk.temp.sys.pojo.SysResource;
 import cn.sk.temp.sys.pojo.SysResourceQueryVo;
 import cn.sk.temp.sys.service.ISysResourceService;
 import cn.sk.temp.sys.utils.SysUtils;
@@ -27,7 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sysResource")
 @RequiresAuthentication
-public class SysResourceController extends BaseController<SysResourceCustom, SysResourceQueryVo> {
+public class SysResourceController extends BaseController<SysResource, SysResourceQueryVo> {
     private static final String UPDATE_RECORDSTATUS_OPRT = "updateRecordStatus";
     @Autowired
     private ISysResourceService sysResourceService;
@@ -36,12 +36,12 @@ public class SysResourceController extends BaseController<SysResourceCustom, Sys
 
     //更新记录状态，禁用启用切换
     @PostMapping(value = "updateRecordStatus")
-    public ServerResponse<SysResourceCustom> updateRecordStatus(@RequestBody SysResourceCustom sysResourceCustom) {
+    public ServerResponse<SysResource> updateRecordStatus(@RequestBody SysResource sysResource) {
         //权限校验
         authorityValidate(UPDATE_RECORDSTATUS_OPRT);
 
-        String rs = sysResourceCustom.getRecordStatus();
-        ServerResponse<SysResourceCustom> serverResponse = sysResourceService.update(sysResourceCustom);
+        String rs = sysResource.getRecordStatus();
+        ServerResponse<SysResource> serverResponse = sysResourceService.update(sysResource);
         if (serverResponse.isSuccess()) {
             if (StringUtils.equals(rs, SysConst.RecordStatus.ABLE)) {
                 serverResponse.setMsg("启用成功");
@@ -91,7 +91,7 @@ public class SysResourceController extends BaseController<SysResourceCustom, Sys
 
     //参数检验
     @Override
-    protected ServerResponse<SysResourceCustom> paramValidate(String oprt, SysResourceCustom sysResourceCustom) {
+    protected ServerResponse<SysResource> paramValidate(String oprt, SysResource sysResource) {
         switch (oprt) {
             case ADD_OPRT://添加
 //                if (StringUtils.isEmpty(sysRoleCustom.getRoleFlag())||StringUtils.isEmpty(sysRoleCustom.getRoleName())) {
@@ -100,27 +100,27 @@ public class SysResourceController extends BaseController<SysResourceCustom, Sys
 
 
                 SysResourceQueryVo sysResourceQueryVo = SysResourceQueryVo.newInstance();
-                SysResourceCustom condition = sysResourceQueryVo.getCdtCustom();
+                SysResource condition = sysResourceQueryVo.getCdtCustom();
 
                 sysResourceQueryVo.getIsNoLike().put("routePath",true);
 
-                condition.setRoutePath(sysResourceCustom.getRoutePath());
+                condition.setRoutePath(sysResource.getRoutePath());
 
-                ServerResponse<List<SysResourceCustom>> serverResponse = this.queryAllByCondition(sysResourceQueryVo);
+                ServerResponse<List<SysResource>> serverResponse = this.queryAllByCondition(sysResourceQueryVo);
                 if(!CollectionUtils.isEmpty(serverResponse.getData())){
                     return ServerResponse.createByErrorMessage("路由路径已存在");
                 }
 
 
-                if(ObjectUtils.isEmpty(sysResourceCustom.getParentId())) {
-                    sysResourceCustom.setParentId(SysConst.Permis.DEFAULT_PARENTID);
+                if(ObjectUtils.isEmpty(sysResource.getParentId())) {
+                    sysResource.setParentId(SysConst.Permis.DEFAULT_PARENTID);
                 }
-                sysResourceCustom.setOptId(SysUtils.getUserId());
+                sysResource.setOptId(SysUtils.getUserId());
                 //默认可用
-                sysResourceCustom.setRecordStatus(SysConst.RecordStatus.ABLE);
+                sysResource.setRecordStatus(SysConst.RecordStatus.ABLE);
                 break;
         }
-        return super.paramValidate(oprt, sysResourceCustom);
+        return super.paramValidate(oprt, sysResource);
     }
 
     //权限校验

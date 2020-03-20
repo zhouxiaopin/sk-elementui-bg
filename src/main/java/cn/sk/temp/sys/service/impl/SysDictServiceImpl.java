@@ -5,7 +5,7 @@ import cn.sk.temp.business.common.Const;
 import cn.sk.temp.sys.common.ServerResponse;
 import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.mapper.SysDictMapper;
-import cn.sk.temp.sys.pojo.SysDictCustom;
+import cn.sk.temp.sys.pojo.SysDict;
 import cn.sk.temp.sys.pojo.SysDictQueryVo;
 import cn.sk.temp.sys.service.ISysDictService;
 import com.google.common.collect.Maps;
@@ -20,7 +20,7 @@ import java.util.Map;
  * 系统数字字典业务逻辑接口实现类
  */
 @Service
-public class SysDictServiceImpl extends BaseServiceImpl<SysDictCustom, SysDictQueryVo,SysDictMapper> implements ISysDictService {
+public class SysDictServiceImpl extends BaseServiceImpl<SysDict, SysDictQueryVo,SysDictMapper> implements ISysDictService {
     @Autowired
     private SysDictMapper sysDictMapper;
 
@@ -28,19 +28,19 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictCustom, SysDictQu
     @Override
     public ServerResponse<Map<String, String>> getDictKvData(String dictType) {
         SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
-        SysDictCustom condition = sysDictQueryVo.getCdtCustom();
+        SysDict condition = sysDictQueryVo.getCdtCustom();
 
         sysDictQueryVo.getIsNoLike().put("dictType",true);
 
         condition.setDictType(dictType);
         condition.setRecordStatus(SysConst.RecordStatus.ABLE);
 
-        List<SysDictCustom> sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
+        List<SysDict> SysDicts = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
         //封装数据
         Map<String,String> kvMap = Maps.newHashMap();
-        for(int i = 0,len = sysDictCustoms.size(); i < len; i++) {
-            SysDictCustom sysDictCustom = sysDictCustoms.get(i);
-            kvMap.put(sysDictCustom.getDictCode(),sysDictCustom.getCodeName());
+        for(int i = 0,len = SysDicts.size(); i < len; i++) {
+            SysDict SysDict = SysDicts.get(i);
+            kvMap.put(SysDict.getDictCode(),SysDict.getCodeName());
         }
         return ServerResponse.createBySuccess(kvMap);
     }
@@ -48,25 +48,25 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictCustom, SysDictQu
     @Override
     public ServerResponse<Map<String, String>> getDictKvAndExpData(String dictType) {
         SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
-        SysDictCustom condition = sysDictQueryVo.getCdtCustom();
+        SysDict condition = sysDictQueryVo.getCdtCustom();
 
         sysDictQueryVo.getIsNoLike().put("dictType",true);
 
         condition.setDictType(dictType);
         condition.setRecordStatus(SysConst.RecordStatus.ABLE);
-        List<SysDictCustom> sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
+        List<SysDict> SysDicts = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
         //封装数据
         Map<String,String> kvMap = Maps.newHashMap();
-        for(int i = 0,len = sysDictCustoms.size(); i < len; i++) {
-            SysDictCustom sysDictCustom = sysDictCustoms.get(i);
+        for(int i = 0,len = SysDicts.size(); i < len; i++) {
+            SysDict SysDict = SysDicts.get(i);
             StringBuilder codeName = new StringBuilder();
-            codeName.append(sysDictCustom.getCodeName());
-            String filed1 = sysDictCustom.getField1();
-            String filed2 = sysDictCustom.getField2();
-            String filed3 = sysDictCustom.getField3();
-            String filed4 = sysDictCustom.getField4();
-            String filed5 = sysDictCustom.getField5();
-            String filed6 = sysDictCustom.getField6();
+            codeName.append(SysDict.getCodeName());
+            String filed1 = SysDict.getField1();
+            String filed2 = SysDict.getField2();
+            String filed3 = SysDict.getField3();
+            String filed4 = SysDict.getField4();
+            String filed5 = SysDict.getField5();
+            String filed6 = SysDict.getField6();
             if(StringUtils.isNotBlank(filed1)) {
                 codeName.append(Const.DEFAULT_SPLIT_SYMBOL).append(filed1);
             }
@@ -85,21 +85,21 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictCustom, SysDictQu
             if(StringUtils.isNotBlank(filed6)) {
                 codeName.append(Const.DEFAULT_SPLIT_SYMBOL).append(filed6);
             }
-            kvMap.put(sysDictCustom.getDictCode(),codeName.toString());
+            kvMap.put(SysDict.getDictCode(),codeName.toString());
         }
         return ServerResponse.createBySuccess(kvMap);
     }
 
 //    @Override
-//    public ServerResponse<PageInfo<SysDictCustom>> queryObjsByPage(SysDictQueryVo entityQueryVo) {
+//    public ServerResponse<PageInfo<SysDict>> queryObjsByPage(SysDictQueryVo entityQueryVo) {
 //        //记录状态
 //        Map<String,String> recordStatusMap = sysDictService.getDictKvAndExpData(Const.Dict.RECORD_STATUS).getData();
 //
 //        //数据封装
-//        ServerResponse<PageInfo<SysDictCustom>> serverResponse = super.queryObjsByPage(entityQueryVo);
-//        List<SysDictCustom> data = serverResponse.getData().getList();
+//        ServerResponse<PageInfo<SysDict>> serverResponse = super.queryObjsByPage(entityQueryVo);
+//        List<SysDict> data = serverResponse.getData().getList();
 //        for(int i = 0,len = data.size(); i < len; i++) {
-//            SysDictCustom item = data.get(i);
+//            SysDict item = data.get(i);
 //            if(ObjectUtils.allNotNull(recordStatusMap)) {
 //                item.setRecordStatusStr(recordStatusMap.get(item.getRecordStatus()));
 //            }

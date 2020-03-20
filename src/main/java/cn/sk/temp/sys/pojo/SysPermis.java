@@ -2,6 +2,7 @@ package cn.sk.temp.sys.pojo;
 
 import cn.sk.temp.base.pojo.BaseModel;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -89,6 +90,19 @@ public class SysPermis extends BaseModel {
     private String expand2;
 
     private String expand3;
+
+
+    //用户名
+    @TableField(exist = false)
+    private String userName;
+    //级别对应的值
+    @TableField(exist = false)
+    private String perLevelStr;
+    //父权限名
+    @TableField(exist = false)
+    private String parentName;
+    @TableField(exist = false)
+    private String recordStatusStr;
 
 
 

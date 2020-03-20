@@ -1,6 +1,6 @@
 package cn.sk.temp.sys.utils;
 
-import cn.sk.temp.sys.pojo.SysUserCustom;
+import cn.sk.temp.sys.pojo.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -11,7 +11,7 @@ public class SysUtils {
      */
     public static Integer getUserId() {
         Integer id = null;
-        SysUserCustom sysUserInfo = (SysUserCustom) SecurityUtils.getSubject().getPrincipal();
+        SysUser sysUserInfo = (SysUser) SecurityUtils.getSubject().getPrincipal();
         if(!ObjectUtils.isEmpty(sysUserInfo)) {
             id = sysUserInfo.getUserId();
         }
@@ -22,8 +22,8 @@ public class SysUtils {
      * 获取登录用户
      * @return
      */
-    public static SysUserCustom getSysUser() {
-        SysUserCustom sysUserInfo = (SysUserCustom) SecurityUtils.getSubject().getPrincipal();
+    public static SysUser getSysUser() {
+        SysUser sysUserInfo = (SysUser) SecurityUtils.getSubject().getPrincipal();
         return sysUserInfo;
     }
 

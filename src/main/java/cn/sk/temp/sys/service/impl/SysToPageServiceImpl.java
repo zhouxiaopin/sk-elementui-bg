@@ -4,9 +4,9 @@ import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.mapper.SysDictMapper;
 import cn.sk.temp.sys.mapper.SysResourceMapper;
 import cn.sk.temp.sys.mapper.SysRoleMapper;
-import cn.sk.temp.sys.pojo.SysDictCustom;
+import cn.sk.temp.sys.pojo.SysDict;
 import cn.sk.temp.sys.pojo.SysDictQueryVo;
-import cn.sk.temp.sys.pojo.SysUserCustom;
+import cn.sk.temp.sys.pojo.SysUser;
 import cn.sk.temp.sys.pojo.TreeNode;
 import cn.sk.temp.sys.service.ISysToPageService;
 import cn.sk.temp.sys.utils.SysUtils;
@@ -40,7 +40,7 @@ public class SysToPageServiceImpl implements ISysToPageService {
 
     @Override
     public ModelAndView index(ModelAndView mv, HttpServletResponse response) {
-        SysUserCustom sysUserInfo = SysUtils.getSysUser();
+        SysUser sysUserInfo = SysUtils.getSysUser();
         if(ObjectUtils.isEmpty(sysUserInfo)) {
             Subject currentUser = SecurityUtils.getSubject();
 
@@ -88,7 +88,7 @@ public class SysToPageServiceImpl implements ISysToPageService {
 
             //获取左边图片key-value对
             SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
-            SysDictCustom condition = sysDictQueryVo.getCdtCustom();
+            SysDict condition = sysDictQueryVo.getCdtCustom();
 
             sysDictQueryVo.getIsNoLike().put("dictType",true);
 
@@ -96,20 +96,20 @@ public class SysToPageServiceImpl implements ISysToPageService {
             condition.setRecordStatus(SysConst.RecordStatus.ABLE);
 
 //            SysDictQueryVo sysDictQueryVo = new SysDictQueryVo();
-//            SysDictCustom condition = new SysDictCustom();
+//            SysDict condition = new SysDict();
 //
 //            sysDictQueryVo.getIsNoLike().put("dictType",true);
 //
 //            condition.setDictType(SysConst.Dict.SysResource.LEFT_ICON);
 //            condition.setRecordStatus(SysConst.RecordStatus.ABLE);
 //
-//            sysDictQueryVo.setSysDictCustom(condition);
-            List<SysDictCustom> sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
+//            sysDictQueryVo.setSysDict(condition);
+            List<SysDict> SysDicts = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
             //左边图标
             Map<String,String> leftIconMap = Maps.newHashMap();
-            for(int i = 0,len = sysDictCustoms.size(); i < len; i++) {
-                SysDictCustom sysDictCustom = sysDictCustoms.get(i);
-                leftIconMap.put(sysDictCustom.getDictCode(),sysDictCustom.getField1());
+            for(int i = 0,len = SysDicts.size(); i < len; i++) {
+                SysDict SysDict = SysDicts.get(i);
+                leftIconMap.put(SysDict.getDictCode(),SysDict.getField1());
             }
 
             for(int i = 0, len = sysResourceCustoms.size(); i < len; i++) {

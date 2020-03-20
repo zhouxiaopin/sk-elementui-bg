@@ -2,6 +2,7 @@ package cn.sk.temp.sys.pojo;
 
 import cn.sk.temp.base.pojo.BaseModel;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -66,6 +67,9 @@ public class SysSqlConf extends BaseModel {
      * 预留字段4
      */
     private String field4;
+
+    @TableField(exist = false)
+    private String recordStatusStr;
 
 
     @Override

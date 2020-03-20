@@ -2,7 +2,7 @@ package cn.sk.temp.sys.controller;
 
 import cn.sk.temp.base.controller.BaseController;
 import cn.sk.temp.sys.common.SysConst;
-import cn.sk.temp.sys.pojo.SysLogCustom;
+import cn.sk.temp.sys.pojo.SysLog;
 import cn.sk.temp.sys.pojo.SysLogQueryVo;
 import cn.sk.temp.sys.service.ISysLogService;
 import org.apache.shiro.SecurityUtils;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/sysLog")
-public class SysLogController extends BaseController<SysLogCustom, SysLogQueryVo> {
+public class SysLogController extends BaseController<SysLog, SysLogQueryVo> {
 
     @Autowired
     private ISysLogService sysLogService;

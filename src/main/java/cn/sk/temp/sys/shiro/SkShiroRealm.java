@@ -5,7 +5,7 @@ import cn.sk.temp.sys.common.SysConst;
 import cn.sk.temp.sys.common.TokenCache;
 import cn.sk.temp.sys.mapper.SysPermisMapper;
 import cn.sk.temp.sys.mapper.SysRoleMapper;
-import cn.sk.temp.sys.pojo.SysUserCustom;
+import cn.sk.temp.sys.pojo.SysUser;
 import cn.sk.temp.sys.service.ISysUserService;
 import cn.sk.temp.sys.utils.JwtUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -93,9 +93,9 @@ public class SkShiroRealm extends AuthorizingRealm {
 
 //        List<SysUserCustom> sysUserCustoms = sysUserService.queryObjs(sysUserQueryVo).getData();
 
-        LambdaQueryWrapper<SysUserCustom> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUserCustom::getUserName,username);
-        SysUserCustom sysUserCustom = sysUserService.getOne(queryWrapper);
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getUserName,username);
+        SysUser sysUser = sysUserService.getOne(queryWrapper);
 
 
         //3. 调用数据库的方法, 从数据库中查询 username 对应的用户记录
@@ -103,7 +103,7 @@ public class SkShiroRealm extends AuthorizingRealm {
 
 
         //4. 若用户不存在, 则可以抛出 UnknownAccountException 异常
-        if(null == sysUserCustom) {
+        if(null == sysUser) {
             throw new UnknownAccountException("用户不存在!");
         }
 
@@ -115,20 +115,20 @@ public class SkShiroRealm extends AuthorizingRealm {
         //6. 根据用户的情况, 来构建 AuthenticationInfo 对象并返回. 通常使用的实现类为: SimpleAuthenticationInfo
         //以下信息是从数据库中获取的.
         //1). principal: 认证的实体信息. 可以是 username, 也可以是数据表对应的用户的实体类对象.
-        Object principal = sysUserCustom;
+        Object principal = sysUser;
         //2). credentials: 密码.
-        Object credentials = sysUserCustom.getPassword(); //"fc1709d0a95a6be30bc5926fdb7f22f4";
-        String salt = sysUserCustom.getSalt();
+        Object credentials = sysUser.getPassword(); //"fc1709d0a95a6be30bc5926fdb7f22f4";
+        String salt = sysUser.getSalt();
 //        if(!credentials.equals(ShiroUtils.getMd5Pwd(salt,new String(upToken.getPassword())))) {
 //            throw new IncorrectCredentialsException("密码错误");
 //        }
 
-        if(StringUtils.equals(SysConst.RecordStatus.DISABLE,sysUserCustom.getRecordStatus())) {
+        if(StringUtils.equals(SysConst.RecordStatus.DISABLE,sysUser.getRecordStatus())) {
             throw new LockedAccountException("用户被禁用");
         }
 
         // 校验token是否超时失效 & 或者账号密码是否错误
-        if (!jwtTokenRefresh(token, username, sysUserCustom.getPassword())) {
+        if (!jwtTokenRefresh(token, username, sysUser.getPassword())) {
 //            throw new AuthenticationException("Token失效，请重新登录!");
             log.info("Token失效，请重新登录!");
             throw new AuthenticationException("Token失效，请重新登录!");
@@ -168,9 +168,9 @@ public class SkShiroRealm extends AuthorizingRealm {
             PrincipalCollection principals) {
         //1. 从 PrincipalCollection 中来获取登录用户的信息
 //        Object principal = principals.getPrimaryPrincipal();
-        SysUserCustom sysUserCustom = (SysUserCustom) principals.getPrimaryPrincipal();
+        SysUser sysUser = (SysUser) principals.getPrimaryPrincipal();
         Map<String,Object> params = Maps.newHashMap();
-        params.put("userId",sysUserCustom.getUserId());
+        params.put("userId",sysUser.getUserId());
         params.put("recordStatus", SysConst.RecordStatus.ABLE);
         List<Map<String,Object>> sysRoleCustoms = sysRoleMapper.selectListByUserId(params);
         //2. 利用登录的用户的信息来用户当前用户的角色或权限(可能需要查询数据库)

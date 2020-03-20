@@ -1,6 +1,6 @@
 package cn.sk.temp.sys.utils;
 
-import cn.sk.temp.sys.pojo.SysUserCustom;
+import cn.sk.temp.sys.pojo.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -41,8 +41,8 @@ public class ShiroPermisUtils {
 
         // 没权限就抛出一个异常
         Object principal = currentUser.getPrincipal();
-        if (principal instanceof SysUserCustom) {
-            SysUserCustom sysUserInfo = (SysUserCustom) principal;
+        if (principal instanceof SysUser) {
+            SysUser sysUserInfo = (SysUser) principal;
             log.error("user {} no permission !", sysUserInfo.getUserName());
         }
         throw new UnauthorizedException();
@@ -67,8 +67,8 @@ public class ShiroPermisUtils {
             if (!permitted) {
                 // 没权限就抛出一个异常
                 Object principal = currentUser.getPrincipal();
-                if (principal instanceof SysUserCustom) {
-                    SysUserCustom sysUserInfo = (SysUserCustom) principal;
+                if (principal instanceof SysUser) {
+                    SysUser sysUserInfo = (SysUser) principal;
                     log.error("user {} no permission !", sysUserInfo.getUserName());
                 }
                 throw new UnauthorizedException();

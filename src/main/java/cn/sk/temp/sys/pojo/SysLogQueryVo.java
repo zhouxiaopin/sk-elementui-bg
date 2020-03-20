@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SysLogQueryVo extends BaseQueryVo {
-    private SysLogCustom cdtCustom = new SysLogCustom();
+    private SysLog cdtCustom = new SysLog();
 
     public static SysLogQueryVo newInstance() {
         return new SysLogQueryVo();

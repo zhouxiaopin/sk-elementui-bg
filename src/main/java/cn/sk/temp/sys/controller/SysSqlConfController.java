@@ -3,7 +3,7 @@ package cn.sk.temp.sys.controller;
 import cn.sk.temp.base.controller.BaseController;
 import cn.sk.temp.sys.common.ServerResponse;
 import cn.sk.temp.sys.common.SysConst;
-import cn.sk.temp.sys.pojo.SysSqlConfCustom;
+import cn.sk.temp.sys.pojo.SysSqlConf;
 import cn.sk.temp.sys.pojo.SysSqlConfQueryVo;
 import cn.sk.temp.sys.service.ISysSqlConfService;
 import cn.sk.temp.sys.utils.SysUtils;
@@ -23,19 +23,19 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sysSqlConf")
-public class SysSqlConfController extends BaseController<SysSqlConfCustom, SysSqlConfQueryVo> {
+public class SysSqlConfController extends BaseController<SysSqlConf, SysSqlConfQueryVo> {
     private static final String UPDATE_RECORDSTATUS_OPRT = "updateRecordStatus";
     @Autowired
     private ISysSqlConfService sysSqlConfService;
 
     //更新记录状态，禁用启用切换
     @PostMapping(value = "updateRecordStatus")
-    public ServerResponse<SysSqlConfCustom> updateRecordStatus(@RequestBody SysSqlConfCustom sysSqlConfCustom) {
+    public ServerResponse<SysSqlConf> updateRecordStatus(@RequestBody SysSqlConf sysSqlConf) {
         //权限校验
         authorityValidate(UPDATE_RECORDSTATUS_OPRT);
 
-        String rs = sysSqlConfCustom.getRecordStatus();
-        ServerResponse<SysSqlConfCustom> serverResponse = sysSqlConfService.update(sysSqlConfCustom);
+        String rs = sysSqlConf.getRecordStatus();
+        ServerResponse<SysSqlConf> serverResponse = sysSqlConfService.update(sysSqlConf);
         if (serverResponse.isSuccess()) {
             if (StringUtils.equals(rs, SysConst.RecordStatus.ABLE)) {
                 serverResponse.setMsg("启用成功");
@@ -53,10 +53,10 @@ public class SysSqlConfController extends BaseController<SysSqlConfCustom, SysSq
     }
     //根据sql配置编码查询真正的数据
     @PostMapping(value = "queryRealByScCode")
-    public ServerResponse<SysSqlConfCustom> queryRealByScCode(@RequestBody SysSqlConfCustom sysSqlConfCustom) {
+    public ServerResponse<SysSqlConf> queryRealByScCode(@RequestBody SysSqlConf sysSqlConf) {
         //权限校验
 //        authorityValidate(UPDATE_RECORDSTATUS_OPRT);
-            String scCode = sysSqlConfCustom.getScCode();
+            String scCode = sysSqlConf.getScCode();
             if(StringUtils.isBlank(scCode)) {
                 return ServerResponse.createByParamError();
             }
@@ -83,35 +83,35 @@ public class SysSqlConfController extends BaseController<SysSqlConfCustom, SysSq
 //    }
     //参数检验
     @Override
-    protected ServerResponse<SysSqlConfCustom> paramValidate(String oprt, SysSqlConfCustom sysSqlConfCustom) {
+    protected ServerResponse<SysSqlConf> paramValidate(String oprt, SysSqlConf sysSqlConf) {
         if(StringUtils.equals(oprt,ADD_OPRT)) {//添加
             //判断语句编码是否存在
             SysSqlConfQueryVo sysSqlConfQueryVo = SysSqlConfQueryVo.newInstance();
-            sysSqlConfQueryVo.getCdtCustom().setScCode(sysSqlConfCustom.getScCode());
+            sysSqlConfQueryVo.getCdtCustom().setScCode(sysSqlConf.getScCode());
             sysSqlConfQueryVo.getIsNoLike().put("dictType",true);
 
 
-            ServerResponse<List<SysSqlConfCustom>> serverResponse = this.queryAllByCondition(sysSqlConfQueryVo);
+            ServerResponse<List<SysSqlConf>> serverResponse = this.queryAllByCondition(sysSqlConfQueryVo);
             if(!CollectionUtils.isEmpty(serverResponse.getData())){
                 return ServerResponse.createByErrorMessage("语句编码已存在");
             }
-            sysSqlConfCustom.setOptId(SysUtils.getUserId());
+            sysSqlConf.setOptId(SysUtils.getUserId());
             //默认可用
-            sysSqlConfCustom.setRecordStatus(SysConst.RecordStatus.ABLE);
+            sysSqlConf.setRecordStatus(SysConst.RecordStatus.ABLE);
         }
         if(StringUtils.equals(oprt,UPDATE_OPRT)) {//修改
             //判断语句编码是否存在
             SysSqlConfQueryVo sysSqlConfQueryVo = SysSqlConfQueryVo.newInstance();
-            sysSqlConfQueryVo.getCdtCustom().setScCode(sysSqlConfCustom.getScCode());
+            sysSqlConfQueryVo.getCdtCustom().setScCode(sysSqlConf.getScCode());
             sysSqlConfQueryVo.getIsNoLike().put("dictType",true);
 
 
 
-            ServerResponse<List<SysSqlConfCustom>> serverResponse = this.queryAllByCondition(sysSqlConfQueryVo);
-            List<SysSqlConfCustom> sysSqlConfCustoms = serverResponse.getData();
+            ServerResponse<List<SysSqlConf>> serverResponse = this.queryAllByCondition(sysSqlConfQueryVo);
+            List<SysSqlConf> sysSqlConfCustoms = serverResponse.getData();
             if(!CollectionUtils.isEmpty(sysSqlConfCustoms)){
                 for (int i = 0, len = sysSqlConfCustoms.size(); i < len; i++){
-                    if(sysSqlConfCustom.getScId() != sysSqlConfCustoms.get(i).getScId()) {
+                    if(sysSqlConf.getScId() != sysSqlConfCustoms.get(i).getScId()) {
                         return ServerResponse.createByErrorMessage("语句编码已存在");
                     }
                 }
@@ -139,7 +139,7 @@ public class SysSqlConfController extends BaseController<SysSqlConfCustom, SysSq
 //            }
         }
 
-        return super.paramValidate(oprt, sysSqlConfCustom);
+        return super.paramValidate(oprt, sysSqlConf);
     }
     //权限校验
     @Override

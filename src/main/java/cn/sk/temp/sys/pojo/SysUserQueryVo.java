@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SysUserQueryVo extends BaseQueryVo {
-    private SysUserCustom cdtCustom = new SysUserCustom();
+    private SysUser cdtCustom = new SysUser();
 
     public static SysUserQueryVo newInstance() {
         return new SysUserQueryVo();

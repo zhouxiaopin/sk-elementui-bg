@@ -7,7 +7,7 @@ import cn.sk.temp.sys.common.ServerResponse;
 import cn.sk.temp.sys.mapper.SysRoleMapper;
 import cn.sk.temp.sys.mapper.SysRolePermisMapper;
 import cn.sk.temp.sys.mapper.SysRoleResourceMapper;
-import cn.sk.temp.sys.pojo.SysRoleCustom;
+import cn.sk.temp.sys.pojo.SysRole;
 import cn.sk.temp.sys.pojo.SysRolePermis;
 import cn.sk.temp.sys.pojo.SysRoleQueryVo;
 import cn.sk.temp.sys.pojo.SysRoleResource;
@@ -25,7 +25,7 @@ import java.util.List;
  * 系统角色业务逻辑接口实现类
  */
 @Service
-public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQueryVo, SysRoleMapper> implements ISysRoleService {
+public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, SysRoleQueryVo, SysRoleMapper> implements ISysRoleService {
     @Autowired
     private SysRoleMapper sysRoleMapper;
     @Autowired
@@ -34,13 +34,13 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQu
     private SysRoleResourceMapper sysRoleResourceMapper;
 
     @Override
-    protected ServerResponse<SysRoleCustom> insertAfter(SysRoleCustom sysRoleCustom) {
+    protected ServerResponse<SysRole> insertAfter(SysRole sysRole) {
         //判断是否有设置权限
-        String[] permisIds = StringUtils.split(sysRoleCustom.getPermisIds(),",");
+        String[] permisIds = StringUtils.split(sysRole.getPermisIds(),",");
         if(!ArrayUtils.isEmpty(permisIds)) {
             List<SysRolePermis> sysRolePermiss = Lists.newArrayList();
             for(int i = 0,len = permisIds.length; i < len; i++) {
-                SysRolePermis sysRolePermis = new SysRolePermis(null,sysRoleCustom.getRoleId(),
+                SysRolePermis sysRolePermis = new SysRolePermis(null,sysRole.getRoleId(),
                         Integer.valueOf(permisIds[i]));
                 sysRolePermiss.add(sysRolePermis);
             }
@@ -51,11 +51,11 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQu
         }
 
         //判断是否有设置资源
-        String[] resIds = StringUtils.split(sysRoleCustom.getResIds(),",");
+        String[] resIds = StringUtils.split(sysRole.getResIds(),",");
         if(!ArrayUtils.isEmpty(resIds)) {
             List<SysRoleResource> sysRoleResources = Lists.newArrayList();
             for(int i = 0,len = resIds.length; i < len; i++) {
-                SysRoleResource sysRoleResource = new SysRoleResource(null,sysRoleCustom.getRoleId(),
+                SysRoleResource sysRoleResource = new SysRoleResource(null,sysRole.getRoleId(),
                         Integer.valueOf(resIds[i]));
                 sysRoleResources.add(sysRoleResource);
             }
@@ -64,14 +64,14 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQu
                 throw new CustomException(ResponseCode.ADD_FAIL);
             }
         }
-        return super.insertAfter(sysRoleCustom);
+        return super.insertAfter(sysRole);
     }
 
     @Override
-    public ServerResponse<SysRoleCustom> queryObj(SysRoleCustom entityCustom) {
-        ServerResponse<SysRoleCustom> serverResponse = super.queryObj(entityCustom);
+    public ServerResponse<SysRole> queryObj(SysRole entity) {
+        ServerResponse<SysRole> serverResponse = super.queryObj(entity);
         //查询角色权限
-        List<SysRolePermis> sysRolePermisList = sysRolePermisMapper.selectByRoleId(entityCustom.getRoleId());
+        List<SysRolePermis> sysRolePermisList = sysRolePermisMapper.selectByRoleId(entity.getRoleId());
         StringBuilder permisIds = new StringBuilder();
         for(int i = 0,len = sysRolePermisList.size(); i < len; i++) {
             permisIds.append(sysRolePermisList.get(i).getPermisId()).append(",");
@@ -79,12 +79,12 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQu
         if(permisIds.length()>1) {
             permisIds.deleteCharAt(permisIds.length()-1);
         }
-        SysRoleCustom sysRoleCustom = serverResponse.getData();
+        SysRole sysRoleCustom = serverResponse.getData();
         sysRoleCustom.setPermisIds(permisIds.toString());
         sysRoleCustom.setOldPermisIds(permisIds.toString());
 
         //查询角色资源
-        List<SysRoleResource> sysRoleResourceList = sysRoleResourceMapper.selectByRoleId(entityCustom.getRoleId());
+        List<SysRoleResource> sysRoleResourceList = sysRoleResourceMapper.selectByRoleId(entity.getRoleId());
         StringBuilder resIds = new StringBuilder();
         for(int i = 0,len = sysRoleResourceList.size(); i < len; i++) {
             resIds.append(sysRoleResourceList.get(i).getResId()).append(",");
@@ -98,7 +98,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQu
     }
 
     @Override
-    protected ServerResponse<SysRoleCustom> updateBefore(SysRoleCustom sysRoleCustom) {
+    protected ServerResponse<SysRole> updateBefore(SysRole sysRoleCustom) {
         //判断是否有修改权限
         if(!StringUtils.equals(sysRoleCustom.getPermisIds(),sysRoleCustom.getOldPermisIds())) {
             //查询系统角色之前是有拥有权限
@@ -163,13 +163,13 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleCustom, SysRoleQu
 
 
     @Override
-    protected ServerResponse<SysRoleCustom> deleteInIdsAfter(String[] ids) {
+    protected ServerResponse<SysRole> deleteInIdsAfter(String[] ids) {
         deleteAfter(ids);
         return super.deleteInIdsAfter(ids);
     }
 
     @Override
-    protected ServerResponse<SysRoleCustom> realDeleteInIdsAfter(String[] ids) {
+    protected ServerResponse<SysRole> realDeleteInIdsAfter(String[] ids) {
         deleteAfter(ids);
         return super.realDeleteInIdsAfter(ids);
     }

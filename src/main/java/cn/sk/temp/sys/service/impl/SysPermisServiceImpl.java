@@ -24,7 +24,7 @@ import java.util.Set;
  * 系统权限业务逻辑接口实现类
  */
 @Service
-public class SysPermisServiceImpl extends BaseServiceImpl<SysPermisCustom, SysPermisQueryVo,SysPermisMapper> implements ISysPermisService {
+public class SysPermisServiceImpl extends BaseServiceImpl<SysPermis, SysPermisQueryVo,SysPermisMapper> implements ISysPermisService {
     @Autowired
     private SysPermisMapper sysPermisMapper;
     @Autowired
@@ -33,17 +33,17 @@ public class SysPermisServiceImpl extends BaseServiceImpl<SysPermisCustom, SysPe
 
     @Override
     public ServerResponse<List<Map<String, Object>>> querySysPermisTree(SysPermisQueryVo sysPermisQueryVo) {
-        List<SysPermisCustom> sysPermisCustoms = sysPermisMapper.selectListByQueryVo(sysPermisQueryVo);
+        List<SysPermis> sysPermiss = sysPermisMapper.selectListByQueryVo(sysPermisQueryVo);
         List<Map<String, Object>> data = Lists.newArrayList();
-        for (int i = 0,len = sysPermisCustoms.size(); i < len; i++){
-            SysPermisCustom sysPermisCustom = sysPermisCustoms.get(i);
+        for (int i = 0,len = sysPermiss.size(); i < len; i++){
+            SysPermis sysPermis = sysPermiss.get(i);
 //            {id:6, pId:0, name:"福建省", open:true, nocheck:true},
 //            { id:1, pId:0, name:"一级分类", open:true},
             Map<String,Object> item = Maps.newHashMap();
-            item.put("id",sysPermisCustom.getPerId());
-            item.put("pId",sysPermisCustom.getParentId());
-            item.put("name",sysPermisCustom.getPerName());
-            item.put("level",sysPermisCustom.getPerLevel());
+            item.put("id",sysPermis.getPerId());
+            item.put("pId",sysPermis.getParentId());
+            item.put("name",sysPermis.getPerName());
+            item.put("level",sysPermis.getPerLevel());
             item.put("open",true);
             data.add(item);
 //
@@ -88,7 +88,7 @@ public class SysPermisServiceImpl extends BaseServiceImpl<SysPermisCustom, SysPe
     }
 
     @Override
-    public ServerResponse<SkPageVo<SysPermisCustom>> queryObjsByPage(SysPermisQueryVo baseQueryVo) {
+    public ServerResponse<SkPageVo<SysPermis>> queryObjsByPage(SysPermisQueryVo baseQueryVo) {
 //        SysDictQueryVo sysDictQueryVo = new SysDictQueryVo();
 //        SysDictCustom condition = new SysDictCustom();
 //
@@ -100,34 +100,34 @@ public class SysPermisServiceImpl extends BaseServiceImpl<SysPermisCustom, SysPe
 //        sysDictQueryVo.setSysDictCustom(condition);
 
         SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
-        SysDictCustom condition = sysDictQueryVo.getCdtCustom();
+        SysDict condition = sysDictQueryVo.getCdtCustom();
 
         sysDictQueryVo.getIsNoLike().put("dictType",true);
 
         condition.setDictType(SysConst.Dict.SysPermis.MENU_TYPE);
         condition.setRecordStatus(SysConst.RecordStatus.ABLE);
 
-        List<SysDictCustom> sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
+        List<SysDict> sysDicts = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
         //类型
         Map<String,String> menuTypeMap = Maps.newHashMap();
-        for(int i = 0,len = sysDictCustoms.size(); i < len; i++) {
-            SysDictCustom sysDictCustom = sysDictCustoms.get(i);
+        for(int i = 0,len = sysDicts.size(); i < len; i++) {
+            SysDict sysDictCustom = sysDicts.get(i);
             menuTypeMap.put(sysDictCustom.getDictCode(),sysDictCustom.getCodeName());
         }
         //级别
         condition.setDictType(SysConst.Dict.SysPermis.MENU_LEVEL);
-        sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
+        sysDicts = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
         Map<String,String> menuLevelMap = Maps.newHashMap();
-        for(int i = 0,len = sysDictCustoms.size(); i < len; i++) {
-            SysDictCustom sysDictCustom = sysDictCustoms.get(i);
-            menuLevelMap.put(sysDictCustom.getDictCode(),sysDictCustom.getCodeName());
+        for(int i = 0,len = sysDicts.size(); i < len; i++) {
+            SysDict sysDict = sysDicts.get(i);
+            menuLevelMap.put(sysDict.getDictCode(),sysDict.getCodeName());
         }
 
         //数据封装
-        ServerResponse<SkPageVo<SysPermisCustom>> pageInfo = super.queryObjsByPage(baseQueryVo);
-        List<SysPermisCustom> data = pageInfo.getData().getList();
+        ServerResponse<SkPageVo<SysPermis>> pageInfo = super.queryObjsByPage(baseQueryVo);
+        List<SysPermis> data = pageInfo.getData().getList();
         for(int i = 0,len = data.size(); i < len; i++) {
-            SysPermisCustom sysPermisCustom = data.get(i);
+            SysPermis sysPermisCustom = data.get(i);
             sysPermisCustom.setPerType(menuTypeMap.get(sysPermisCustom.getPerType()));
             sysPermisCustom.setPerLevelStr(menuLevelMap.get(sysPermisCustom.getPerLevel().toString()));
         }

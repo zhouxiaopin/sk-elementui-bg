@@ -3,7 +3,7 @@ package cn.sk.temp.sys.controller;
 import cn.sk.temp.base.controller.BaseController;
 import cn.sk.temp.sys.common.ServerResponse;
 import cn.sk.temp.sys.common.SysConst;
-import cn.sk.temp.sys.pojo.SysPermisCustom;
+import cn.sk.temp.sys.pojo.SysPermis;
 import cn.sk.temp.sys.pojo.SysPermisQueryVo;
 import cn.sk.temp.sys.service.ISysPermisService;
 import cn.sk.temp.sys.utils.SysUtils;
@@ -26,7 +26,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sysPermis")
 @RequiresAuthentication
-public class SysPermisController extends BaseController<SysPermisCustom, SysPermisQueryVo> {
+public class SysPermisController extends BaseController<SysPermis, SysPermisQueryVo> {
     private static final String UPDATE_RECORDSTATUS_OPRT = "updateRecordStatus";
     @Autowired
     private ISysPermisService sysPermisService;
@@ -35,12 +35,12 @@ public class SysPermisController extends BaseController<SysPermisCustom, SysPerm
 
     //更新记录状态，禁用启用切换
     @PostMapping(value = "updateRecordStatus")
-    public ServerResponse<SysPermisCustom> updateRecordStatus(@RequestBody SysPermisCustom sysPermisCustom) {
+    public ServerResponse<SysPermis> updateRecordStatus(@RequestBody SysPermis sysPermis) {
         //权限校验
         authorityValidate(UPDATE_RECORDSTATUS_OPRT);
 
-        String rs = sysPermisCustom.getRecordStatus();
-        ServerResponse<SysPermisCustom> serverResponse = sysPermisService.update(sysPermisCustom);
+        String rs = sysPermis.getRecordStatus();
+        ServerResponse<SysPermis> serverResponse = sysPermisService.update(sysPermis);
         if (serverResponse.isSuccess()) {
             if (StringUtils.equals(rs, SysConst.RecordStatus.ABLE)) {
                 serverResponse.setMsg("启用成功");
@@ -91,22 +91,22 @@ public class SysPermisController extends BaseController<SysPermisCustom, SysPerm
 
     //参数检验
     @Override
-    protected ServerResponse<SysPermisCustom> paramValidate(String oprt, SysPermisCustom sysPermisCustom) {
+    protected ServerResponse<SysPermis> paramValidate(String oprt, SysPermis sysPermis) {
         switch (oprt) {
             case ADD_OPRT://添加
 //                if (StringUtils.isEmpty(sysRoleCustom.getRoleFlag())||StringUtils.isEmpty(sysRoleCustom.getRoleName())) {
 //                    return ServerResponse.createByParamError();
 //                }
 
-                if(ObjectUtils.isEmpty(sysPermisCustom.getParentId())) {
-                    sysPermisCustom.setParentId(SysConst.Permis.DEFAULT_PARENTID);
+                if(ObjectUtils.isEmpty(sysPermis.getParentId())) {
+                    sysPermis.setParentId(SysConst.Permis.DEFAULT_PARENTID);
                 }
-                sysPermisCustom.setOptId(SysUtils.getUserId());
+                sysPermis.setOptId(SysUtils.getUserId());
                 //默认可用
-                sysPermisCustom.setRecordStatus(SysConst.RecordStatus.ABLE);
+                sysPermis.setRecordStatus(SysConst.RecordStatus.ABLE);
                 break;
         }
-        return super.paramValidate(oprt, sysPermisCustom);
+        return super.paramValidate(oprt, sysPermis);
     }
 
     //权限校验

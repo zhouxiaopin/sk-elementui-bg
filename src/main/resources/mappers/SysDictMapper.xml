@@ -29,7 +29,7 @@
   <!--以下是自定义的-->
 
   <!-- 表与实体映射 -->
-  <resultMap id="ResultMapCustom" type="cn.sk.temp.sys.pojo.SysDictCustom" extends="BaseResultMap">
+  <resultMap id="ResultMapCustom" type="cn.sk.temp.sys.pojo.SysDict" extends="BaseResultMap">
 
   </resultMap>
 

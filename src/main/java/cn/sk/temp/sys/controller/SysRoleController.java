@@ -3,7 +3,7 @@ package cn.sk.temp.sys.controller;
 import cn.sk.temp.base.controller.BaseController;
 import cn.sk.temp.sys.common.ServerResponse;
 import cn.sk.temp.sys.common.SysConst;
-import cn.sk.temp.sys.pojo.SysRoleCustom;
+import cn.sk.temp.sys.pojo.SysRole;
 import cn.sk.temp.sys.pojo.SysRoleQueryVo;
 import cn.sk.temp.sys.service.ISysRoleService;
 import cn.sk.temp.sys.utils.SysUtils;
@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/sysRole")
 //@RequiresAuthentication
-public class SysRoleController extends BaseController<SysRoleCustom, SysRoleQueryVo> {
+public class SysRoleController extends BaseController<SysRole, SysRoleQueryVo> {
     private static final String UPDATE_RECORDSTATUS_OPRT = "updateRecordStatus";
     @Autowired
     private ISysRoleService sysRoleService;
@@ -32,12 +32,12 @@ public class SysRoleController extends BaseController<SysRoleCustom, SysRoleQuer
 
     //更新记录状态，禁用启用切换
     @PostMapping(value = "updateRecordStatus")
-    public ServerResponse<SysRoleCustom> updateRecordStatus(@RequestBody SysRoleCustom sysRoleCustom) {
+    public ServerResponse<SysRole> updateRecordStatus(@RequestBody SysRole sysRole) {
         //权限校验
         authorityValidate(UPDATE_RECORDSTATUS_OPRT);
 
-        String rs = sysRoleCustom.getRecordStatus();
-        ServerResponse<SysRoleCustom> serverResponse = sysRoleService.update(sysRoleCustom);
+        String rs = sysRole.getRecordStatus();
+        ServerResponse<SysRole> serverResponse = sysRoleService.update(sysRole);
         if (serverResponse.isSuccess()) {
             if (StringUtils.equals(rs, SysConst.RecordStatus.ABLE)) {
                 serverResponse.setMsg("启用成功");
@@ -75,20 +75,20 @@ public class SysRoleController extends BaseController<SysRoleCustom, SysRoleQuer
 
     //参数检验
     @Override
-    protected ServerResponse<SysRoleCustom> paramValidate(String oprt, SysRoleCustom sysRoleCustom) {
+    protected ServerResponse<SysRole> paramValidate(String oprt, SysRole sysRole) {
         SysRoleQueryVo sysRoleQueryVo;
-        SysRoleCustom condition;
-        ServerResponse<List<SysRoleCustom>> serverResponse;
+        SysRole condition;
+        ServerResponse<List<SysRole>> serverResponse;
         switch (oprt) {
             case ADD_OPRT://添加
-                if (StringUtils.isEmpty(sysRoleCustom.getRoleFlag())||StringUtils.isEmpty(sysRoleCustom.getRoleName())) {
+                if (StringUtils.isEmpty(sysRole.getRoleFlag())||StringUtils.isEmpty(sysRole.getRoleName())) {
                     return ServerResponse.createByParamError();
                 }
 
                 //判断角色标识是否存在
 
                 sysRoleQueryVo = SysRoleQueryVo.newInstance();
-                sysRoleQueryVo.getCdtCustom().setRoleFlag(sysRoleCustom.getRoleFlag());
+                sysRoleQueryVo.getCdtCustom().setRoleFlag(sysRole.getRoleFlag());
                 sysRoleQueryVo.getIsNoLike().put("roleFlag",true);
 
 //                sysRoleQueryVo = new SysRoleQueryVo();
@@ -105,9 +105,9 @@ public class SysRoleController extends BaseController<SysRoleCustom, SysRoleQuer
                     return ServerResponse.createByErrorMessage("角色标识已存在");
                 }
 
-                sysRoleCustom.setOptId(SysUtils.getUserId());
+                sysRole.setOptId(SysUtils.getUserId());
                 //默认可用
-                sysRoleCustom.setRecordStatus(SysConst.RecordStatus.ABLE);
+                sysRole.setRecordStatus(SysConst.RecordStatus.ABLE);
                 break;
             case UPDATE_OPRT://修改
                 //判断角色标识是否存在
@@ -120,21 +120,21 @@ public class SysRoleController extends BaseController<SysRoleCustom, SysRoleQuer
 //
 //                sysRoleQueryVo.setSysRoleCustom(condition);
                 sysRoleQueryVo = SysRoleQueryVo.newInstance();
-                sysRoleQueryVo.getCdtCustom().setRoleFlag(sysRoleCustom.getRoleFlag());
+                sysRoleQueryVo.getCdtCustom().setRoleFlag(sysRole.getRoleFlag());
                 sysRoleQueryVo.getIsNoLike().put("roleFlag",true);
 
                 serverResponse = this.queryAllByCondition(sysRoleQueryVo);
-                List<SysRoleCustom> sysRoleCustoms = serverResponse.getData();
-                if(!CollectionUtils.isEmpty(sysRoleCustoms)){
-                    for (int i = 0, len = sysRoleCustoms.size(); i < len; i++){
-                        if(sysRoleCustom.getRoleId() != sysRoleCustoms.get(i).getRoleId()) {
+                List<SysRole> sysRoles = serverResponse.getData();
+                if(!CollectionUtils.isEmpty(sysRoles)){
+                    for (int i = 0, len = sysRoles.size(); i < len; i++){
+                        if(sysRole.getRoleId() != sysRoles.get(i).getRoleId()) {
                             return ServerResponse.createByErrorMessage("角色标识已存在");
                         }
                     }
                 }
                 break;
         }
-        return super.paramValidate(oprt, sysRoleCustom);
+        return super.paramValidate(oprt, sysRole);
     }
 
     //权限校验

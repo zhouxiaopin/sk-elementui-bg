@@ -28,7 +28,7 @@
   <!--以下是自定义的-->
 
   <!-- 表与实体映射 -->
-  <resultMap id="ResultMapCustom" type="cn.sk.temp.sys.pojo.SysSqlConfCustom" extends="BaseResultMap">
+  <resultMap id="ResultMapCustom" type="cn.sk.temp.sys.pojo.SysSqlConf" extends="BaseResultMap">
 
   </resultMap>
 

@@ -3,7 +3,7 @@ package cn.sk.temp.base.controller;
 import cn.sk.temp.base.service.IBaseService;
 import cn.sk.temp.sys.common.*;
 import cn.sk.temp.sys.pojo.SkPageVo;
-import cn.sk.temp.sys.pojo.SysDictCustom;
+import cn.sk.temp.sys.pojo.SysDict;
 import cn.sk.temp.sys.pojo.SysDictQueryVo;
 import cn.sk.temp.sys.service.ISysDictService;
 import cn.sk.temp.sys.utils.JackJsonUtil;
@@ -255,17 +255,17 @@ public class BaseController<T, V> {
             return ServerResponse.createByErrorMessage(ResponseCode.ILLEGAL_ARGUMENT.getMsg());
         }
         SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
-        SysDictCustom condition = sysDictQueryVo.getCdtCustom();
+        SysDict condition = sysDictQueryVo.getCdtCustom();
         sysDictQueryVo.getIsNoLike().put("dictType",true);
         sysDictQueryVo.setOrderBy("sort");
         condition.setDictType(dictType);
         condition.setRecordStatus(SysConst.RecordStatus.ABLE);
 
-        ServerResponse<List<SysDictCustom>> sr = sysDictService.queryObjs(sysDictQueryVo);
-        List<SysDictCustom> data = sr.getData();
+        ServerResponse<List<SysDict>> sr = sysDictService.queryObjs(sysDictQueryVo);
+        List<SysDict> data = sr.getData();
         List<SelectBoxVo> selectBoxVos = Lists.newArrayList();
         for (int i = 0,len = data.size(); i < len; i++){
-            SysDictCustom s = data.get(i);
+            SysDict s = data.get(i);
             SelectBoxVo selectBoxVo = new SelectBoxVo(s.getDictCode(),s.getCodeName());
             selectBoxVos.add(selectBoxVo);
         }

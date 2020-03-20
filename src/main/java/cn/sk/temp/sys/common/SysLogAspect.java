@@ -1,7 +1,7 @@
 package cn.sk.temp.sys.common;
 
-import cn.sk.temp.sys.pojo.SysLogCustom;
-import cn.sk.temp.sys.pojo.SysUserCustom;
+import cn.sk.temp.sys.pojo.SysLog;
+import cn.sk.temp.sys.pojo.SysUser;
 import cn.sk.temp.sys.service.ISysLogService;
 import cn.sk.temp.sys.utils.IpAdrressUtil;
 import cn.sk.temp.sys.utils.JackJsonUtil;
@@ -60,7 +60,7 @@ public class SysLogAspect {
         HttpServletRequest request = attributes.getRequest();
         log.debug("======系统日志处理开始======");
         //保存日志
-        SysLogCustom sysLogCustom = new SysLogCustom();
+        SysLog sysLog = new SysLog();
 
         //从切面织入点处通过反射机制获取织入点处的方法
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -75,12 +75,12 @@ public class SysLogAspect {
 //        sysLogCustom.setMethodName(className + "." + methodName);
         String methodName = method.getName();
         String simpleName = joinPoint.getTarget().getClass().getSimpleName();
-        sysLogCustom.setMethodName(simpleName + "_" + methodName);
-        sysLogCustom.setExpan1(signature.getDeclaringTypeName() + "_" +methodName);
+        sysLog.setMethodName(simpleName + "_" + methodName);
+        sysLog.setExpan1(signature.getDeclaringTypeName() + "_" +methodName);
         //url
-        sysLogCustom.setRequestUrl(request.getRequestURL().toString());
+        sysLog.setRequestUrl(request.getRequestURL().toString());
         //method
-        sysLogCustom.setRequestType(request.getMethod());
+        sysLog.setRequestType(request.getMethod());
 
 
         //获取操作
@@ -91,29 +91,29 @@ public class SysLogAspect {
             operation.append(skLog.value());
 
             //保存获取的操作
-            sysLogCustom.setOperation(operation.toString());
+            sysLog.setOperation(operation.toString());
 
             if(skLog.saveParams()) {
                 //请求的参数
                 Object[] args = joinPoint.getArgs();
                 //将参数所在的数组转换成json
                 String params = JackJsonUtil.obj2String(args);
-                sysLogCustom.setParams(params);
+                sysLog.setParams(params);
             }
         }
 
         //获取用户名
-        SysUserCustom sysUserInfo = (SysUserCustom) SecurityUtils.getSubject().getPrincipal();
+        SysUser sysUserInfo = (SysUser) SecurityUtils.getSubject().getPrincipal();
         if(!ObjectUtils.isEmpty(sysUserInfo)) {
-            sysLogCustom.setUserId(sysUserInfo.getUserId());
-            sysLogCustom.setUserName(sysUserInfo.getUserName());
+            sysLog.setUserId(sysUserInfo.getUserId());
+            sysLog.setUserName(sysUserInfo.getUserName());
         }
         //获取用户ip地址
-        sysLogCustom.setIp(IpAdrressUtil.getIpAdrress(request));
+        sysLog.setIp(IpAdrressUtil.getIpAdrress(request));
 
-        sysLogCustom.setRecordStatus(SysConst.RecordStatus.ABLE);
+        sysLog.setRecordStatus(SysConst.RecordStatus.ABLE);
         //调用service保存SysLog实体类到数据库
-        sysLogService.insert(sysLogCustom);
+        sysLogService.insert(sysLog);
 
         log.debug("======系统日志处理======");
     }
