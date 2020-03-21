@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sk.api.sys.mapper.SysPermisMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.sk.api.sys.pojo.SysPermis">
+        <id column="per_id" property="perId" />
+        <result column="per_flag" property="perFlag" />
+        <result column="per_name" property="perName" />
+        <result column="per_url" property="perUrl" />
+        <result column="route_path" property="routePath" />
+        <result column="route_name" property="routeName" />
+        <result column="route_component" property="routeComponent" />
+        <result column="parent_id" property="parentId" />
+        <result column="per_type" property="perType" />
+        <result column="per_level" property="perLevel" />
+        <result column="per_sort" property="perSort" />
+        <result column="descri" property="descri" />
+        <result column="opt_id" property="optId" />
+        <result column="left_icon" property="leftIcon" />
+        <result column="expand1" property="expand1" />
+        <result column="expand2" property="expand2" />
+        <result column="expand3" property="expand3" />
+        <result column="record_status" property="recordStatus" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        sp.per_id, sp.per_flag, sp.per_name, sp.per_url, sp.parent_id, sp.per_type, sp.per_level, sp.per_sort, sp.descri, sp.opt_id, sp.left_icon,
+        sp.expand1, sp.expand2, sp.expand3, sp.record_status, sp.update_time, sp.create_time
+    </sql>
+
+
+    <!--以下是自定义的-->
+
+    <!-- 表与实体映射 -->
+    <resultMap id="ResultMapCustom" type="cn.sk.api.sys.pojo.SysPermis" extends="BaseResultMap">
+        <result property="userName" column="user_name"/>
+        <result property="parentName" column="parentName"/>
+    </resultMap>
+
+    <!-- 查询条件的sql片段 -->
+
+    <sql id="base_query_condition">
+        <!--<if test="null != greaterThanPLevel">-->
+        <!--AND per_level >= #{greaterThanPLevel,jdbcType=INTEGER}-->
+        <!--</if>-->
+        <if test="null != cdtCustom">
+            <!-- ${}拼接字符串，有sql注入的维修，少用-->
+            <!--<if test="null != SysPermisCustom.userName and '' != SysPermisCustom.userName">-->
+            <!--AND user_name LIKE CONCAT('%',CONCAT(#{SysPermisCustom.userName},'%'))-->
+            <!--</if>-->
+            <if test="null != cdtCustom.parentId and '' != cdtCustom.parentId">
+                AND sp.parent_id = #{cdtCustom.parentId,jdbcType=INTEGER}
+            </if>
+            <!--<if test="null != sysPermisCustom.pLevel and '' != sysPermisCustom.pLevel">-->
+            <!--AND per_level = #{sysPermisCustom.pLevel,jdbcType=INTEGER}-->
+            <!--</if>-->
+            <if test="null != cdtCustom.perName and '' != cdtCustom.perName">
+                AND sp.per_name LIKE CONCAT('%',CONCAT(#{cdtCustom.perName,jdbcType=VARCHAR},'%'))
+            </if>
+            <if test="null != cdtCustom.recordStatus and '' != cdtCustom.recordStatus">
+                AND sp.record_status = #{cdtCustom.recordStatus,jdbcType=VARCHAR}
+            </if>
+
+        </if>
+    </sql>
+
+    <!--根据条件统计条数-->
+    <select id="selectCountByQueryVo" parameterType="cn.sk.api.sys.pojo.SysPermisQueryVo" resultType="long">
+        select count(1) from tb_sys_permis sp
+        <where>
+            <!-- 引用sql片段 的id,如果refid指定的id不在本mapper文件中,要前边加namespace -->
+            <include refid="base_query_condition"></include>
+            AND record_status != '00'
+        </where>
+    </select>
+
+    <!--根据条件查询-->
+    <select id="selectListByQueryVo" parameterType="cn.sk.api.sys.pojo.SysPermisQueryVo" resultMap="ResultMapCustom">
+        select
+        <include refid="Base_Column_List"/>,su.user_name,sp2.per_name parentName
+        from tb_sys_permis sp left join tb_sys_user su
+        on sp.opt_id = su.user_id
+        left join tb_sys_permis sp2
+        on sp.parent_id = sp2.per_id
+        <where>
+            <!-- 引用sql片段 的id,如果refid指定的id不在本mapper文件中,要前边加namespace -->
+            <include refid="base_query_condition"></include>
+            AND sp.record_status != '00'
+        </where>
+        <include refid="cn.sk.api.base.mapper.IBaseMapper.base_order"/>
+        <include refid="cn.sk.api.base.mapper.IBaseMapper.base_query_page"></include>
+    </select>
+
+    <!--根据角色id查找权限-->
+    <select id="selectListByRoleId" parameterType="map" resultType="map">
+        select sp.per_id perId, sp.per_flag perFlag, sp.per_name perName, sp.per_url perUrl, sp.parent_id parentId, sp.per_type
+        perType,sp.per_level perLevel, sp.per_sort perSort, sp.left_icon leftIcon from tb_sys_role_permis rp
+        LEFT JOIN tb_sys_permis sp
+        on rp.permis_id = sp.per_id
+        <where>
+            and role_id IN
+            <foreach collection="params.roleIds" open="(" close=")" separator="," item="roleId">
+                #{roleId,jdbcType=INTEGER}
+            </foreach>
+            and sp.record_status = #{params.recordStatus,jdbcType=CHAR}
+            <if test="null != params.pType and '' != params.pType">
+                and sp.per_type = #{params.pType,jdbcType=CHAR}
+            </if>
+        </where>
+        <if test="null != params.orderBy and '' != params.orderBy">
+            order by ${params.orderBy}
+        </if>
+    </select>
+
+
+    <!--根据主键软删除-->
+    <update id="deleteInIds">
+        update tb_sys_permis
+        set record_status = #{recordStatus,jdbcType=VARCHAR}
+        <where>
+            per_id IN
+            <foreach collection="pks" open="(" close=")" separator="," item="pk">
+                #{pk}
+            </foreach>
+        </where>
+    </update>
+
+    <!--根据主键硬删除-->
+    <delete id="realDeleteInIds">
+        delete from tb_sys_permis
+        <where>
+            per_id IN
+            <foreach collection="pks" open="(" close=")" separator="," item="pk">
+                #{pk}
+            </foreach>
+        </where>
+    </delete>
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sk.api.sys.mapper.SysLogMapper">
+
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="cn.sk.api.sys.pojo.SysLog">
+    <id column="id" property="id" />
+    <result column="user_id" property="userId" />
+    <result column="user_name" property="userName" />
+    <result column="operation" property="operation" />
+    <result column="method_name" property="methodName" />
+    <result column="params" property="params" />
+    <result column="ip" property="ip" />
+    <result column="request_url" property="requestUrl" />
+    <result column="request_type" property="requestType" />
+    <result column="expan1" property="expan1" />
+    <result column="expan2" property="expan2" />
+    <result column="expan3" property="expan3" />
+    <result column="expan4" property="expan4" />
+    <result column="expan5" property="expan5" />
+    <result column="expan6" property="expan6" />
+    <result column="record_status" property="recordStatus" />
+    <result column="update_time" property="updateTime" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
+        id, user_id, user_name, operation, method_name, params, ip, request_url, request_type, expan1, expan2, expan3, expan4, expan5, expan6 , record_status  , update_time  , create_time
+  </sql>
+
+
+  <!--以下是自定义的-->
+
+  <!-- 表与实体映射 -->
+  <resultMap id="ResultMapCustom" type="cn.sk.api.sys.pojo.SysLog" extends="BaseResultMap">
+
+  </resultMap>
+
+  <!-- 查询条件的sql片段 -->
+
+  <sql id="base_query_condition">
+    <if test="null != cdtCustom">
+      <!-- ${}拼接字符串，有sql注入的维修，少用-->
+      <if test="null != cdtCustom.operation and '' != cdtCustom.operation">
+        AND operation LIKE CONCAT('%',CONCAT(#{cdtCustom.operation,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="null != cdtCustom.userName and '' != cdtCustom.userName">
+        AND user_name LIKE CONCAT('%',CONCAT(#{cdtCustom.userName,jdbcType=VARCHAR},'%'))
+      </if>
+    </if>
+    <if test="null != startCreatTime and '' != startCreatTime">
+      AND create_time &gt;= #{startCreatTime,jdbcType=VARCHAR}
+    </if>
+    <if test="null != endCreatTime and '' != endCreatTime">
+      AND create_time &lt;= #{startCreatTime,jdbcType=VARCHAR}
+    </if>
+  </sql>
+
+
+  <!--根据条件统计条数-->
+  <select id="selectCountByQueryVo" parameterType="cn.sk.api.sys.pojo.SysLogQueryVo" resultType="long">
+    select count(1) from tb_sys_log
+    <where>
+      <!-- 引用sql片段 的id,如果refid指定的id不在本mapper文件中,要前边加namespace -->
+      <include refid="base_query_condition"></include>
+      AND record_status != '00'
+    </where>
+  </select>
+
+  <!--根据条件查询-->
+  <select id="selectListByQueryVo" parameterType="cn.sk.api.sys.pojo.SysLogQueryVo" resultMap="ResultMapCustom">
+    select
+    <include refid="Base_Column_List" />
+    from tb_sys_log
+    <where>
+      <!-- 引用sql片段 的id,如果refid指定的id不在本mapper文件中,要前边加namespace -->
+      <include refid="base_query_condition"></include>
+      AND record_status != '00'
+    </where>
+    <include refid="cn.sk.api.base.mapper.IBaseMapper.base_order"/>
+    <include refid="cn.sk.api.base.mapper.IBaseMapper.base_query_page"></include>
+  </select>
+
+  <!--根据主键软删除-->
+  <update id="deleteInIds">
+    update tb_sys_log
+    set record_status = #{recordStatus,jdbcType=VARCHAR}
+    <where>
+      id IN
+      <foreach collection="pks" open="(" close=")" separator="," item="pk">
+        #{pk}
+      </foreach>
+    </where>
+  </update>
+
+  <!--根据主键硬删除-->
+  <delete id="realDeleteInIds" >
+    delete from tb_sys_log
+    <where>
+      id IN
+      <foreach collection="pks" open="(" close=")" separator="," item="pk">
+        #{pk}
+      </foreach>
+    </where>
+  </delete>
+
+
+
+</mapper>

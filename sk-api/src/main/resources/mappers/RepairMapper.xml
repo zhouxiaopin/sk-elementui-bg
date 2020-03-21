@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sk.api.business.mapper.RepairMapper">
+  <resultMap id="BaseResultMap" type="cn.sk.api.business.pojo.Repair">
+    <constructor>
+      <idArg column="rp_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="rp_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="rp_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="rp_posi_storey" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="link_person" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="link_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="rp_emp_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="rp_person" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="rp_depart" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="rp_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="wx_emp_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="wx_person" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="handle_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="rp_idea" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="record_status" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="breakdown_pic" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="wx_pic" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="wx_plan" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+      <arg column="predict_wx_fee" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="breakdown_desc" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <!--<resultMap id="ResultMapWithBLOBs" type="Repair">-->
+  <!--<constructor>-->
+  <!--<idArg column="rp_id" javaType="java.lang.Integer" jdbcType="INTEGER" />-->
+  <!--<arg column="rp_no" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+  <!--<arg column="rp_type" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+  <!--<arg column="rp_posi_storey" javaType="java.lang.Byte" jdbcType="TINYINT" />-->
+  <!--<arg column="link_person" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+  <!--<arg column="link_phone" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+  <!--<arg column="rp_emp_id" javaType="java.lang.Integer" jdbcType="INTEGER" />-->
+  <!--<arg column="rp_person" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+  <!--<arg column="rp_depart" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+  <!--<arg column="rp_phone" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+  <!--<arg column="wx_emp_id" javaType="java.lang.Integer" jdbcType="INTEGER" />-->
+  <!--<arg column="wx_person" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+  <!--<arg column="handle_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />-->
+  <!--<arg column="rp_idea" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+  <!--<arg column="record_status" javaType="java.lang.String" jdbcType="CHAR" />-->
+  <!--<arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />-->
+  <!--<arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />-->
+  <!--<arg column="breakdown_desc" javaType="java.lang.String" jdbcType="LONGVARCHAR" />-->
+  <!--</constructor>-->
+  <!--</resultMap>-->
+  <sql id="Base_Column_List">
+    rp_id, rp_no, rp_type, rp_posi_storey, link_person, link_phone, rp_emp_id, rp_person,
+    rp_depart, rp_phone, wx_emp_id, wx_person, handle_time, rp_idea, record_status, update_time,
+    create_time,breakdown_pic,wx_pic,predict_wx_fee,wx_plan,breakdown_desc
+  </sql>
+  <!--<sql id="Blob_Column_List">-->
+  <!--breakdown_desc-->
+  <!--</sql>-->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapCustom">
+    select
+    <include refid="Base_Column_List" />
+    <!--,-->
+    <!--<include refid="Blob_Column_List" />-->
+    from tb_rp_repair
+    where rp_id = #{rpId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_rp_repair
+    where rp_id = #{rpId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.sk.api.business.pojo.Repair">
+    insert into tb_rp_repair (rp_id, rp_no, rp_type, 
+      rp_posi_storey, link_person, link_phone, 
+      rp_emp_id, rp_person, rp_depart, 
+      rp_phone, wx_emp_id, wx_person, 
+      handle_time, rp_idea, record_status, 
+      update_time, create_time,breakdown_pic,wx_pic,predict_wx_fee,wx_plan, breakdown_desc
+      )
+
+    values (#{rpId,jdbcType=INTEGER}, #{rpNo,jdbcType=VARCHAR}, #{rpType,jdbcType=VARCHAR}, 
+      #{rpPosiStorey,jdbcType=TINYINT}, #{linkPerson,jdbcType=VARCHAR}, #{linkPhone,jdbcType=VARCHAR}, 
+      #{rpEmpId,jdbcType=BIGINT}, #{rpPerson,jdbcType=VARCHAR}, #{rpDepart,jdbcType=VARCHAR},
+      #{rpPhone,jdbcType=VARCHAR}, #{wxEmpId,jdbcType=BIGINT}, #{wxPerson,jdbcType=VARCHAR},
+      #{handleTime,jdbcType=TIMESTAMP}, #{rpIdea,jdbcType=VARCHAR}, #{recordStatus,jdbcType=CHAR}, 
+      now(), now(), #{breakdownPic,jdbcType=VARCHAR}, #{wxPic,jdbcType=VARCHAR}, #{predictWxFee,jdbcType=DECIMAL},
+      #{wxPlan,jdbcType=LONGVARCHAR},#{breakdownDesc,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.sk.api.business.pojo.Repair">
+    insert into tb_rp_repair
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rpId != null">
+        rp_id,
+      </if>
+      <if test="rpNo != null">
+        rp_no,
+      </if>
+      <if test="rpType != null">
+        rp_type,
+      </if>
+      <if test="rpPosiStorey != null">
+        rp_posi_storey,
+      </if>
+      <if test="linkPerson != null">
+        link_person,
+      </if>
+      <if test="linkPhone != null">
+        link_phone,
+      </if>
+      <if test="rpEmpId != null">
+        rp_emp_id,
+      </if>
+      <if test="rpPerson != null">
+        rp_person,
+      </if>
+      <if test="rpDepart != null">
+        rp_depart,
+      </if>
+      <if test="rpPhone != null">
+        rp_phone,
+      </if>
+      <if test="wxEmpId != null">
+        wx_emp_id,
+      </if>
+      <if test="wxPerson != null">
+        wx_person,
+      </if>
+      <if test="handleTime != null">
+        handle_time,
+      </if>
+      <if test="rpIdea != null">
+        rp_idea,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      update_time,
+      create_time,
+      <if test="breakdownPic != null">
+        breakdown_pic,
+      </if>
+      <if test="wxPic != null">
+        wx_pic,
+      </if>
+      <if test="predictWxFee != null">
+        predict_wx_fee,
+      </if>
+      <if test="wxPlan != null">
+        wx_plan,
+      </if>
+      <if test="breakdownDesc != null">
+        breakdown_desc,
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rpId != null">
+        #{rpId,jdbcType=INTEGER},
+      </if>
+      <if test="rpNo != null">
+        #{rpNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rpType != null">
+        #{rpType,jdbcType=VARCHAR},
+      </if>
+      <if test="rpPosiStorey != null">
+        #{rpPosiStorey,jdbcType=TINYINT},
+      </if>
+      <if test="linkPerson != null">
+        #{linkPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="linkPhone != null">
+        #{linkPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="rpEmpId != null">
+        #{rpEmpId,jdbcType=BIGINT},
+      </if>
+      <if test="rpPerson != null">
+        #{rpPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="rpDepart != null">
+        #{rpDepart,jdbcType=VARCHAR},
+      </if>
+      <if test="rpPhone != null">
+        #{rpPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="wxEmpId != null">
+        #{wxEmpId,jdbcType=BIGINT},
+      </if>
+      <if test="wxPerson != null">
+        #{wxPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="handleTime != null">
+        #{handleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rpIdea != null">
+        #{rpIdea,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=CHAR},
+      </if>
+      now(),
+      now(),
+      <if test="breakdownPic != null">
+        #{breakdownPic,jdbcType=VARCHAR},
+      </if>
+      <if test="wxPic != null">
+        #{wxPic,jdbcType=VARCHAR},
+      </if>
+      <if test="predictWxFee != null">
+        #{predictWxFee,jdbcType=DECIMAL},
+      </if>
+      <if test="wxPlan != null">
+        #{wxPlan,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="breakdownDesc != null">
+        #{breakdownDesc,jdbcType=LONGVARCHAR},
+      </if>
+
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.sk.api.business.pojo.Repair">
+    update tb_rp_repair
+    <set>
+      <if test="rpNo != null">
+        rp_no = #{rpNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rpType != null">
+        rp_type = #{rpType,jdbcType=VARCHAR},
+      </if>
+      <if test="rpPosiStorey != null">
+        rp_posi_storey = #{rpPosiStorey,jdbcType=TINYINT},
+      </if>
+      <if test="linkPerson != null">
+        link_person = #{linkPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="linkPhone != null">
+        link_phone = #{linkPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="rpEmpId != null">
+        rp_emp_id = #{rpEmpId,jdbcType=BIGINT},
+      </if>
+      <if test="rpPerson != null">
+        rp_person = #{rpPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="rpDepart != null">
+        rp_depart = #{rpDepart,jdbcType=VARCHAR},
+      </if>
+      <if test="rpPhone != null">
+        rp_phone = #{rpPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="wxEmpId != null">
+        wx_emp_id = #{wxEmpId,jdbcType=BIGINT},
+      </if>
+      <if test="wxPerson != null">
+        wx_person = #{wxPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="handleTime != null">
+        handle_time = #{handleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rpIdea != null">
+        rp_idea = #{rpIdea,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=CHAR},
+      </if>
+      update_time = now(),
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+
+      <if test="breakdownPic != null">
+        breakdown_desc = #{breakdownPic,jdbcType=VARCHAR},
+      </if>
+      <if test="wxPic != null">
+        wx_pic = #{wxPic,jdbcType=VARCHAR},
+      </if>
+      <if test="predictWxFee != null">
+        predict_wx_fee = #{predictWxFee,jdbcType=DECIMAL},
+      </if>
+      <if test="wxPlan != null">
+        wx_plan = #{wxPlan,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="breakdownDesc != null">
+        breakdown_desc = #{breakdownDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where rp_id = #{rpId,jdbcType=INTEGER}
+  </update>
+  <!--<update id="updateByPrimaryKeyWithBLOBs" parameterType="Repair">-->
+  <!--update tb_rp_repair-->
+  <!--set rp_no = #{rpNo,jdbcType=VARCHAR},-->
+  <!--rp_type = #{rpType,jdbcType=VARCHAR},-->
+  <!--rp_posi_storey = #{rpPosiStorey,jdbcType=TINYINT},-->
+  <!--link_person = #{linkPerson,jdbcType=VARCHAR},-->
+  <!--link_phone = #{linkPhone,jdbcType=VARCHAR},-->
+  <!--rp_emp_id = #{rpEmpId,jdbcType=INTEGER},-->
+  <!--rp_person = #{rpPerson,jdbcType=VARCHAR},-->
+  <!--rp_depart = #{rpDepart,jdbcType=VARCHAR},-->
+  <!--rp_phone = #{rpPhone,jdbcType=VARCHAR},-->
+  <!--wx_emp_id = #{wxEmpId,jdbcType=INTEGER},-->
+  <!--wx_person = #{wxPerson,jdbcType=VARCHAR},-->
+  <!--handle_time = #{handleTime,jdbcType=TIMESTAMP},-->
+  <!--rp_idea = #{rpIdea,jdbcType=VARCHAR},-->
+  <!--record_status = #{recordStatus,jdbcType=CHAR},-->
+  <!--update_time = #{updateTime,jdbcType=TIMESTAMP},-->
+  <!--create_time = #{createTime,jdbcType=TIMESTAMP},-->
+  <!--breakdown_desc = #{breakdownDesc,jdbcType=LONGVARCHAR}-->
+  <!--where rp_id = #{rpId,jdbcType=INTEGER}-->
+  <!--</update>-->
+  <update id="updateByPrimaryKey" parameterType="cn.sk.api.business.pojo.Repair">
+    update tb_rp_repair
+    set rp_no = #{rpNo,jdbcType=VARCHAR},
+      rp_type = #{rpType,jdbcType=VARCHAR},
+      rp_posi_storey = #{rpPosiStorey,jdbcType=TINYINT},
+      link_person = #{linkPerson,jdbcType=VARCHAR},
+      link_phone = #{linkPhone,jdbcType=VARCHAR},
+      rp_emp_id = #{rpEmpId,jdbcType=BIGINT},
+      rp_person = #{rpPerson,jdbcType=VARCHAR},
+      rp_depart = #{rpDepart,jdbcType=VARCHAR},
+      rp_phone = #{rpPhone,jdbcType=VARCHAR},
+      wx_emp_id = #{wxEmpId,jdbcType=BIGINT},
+      wx_person = #{wxPerson,jdbcType=VARCHAR},
+      handle_time = #{handleTime,jdbcType=TIMESTAMP},
+      rp_idea = #{rpIdea,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=CHAR},
+      update_time = now(),
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      breakdown_desc = #{breakdownDesc,jdbcType=LONGVARCHAR}
+    where rp_id = #{rpId,jdbcType=INTEGER}
+  </update>
+
+
+  <!--以下是自定义的-->
+
+  <!-- 表与实体映射 -->
+  <resultMap id="ResultMapCustom" type="cn.sk.api.business.pojo.RepairCustom" extends="BaseResultMap">
+    <!--<result property="roleName" column="role_ame" />-->
+  </resultMap>
+
+  <!-- 查询条件的sql片段 -->
+
+  <sql id="base_query_condition">
+    <if test="null != repairCustom">
+
+      <!-- ${}拼接字符串，有sql注入的维修，少用-->
+      <if test="null != repairCustom.rpNo and '' != repairCustom.rpNo">
+        AND rp.rp_no LIKE CONCAT('%',CONCAT(#{repairCustom.rpNo,jdbcType=VARCHAR},'%'))
+      </if>
+
+
+      <!-- ${}拼接字符串，有sql注入的维修，少用-->
+      <!--<if test="null != employeeCustom.empName and '' != employeeCustom.empName">-->
+        <!--<if test="isNoLike.empName">-->
+          <!--AND be.emp_name = #{employeeCustom.empName,jdbcType=VARCHAR}-->
+        <!--</if>-->
+        <!--<if test="!isNoLike.userName">-->
+          <!--AND be.emp_name LIKE CONCAT('%',CONCAT(#{employeeCustom.empName,jdbcType=VARCHAR},'%'))-->
+        <!--</if>-->
+      <!--</if>-->
+
+    </if>
+  </sql>
+
+  <!--根据条件查询-->
+  <select id="selectListByQueryVo" parameterType="cn.sk.api.business.pojo.RepairQueryVo" resultMap="ResultMapCustom">
+    select
+    <include refid="Base_Column_List" />
+    from tb_rp_repair rp
+    <where>
+      <!-- 引用sql片段 的id,如果refid指定的id不在本mapper文件中,要前边加namespace -->
+      <include refid="base_query_condition"></include>
+    </where>
+    <include refid="cn.sk.api.base.mapper.IBaseMapper.base_order"/>
+  </select>
+</mapper>

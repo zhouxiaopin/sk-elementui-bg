@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sk.api.sys.mapper.SysDictMapper">
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="cn.sk.api.sys.pojo.SysDict">
+    <id column="dict_id" property="dictId" />
+    <result column="dict_type" property="dictType" />
+    <result column="dict_code" property="dictCode" />
+    <result column="code_name" property="codeName" />
+    <result column="description" property="description" />
+    <result column="sort" property="sort" />
+    <result column="remark" property="remark" />
+    <result column="field1" property="field1" />
+    <result column="field2" property="field2" />
+    <result column="field3" property="field3" />
+    <result column="field4" property="field4" />
+    <result column="field5" property="field5" />
+    <result column="field6" property="field6" />
+    <result column="record_status" property="recordStatus" />
+    <result column="update_time" property="updateTime" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
+        dict_id, dict_type, dict_code, code_name, description, sort, remark, field1, field2, field3, field4, field5, field6 , record_status  , update_time  , create_time
+    </sql>
+
+  <!--以下是自定义的-->
+
+  <!-- 表与实体映射 -->
+  <resultMap id="ResultMapCustom" type="cn.sk.api.sys.pojo.SysDict" extends="BaseResultMap">
+
+  </resultMap>
+
+  <!-- 查询条件的sql片段 -->
+
+  <sql id="base_query_condition">
+    <if test="null != cdtCustom">
+      <!-- ${}拼接字符串，有sql注入的危险，少用-->
+      <if test="isNoLike.dictType">
+        <if test="null != cdtCustom.dictType and '' != cdtCustom.dictType">
+          AND dict_type = #{cdtCustom.dictType,jdbcType=VARCHAR}
+        </if>
+      </if>
+      <if test="!isNoLike.dictType">
+        <if test="null != cdtCustom.dictType and '' != cdtCustom.dictType">
+          AND dict_type LIKE CONCAT('%',CONCAT(#{cdtCustom.dictType,jdbcType=VARCHAR},'%'))
+        </if>
+      </if>
+      <if test="null != cdtCustom.dictCode and '' != cdtCustom.dictCode">
+        AND dict_code = #{cdtCustom.dictCode,jdbcType=VARCHAR}
+      </if>
+      <if test="null != cdtCustom.recordStatus and '' != cdtCustom.recordStatus">
+        AND record_status = #{cdtCustom.recordStatus,jdbcType=VARCHAR}
+      </if>
+    </if>
+  </sql>
+
+  <!--根据条件统计条数-->
+  <select id="selectCountByQueryVo" parameterType="cn.sk.api.sys.pojo.SysDictQueryVo" resultType="long">
+    select count(1) from tb_sys_dict
+    <where>
+      <!-- 引用sql片段 的id,如果refid指定的id不在本mapper文件中,要前边加namespace -->
+      <include refid="base_query_condition"></include>
+      AND record_status != '00'
+    </where>
+  </select>
+  <!--根据条件查询-->
+  <select id="selectListByQueryVo" parameterType="cn.sk.api.sys.pojo.SysDictQueryVo" resultMap="ResultMapCustom">
+    select
+    <include refid="Base_Column_List" />
+    from tb_sys_dict
+    <where>
+      <!-- 引用sql片段 的id,如果refid指定的id不在本mapper文件中,要前边加namespace -->
+      <include refid="base_query_condition"></include>
+      AND record_status != '00'
+    </where>
+    <include refid="cn.sk.api.base.mapper.IBaseMapper.base_order"/>
+    <include refid="cn.sk.api.base.mapper.IBaseMapper.base_query_page"></include>
+  </select>
+
+  <!--根据主键软删除-->
+  <update id="deleteInIds">
+    update tb_sys_dict
+    set record_status = #{recordStatus,jdbcType=VARCHAR}
+
+    <where>
+      dict_id IN
+      <foreach collection="pks" open="(" close=")" separator="," item="pk">
+        #{pk}
+      </foreach>
+    </where>
+  </update>
+
+  <!--根据主键硬删除-->
+  <delete id="realDeleteInIds">
+    delete from tb_sys_dict
+    <where>
+      dict_id IN
+      <foreach collection="pks" open="(" close=")" separator="," item="pk">
+        #{pk}
+      </foreach>
+    </where>
+  </delete>
+</mapper>
