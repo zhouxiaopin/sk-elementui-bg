@@ -1,4 +1,4 @@
-package cn.sk.api.sys.utils;
+package cn.sk.common.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -111,8 +111,8 @@ public class HttpClientUtil {
 	 * @param params
 	 * @return
 	 */
-	public static JSONObject sendPostJson(String interfaceName,String url, String params) {
-		long startTime = System.currentTimeMillis();
+	public static JSONObject sendPostJson(String url, String params) {
+		
 		// 初始化请求接收对象
 		CloseableHttpResponse response = null;
 		
@@ -121,12 +121,12 @@ public class HttpClientUtil {
 		
 		// 【2】，Post请求，创建HttpPost对象。
 		HttpPost httpPost = new HttpPost(url);
+
 		httpPost.addHeader("ContentType", "application/json");
-		
+
 		try {
 			// 设置请求参数（这里是模仿，web页的提交参数key-value格式）
 			// 擦，这里貌似最后还是转化成了 key1=value2&key2=value2&key3=value3 这样的格式
-//			httpPost.setEntity(new StringEntity(params, Consts.UTF_8));
 			StringEntity requestEntity = new StringEntity(params, Consts.UTF_8);
 			requestEntity.setContentType("application/json");
 			requestEntity.setContentEncoding(Consts.UTF_8.toString());
@@ -147,17 +147,11 @@ public class HttpClientUtil {
 					log.error("请求Post,解析resulr数据异常IOException：", e);
 					e.printStackTrace();
 				}
-
-				long endTime = System.currentTimeMillis();
-				String timeConsuming = DateUtils.timeDifferenceTomm(startTime,endTime);
-				log.info(interfaceName);
-				log.info("请求参数：" + params.toString());
-				log.info("返回结果：" + result);
-				log.info("耗时： " + timeConsuming);
-				log.info("------------------------------------------");
-
-//				System.out.println("=====请求返回的数据====="+result);
+				System.out.println("=====请求返回的数据====="+result);
 				return JSONObject.parseObject(result);
+			}else{
+				System.out.println("=====请求返回的statusCode====="+response.getStatusLine().getStatusCode());
+				log.error("请求返回的statusCode：{}", response.getStatusLine().getStatusCode());
 			}
 		} catch (UnsupportedEncodingException e1) {
 			log.error("请求Post异常UnsupportedEncodingException：", e1);
@@ -188,8 +182,11 @@ public class HttpClientUtil {
 	 * @param params
 	 * @return
 	 */
-	public static JSONObject sendPostJson(String url, String params) {
-
+	public static JSONObject sendPostJson(String interfaceName, String url, String params) {
+		log.info(interfaceName);
+		log.info("请求url：" + interfaceName);
+		log.info("请求参数：" + params.toString());
+		long startTime = System.currentTimeMillis();
 		// 初始化请求接收对象
 		CloseableHttpResponse response = null;
 
@@ -203,7 +200,11 @@ public class HttpClientUtil {
 		try {
 			// 设置请求参数（这里是模仿，web页的提交参数key-value格式）
 			// 擦，这里貌似最后还是转化成了 key1=value2&key2=value2&key3=value3 这样的格式
-			httpPost.setEntity(new StringEntity(params, Consts.UTF_8));
+//			httpPost.setEntity(new StringEntity(params, Consts.UTF_8));
+			StringEntity requestEntity = new StringEntity(params, Consts.UTF_8);
+			requestEntity.setContentType("application/json");
+			requestEntity.setContentEncoding(Consts.UTF_8.toString());
+			httpPost.setEntity(requestEntity);
 			// httpPost.setEntity(new UrlEncodedFormEntity(list,Consts.UTF_8));
 			response = httpclient.execute(httpPost);
 			/** 请求发送成功，并得到响应 **/
@@ -220,7 +221,16 @@ public class HttpClientUtil {
 					log.error("请求Post,解析resulr数据异常IOException：", e);
 					e.printStackTrace();
 				}
-				System.out.println("=====请求返回的数据====="+result);
+
+				long endTime = System.currentTimeMillis();
+				String timeConsuming = DateUtils.timeDifferenceTomm(startTime,endTime);
+
+
+				log.info("返回结果：" + result);
+				log.info("耗时： " + timeConsuming);
+				log.info("------------------------------------------");
+
+//				System.out.println("=====请求返回的数据====="+result);
 				return JSONObject.parseObject(result);
 			}
 		} catch (UnsupportedEncodingException e1) {

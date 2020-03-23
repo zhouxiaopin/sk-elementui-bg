@@ -1,14 +1,16 @@
 package cn.sk.api.sys.controller;
 
 import cn.sk.api.base.controller.BaseController;
+import cn.sk.api.business.service.IFileService;
 import cn.sk.api.sys.common.*;
 import cn.sk.api.sys.pojo.SysUser;
 import cn.sk.api.sys.pojo.SysUserQueryVo;
 import cn.sk.api.sys.service.ISysUserService;
-import cn.sk.api.sys.utils.DateUtils;
 import cn.sk.api.sys.utils.JwtUtil;
 import cn.sk.api.sys.utils.ShiroUtils;
+import cn.sk.common.utils.DateUtils;
 import cn.sk.poi.utils.ExportExcelUtil;
+import cn.sk.poi.utils.ImportExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
@@ -16,9 +18,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +40,8 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
 
     @Autowired
     private ISysUserService sysUserService;
+    @Autowired
+    private IFileService fileService;
 
 
     //进入登录页面
@@ -247,6 +253,15 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
                 .tempPath("emp-template.xls").build();
 
         exportExcelUtil.exportExcel03(params);
+    }
+    @PostMapping(value = "/import")
+    public ServerResponse skImport(MultipartFile uploadFile) throws IOException {
+        ImportExcelUtil<SysUser> importExcelUtil = new ImportExcelUtil<>();
+        ImportExcelUtil.ImportParam<SysUser> params = ImportExcelUtil.ImportParam.<SysUser>builder()
+                .is(uploadFile.getInputStream())
+                .fileName(uploadFile.getName())
+                .clazz(SysUser.class).build();
+        return ServerResponse.createBySuccess(importExcelUtil.importExcel(params));
     }
 
     //参数检验

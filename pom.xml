@@ -19,6 +19,7 @@
 	<modules>
 		<module>sk-api</module>
 		<module>sk-poi</module>
+		<module>sk-common</module>
 	</modules>
 
 	<!--属性-->
@@ -43,6 +44,7 @@
 		<velocity.engine.version>2.2</velocity.engine.version>
 		<junit.version>4.13</junit.version>
 		<servlet.version>3.1.0</servlet.version>
+		<commons.net.version>3.1</commons.net.version>
 
 	</properties>
 
@@ -159,6 +161,12 @@
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
 				<version>${commons.beanutils.version}</version>
+			</dependency>
+			<!-- ftpclient -->
+			<dependency>
+				<groupId>commons-net</groupId>
+				<artifactId>commons-net</artifactId>
+				<version>${commons.net.version}</version>
 			</dependency>
 
 			<dependency>

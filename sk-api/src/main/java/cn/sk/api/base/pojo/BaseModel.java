@@ -2,6 +2,7 @@ package cn.sk.api.base.pojo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -40,5 +41,6 @@ public abstract class BaseModel implements Serializable{
 //    @TableField(exist = false)
 //    private Serializable pk;
 
+    @JsonIgnore
     public abstract Serializable getPkVal();
 }

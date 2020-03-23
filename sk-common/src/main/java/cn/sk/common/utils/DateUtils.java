@@ -1,4 +1,4 @@
-package cn.sk.api.sys.utils;
+package cn.sk.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;

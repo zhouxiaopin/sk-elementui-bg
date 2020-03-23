@@ -1,7 +1,6 @@
 package cn.sk.api.business.service;
 
-import java.io.File;
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 文件业务逻辑接口
@@ -11,7 +10,7 @@ public interface IFileService {
      * 下载文件
      * @param realPath
      */
-    void downFile(String realPath);
+    void downTemplateFile(HttpServletResponse response,String realPath);
 
     /**
      * 导出数据
@@ -20,5 +19,5 @@ public interface IFileService {
      * @param colWidth
      * @param lists
      */
-    void exportExcelData(File file, String[] title, int[] colWidth, List<List<String>> lists);
+//    void exportExcelData(File file, String[] title, int[] colWidth, List<List<String>> lists);
 }

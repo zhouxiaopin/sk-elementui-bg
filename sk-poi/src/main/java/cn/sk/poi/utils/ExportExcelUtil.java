@@ -111,16 +111,17 @@ public class ExportExcelUtil<T> {
                     Cell cell = row.createCell(j);
                     cell.setCellStyle(cellStyle[j]);
 
-                    //找出有声明注解cn.sk.poi.anno.ExcelAtrr并sort=j的属性
-                    for (int p = 0, length = fields.size(); p < length; p++) {
+                    //找出有声明注解cn.sk.poi.anno.ExcelAtrr并outSort=j的属性
+                    filedlable:for (int p = 0, length = fields.size(); p < length; p++) {
                         Field field = fields.get(p);
                         ExcelAtrr anno = field.getAnnotation(ExcelAtrr.class);
                         if (null != anno) {
-                            int sort = anno.sort();
+                            int sort = anno.outSort();
                             if (sort == j) {
                                 field.setAccessible(true);
                                 Object val = field.get(t);
                                 cell.setCellValue(null != val?val.toString():null);
+                                break filedlable;
                             }
                         }
                     }

@@ -1,6 +1,7 @@
-package cn.sk.api.sys.utils;
+package cn.sk.common.utils;
 
-import cn.sk.api.sys.pojo.TreeNode;
+
+import cn.sk.common.pojo.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;

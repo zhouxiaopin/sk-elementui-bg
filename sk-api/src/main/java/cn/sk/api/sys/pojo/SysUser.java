@@ -25,7 +25,7 @@ public class SysUser extends BaseModel{
     /**
      * 用户名
      */
-    @ExcelAtrr(sort = 0)
+    @ExcelAtrr(outSort = 0,inSort = 0)
     private String userName;
 
     /**
@@ -36,7 +36,7 @@ public class SysUser extends BaseModel{
     /**
      * 姓名
      */
-    @ExcelAtrr(sort = 0)
+    @ExcelAtrr(outSort = 1,inSort = 1)
     private String realName;
 
     /**

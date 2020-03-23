@@ -1,4 +1,4 @@
-package cn.sk.api.sys.pojo;
+package cn.sk.common.pojo;
 
 
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package cn.sk.api.sys.utils;
+package cn.sk.poi.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.*;
@@ -211,13 +211,13 @@ public class PoiExcelUtil {
 				CellType type = cell.getCellType();
 				if(type == CellType.NUMERIC) {// 如果当前Cell的Type为NUMERIC
 					if (DateUtil.isCellDateFormatted(cell)) {
-						cellvalue = DateUtils.dateFomat.format(HSSFDateUtil.getJavaDate(cell.getNumericCellValue()));
+						cellvalue = ExcelCommonUtil.simpleDateFormat.format(DateUtil.getJavaDate(cell.getNumericCellValue()));
 					} else {
 						cellvalue = (new BigDecimal(cell.getNumericCellValue())).toString();
 					}
 				}else if(type == CellType.FORMULA){
 					if (DateUtil.isCellDateFormatted(cell)) {
-						cellvalue = DateUtils.dateFomat.format(HSSFDateUtil.getJavaDate(cell.getNumericCellValue()));
+						cellvalue = ExcelCommonUtil.simpleDateFormat.format(DateUtil.getJavaDate(cell.getNumericCellValue()));
 					} else {// 如果是纯数字
 						// 取得当前Cell的数值
 						cellvalue = (new BigDecimal(cell.getNumericCellValue())).toString();
@@ -232,6 +232,7 @@ public class PoiExcelUtil {
 				cellvalue = "";
 			}
 		} catch (Exception e) {
+
 		}
 		return cellvalue;
 	}
