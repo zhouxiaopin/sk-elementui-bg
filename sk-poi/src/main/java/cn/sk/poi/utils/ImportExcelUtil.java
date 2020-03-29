@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
@@ -18,6 +15,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  *@Deseription excel 导入工具类
@@ -30,6 +28,7 @@ public class ImportExcelUtil<T> {
 
     public List<T> importExcel(@NonNull ImportParam<T> params) {
         InputStream is = null;
+        boolean isO3 = true;
         try {
             is = params.getIs();
             Class<T> clazz = params.getClazz();
@@ -37,8 +36,9 @@ public class ImportExcelUtil<T> {
             String importFileName = params.getFileName();
             Workbook workbook;
             //判断后缀
-            if(importFileName.endsWith(".xlsx")) {
+            if(importFileName.endsWith(".xlsx")) {//07或者以上
                 workbook = new XSSFWorkbook(is);
+                isO3 = false;
             }else{
                 workbook = new HSSFWorkbook(is);
             }
@@ -64,7 +64,14 @@ public class ImportExcelUtil<T> {
                 fields.addAll(Arrays.asList(suFileds));
             }
 
-            for(int i = startLowIndex; i < lastRowNum; i++) {
+
+            Map<String, PictureData> picMap = null;
+            //判断是否有图片
+            if(params.hasPic) {
+                picMap = isO3?ExcelCommonUtil.getPicturesByXls(sheet):ExcelCommonUtil.getPicturesByXlsx(sheet);
+            }
+
+            for(int i = startLowIndex; i <= lastRowNum; i++) {//行
                 Row row = sheet.getRow(i);
                 short lastCellNum = row.getLastCellNum();
 
@@ -72,7 +79,7 @@ public class ImportExcelUtil<T> {
 //                T t = (T) tClass.getConstructor().newInstance();
                 T t = clazz.newInstance();
 
-                for(int j = 0; j < lastCellNum; j++) {
+                for(int j = 0; j < lastCellNum; j++) {//列
                     Cell cell = row.getCell(j);
                     Object value = ExcelCommonUtil.getCellValue(cell);
 
@@ -85,13 +92,25 @@ public class ImportExcelUtil<T> {
                             if (sort == j) {
                                 //zcp------有新类型就在这里加
                                 field.setAccessible(true);
-                                if(value instanceof Double) {
-                                    if(field.getType() == Integer.class) {
-                                        field.set(t,((Double) value).intValue());
-                                    }
-                                }else{
+                                //获取字段类型
+                                Class<?> fieldType= field.getType();
+                                //如果是文件类型
+                                if(params.hasPic&&PictureData.class == fieldType&& null != picMap
+                                        &&picMap.size()>0) {//图片
+                                    String picKey = i+"-"+j;
+                                    //根据行列获取对应图片
+                                    value = picMap.get(picKey);
                                     field.set(t,value);
+                                }else{
+                                    if(value instanceof Double) {
+                                        if(field.getType() == Integer.class) {
+                                            field.set(t,((Double) value).intValue());
+                                        }
+                                    }else{
+                                        field.set(t,value);
+                                    }
                                 }
+
                                 break filedlable;
                             }
                         }
@@ -125,6 +144,8 @@ public class ImportExcelUtil<T> {
         private String fileName;
         //数据开始的行索引
         private Integer lowIndex;
+        //是否有图片
+        private boolean hasPic;
         public Integer getLowIndex() {
             return null == lowIndex?DEFAULT_LOWINDEX:lowIndex;
         }

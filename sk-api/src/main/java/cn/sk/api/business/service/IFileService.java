@@ -1,5 +1,7 @@
 package cn.sk.api.business.service;
 
+import cn.sk.api.sys.common.ServerResponse;
+
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -10,7 +12,7 @@ public interface IFileService {
      * 下载文件
      * @param realPath
      */
-    void downTemplateFile(HttpServletResponse response,String realPath);
+    ServerResponse downTemplateFile(HttpServletResponse response, String realPath);
 
     /**
      * 导出数据

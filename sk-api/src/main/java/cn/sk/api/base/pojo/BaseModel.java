@@ -37,6 +37,7 @@ public abstract class BaseModel implements Serializable{
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
+
     //主键
 //    @TableField(exist = false)
 //    private Serializable pk;

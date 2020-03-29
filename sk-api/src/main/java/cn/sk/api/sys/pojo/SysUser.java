@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.poi.ss.usermodel.PictureData;
 
 import java.io.Serializable;
 
@@ -74,12 +76,19 @@ public class SysUser extends BaseModel{
     //旧角色ID
     @TableField(exist = false)
     private String oldRoleIds;
-
     //角色名
     @TableField(exist = false)
     private String roleName;
     @TableField(exist = false)
     private String recordStatusStr;
+
+    /**
+     * 头像文件
+     */
+    @TableField(exist = false)
+    @JsonIgnore
+    @ExcelAtrr(outSort = 11,inSort = 11)
+    private PictureData headImg;
 
 
     @Override

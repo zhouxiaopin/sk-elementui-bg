@@ -8,5 +8,4 @@ import cn.sk.api.sys.pojo.SysUserQueryVo;
  * 系统用户业务逻辑接口
  */
 public interface ISysUserService extends IBaseService<SysUser, SysUserQueryVo>{
-
 }

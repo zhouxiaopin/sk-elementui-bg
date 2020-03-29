@@ -91,6 +91,12 @@ public class SysConst {
         String BATCH_DEL = "batchDel";
         //批量硬删除
         String BATCH_REAL_DEL = "batchRealDel";
+        //下载导入模板
+        String DOWN_IMPORT_TEMP = "downImportTemp";
+        //导出数据
+        String EXPORT_DATA = "exportData";
+        //批量导入
+        String BATCH_IMPORT = "batchImport";
 
         //系统用户
         class SysUser{
@@ -103,6 +109,9 @@ public class SysConst {
             public static final String REAL_DEL = SYSUSER+":"+ShiroPermis.REAL_DEL;
             public static final String BATCH_DEL = SYSUSER+":"+ShiroPermis.BATCH_DEL;
             public static final String BATCH_REAL_DEL = SYSUSER+":"+ShiroPermis.BATCH_REAL_DEL;
+            public static final String DOWN_IMPORT_TEMP = SYSUSER+":"+ShiroPermis.DOWN_IMPORT_TEMP;
+            public static final String EXPORT_DATA = SYSUSER+":"+ShiroPermis.EXPORT_DATA;
+            public static final String BATCH_IMPORT = SYSUSER+":"+ShiroPermis.BATCH_IMPORT;
         }
 
         //系统角色

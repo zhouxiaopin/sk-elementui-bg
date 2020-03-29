@@ -11,6 +11,16 @@ import java.net.URLEncoder;
 import java.util.UUID;
 
 public class FileUtils {
+    /**
+     * 向客户端下载文件,弹出下载框.
+     *
+     * @param response
+     *            (HttpServletResponse)
+     * @param filePath
+     *            (需要下载的文件路径)
+     *            (文件名)
+     * @throws IOException
+     */
     public static boolean exportFile(HttpServletResponse response, String filePath){
         String fileName = UUID.randomUUID().toString()
                 +filePath.substring(filePath.lastIndexOf("."));
@@ -37,9 +47,12 @@ public class FileUtils {
             String filename = URLEncoder.encode(fileName, "UTF-8");
             // 定义输出类型(下载)
             response.setContentType("application/force-download");
-            response.setHeader("Location", filename);
+            response.setHeader("filename", filename);
             // 定义输出文件头
-            response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+            response.setHeader("content-disposition", "attachment;filename=" + filename);
+            //如果想让浏览器能访问到其他的 响应头的话 需要在服务器上设置 Access-Control-Expose-Headers
+            response.setHeader("Access-Control-Expose-Headers", "filename,content-disposition");
+
             // 取得输出流
             out = response.getOutputStream();
             in = ExportExcelUtil.class.getClassLoader().getResourceAsStream(filePath);

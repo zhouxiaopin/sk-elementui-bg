@@ -42,6 +42,9 @@ public class BaseController<T, V> {
     protected static final String REAL_DEL_OPRT = "realDel";
     protected static final String BATCH_DEL_OPRT = "batchDel";
     protected static final String BATCH_REAL_DEL_OPRT = "batchRealDel";
+    protected static final String DOWN_IMPORT_TEMP = "downImportTemp";
+    protected static final String EXPORT_DATA = "exportData";
+    protected static final String BATCH_IMPORT = "batchImport";
 
     //根据操作返回对应的页面
 //    protected String getPage(String oprt) {

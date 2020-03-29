@@ -1,10 +1,17 @@
 package cn.sk.poi.utils;
 
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ooxml.POIXMLDocumentPart;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.NumberToTextConverter;
+import org.apache.poi.xssf.usermodel.*;
+import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ExcelCommonUtil {
 
@@ -76,5 +83,55 @@ public class ExcelCommonUtil {
         }
 
         return ret.trim(); // 有必要自行trim
+    }
+
+    /**
+     * 获取图片和位置 (xls)
+     * @param st
+     * @return
+     */
+    public static Map<String, PictureData> getPicturesByXls (Sheet st) {
+        HSSFSheet sheet = (HSSFSheet) st;
+        Map<String, PictureData> map = new HashMap<>();
+        HSSFPatriarch hssfShapes = sheet.getDrawingPatriarch();
+        if(null == hssfShapes) {
+            return map;
+        }
+        List<HSSFShape> list = sheet.getDrawingPatriarch().getChildren();
+        for (HSSFShape shape : list) {
+            if (shape instanceof HSSFPicture) {
+                HSSFPicture picture = (HSSFPicture) shape;
+                HSSFClientAnchor cAnchor = (HSSFClientAnchor) picture.getAnchor();
+                PictureData pdata = picture.getPictureData();
+                String key = cAnchor.getRow1() + "-" + cAnchor.getCol1(); // 行号-列号
+                map.put(key, pdata);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 获取图片和位置 (xlsx)
+     * @param st
+     * @return
+     */
+    public static Map<String, PictureData> getPicturesByXlsx (Sheet st) {
+        XSSFSheet sheet = (XSSFSheet) st;
+        Map<String, PictureData> map = new HashMap<>();
+        List<POIXMLDocumentPart> list = sheet.getRelations();
+        for (POIXMLDocumentPart part : list) {
+            if (part instanceof XSSFDrawing) {
+                XSSFDrawing drawing = (XSSFDrawing) part;
+                List<XSSFShape> shapes = drawing.getShapes();
+                for (XSSFShape shape : shapes) {
+                    XSSFPicture picture = (XSSFPicture) shape;
+                    XSSFClientAnchor anchor = picture.getPreferredSize();
+                    CTMarker marker = anchor.getFrom();
+                    String key = marker.getRow() + "-" + marker.getCol();
+                    map.put(key, picture.getPictureData());
+                }
+            }
+        }
+        return map;
     }
 }

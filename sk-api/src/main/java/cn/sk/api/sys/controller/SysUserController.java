@@ -11,10 +11,15 @@ import cn.sk.api.sys.utils.ShiroUtils;
 import cn.sk.common.utils.DateUtils;
 import cn.sk.poi.utils.ExportExcelUtil;
 import cn.sk.poi.utils.ImportExcelUtil;
+import cn.sk.poi.vo.BatchImportVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.PictureData;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,16 +27,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 系统用户 Controller
  */
 @RestController
 @RequestMapping("/sysUser")
+@Slf4j
 public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
 
     private static final String UPDATE_PASSWORD_OPRT = "updatePassword";
@@ -242,10 +250,10 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
 //        return super.getPage(oprt);
 //    }
 
-    @GetMapping(value = "/export")
-    public void export(HttpServletResponse response){
+    @PostMapping(value = "/export",produces = "application/octet-stream;charset=UTF-8")
+    public void export(@RequestBody SysUserQueryVo sysUserQueryVo,HttpServletResponse response){
 
-        List<SysUser> sysUsers = this.queryAllByCondition(null).getData();
+        List<SysUser> sysUsers = this.queryAllByCondition(sysUserQueryVo).getData();
 
         ExportExcelUtil<SysUser> exportExcelUtil = new ExportExcelUtil<>();
         ExportExcelUtil.ExportParam<SysUser> params = ExportExcelUtil.ExportParam.<SysUser>builder()
@@ -254,14 +262,51 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
 
         exportExcelUtil.exportExcel03(params);
     }
-    @PostMapping(value = "/import")
-    public ServerResponse skImport(MultipartFile uploadFile) throws IOException {
+    @PostMapping(value = "/batchImport")
+    public ServerResponse batchImport(@RequestParam("file") MultipartFile[] files) throws IOException {
         ImportExcelUtil<SysUser> importExcelUtil = new ImportExcelUtil<>();
-        ImportExcelUtil.ImportParam<SysUser> params = ImportExcelUtil.ImportParam.<SysUser>builder()
-                .is(uploadFile.getInputStream())
-                .fileName(uploadFile.getName())
-                .clazz(SysUser.class).build();
-        return ServerResponse.createBySuccess(importExcelUtil.importExcel(params));
+        ImportExcelUtil.ImportParam<SysUser> params;
+        List<SysUser> list = Lists.newArrayList();
+
+        List<Map<String,Object>> failList = Lists.newArrayList();
+
+        for(int i = 0,len = files.length; i < len; i++) {
+            params = ImportExcelUtil.ImportParam.<SysUser>builder()
+                    .is(files[i].getInputStream())
+                    .fileName(files[i].getOriginalFilename())
+                    .hasPic(true)
+                    .clazz(SysUser.class).build();
+
+            List<SysUser> itemList = importExcelUtil.importExcel(params);
+            if(i == 0) {
+                Map<String,Object> failItem = Maps.newHashMap();
+                failItem.put("userName",itemList.get(0).getUserName());
+                failItem.put("failMsg","未知错误");
+                failList.add(failItem);
+
+                PictureData pic = itemList.get(0).getHeadImg();
+                // 获取图片格式
+                String fileExtensionName = pic.suggestFileExtension();
+                String uploadFileName = UUID.randomUUID().toString()+"."+fileExtensionName;
+                byte[] data = pic.getData();
+                String fileUploadPath = this.getClass().getClassLoader().getResource("static/").getPath()+"upload/";
+                File targetFile = new File(fileUploadPath,uploadFileName);
+                FileUtils.forceMkdirParent(targetFile);
+                FileUtils.writeByteArrayToFile(targetFile,data);
+                log.info("开始上传文件,路径:{"+targetFile.getPath()+"}");
+                log.info("开始上传文件,新文件名:{"+uploadFileName+"}");
+            }
+            list.addAll(itemList);
+        }
+        BatchImportVo<SysUser> batchImportVo = BatchImportVo.<SysUser>builder()
+                .totalNum(list.size()).failList(failList).build();
+
+        return ServerResponse.createBySuccess(batchImportVo);
+    }
+    @GetMapping(value = "/downImportTemp",produces = "application/octet-stream;charset=UTF-8")
+    public void downImportTemp(HttpServletResponse response){
+        authorityValidate(DOWN_IMPORT_TEMP);
+        fileService.downTemplateFile(response,"excel/emp-template.xls");
     }
 
     //参数检验
@@ -269,7 +314,6 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
     protected ServerResponse<SysUser> paramValidate(String oprt, SysUser sysUser) {
         ServerResponse<List<SysUser>> serverResponse;
         SysUserQueryVo sysUserQueryVo;
-        SysUser condition;
         switch (oprt) {
             case ADD_OPRT://添加
                 if (!StringUtils.equals(sysUser.getPassword(), sysUser.getPassword2())) {
@@ -360,6 +404,15 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
                 break;
             case BATCH_REAL_DEL_OPRT://批量硬删除
                 SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.BATCH_REAL_DEL);
+                break;
+            case DOWN_IMPORT_TEMP://下载导入模板
+                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.DOWN_IMPORT_TEMP);
+                break;
+            case EXPORT_DATA://导出数据
+                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.EXPORT_DATA);
+                break;
+            case BATCH_IMPORT://批量导入
+                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.BATCH_IMPORT);
                 break;
         }
     }

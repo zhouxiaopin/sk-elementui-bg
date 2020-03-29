@@ -133,6 +133,8 @@ public class ExportExcelUtil<T> {
             response.setContentType("application/octet-stream");
             response.setHeader("content-disposition", "attachment;filename=" + fileName);
             response.setHeader("filename", fileName);
+            //如果想让浏览器能访问到其他的 响应头的话 需要在服务器上设置 Access-Control-Expose-Headers
+            response.setHeader("Access-Control-Expose-Headers", "filename,content-disposition");
             workbook.write(response.getOutputStream());
 
             return true;
