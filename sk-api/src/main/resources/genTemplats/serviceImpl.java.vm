@@ -1,14 +1,16 @@
 package ${package.ServiceImpl};
 
 import ${package.Entity}.${entity};
+import ${package.Entity}.${entity}QueryVo;
 import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
 import ${superServiceImplClassPackage};
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <p>
- * $!{table.comment} 服务实现类
+ * $!{table.comment} 业务逻辑接口实现类
  * </p>
  *
  * @author ${author}
@@ -20,7 +22,8 @@ open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperNam
 
 }
 #else
-public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
-
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${entity}, ${entity}QueryVo, ${table.mapperName}> implements ${table.serviceName} {
+        @Autowired
+        private ${table.mapperName} ${table.entityPath}Mapper;
 }
 #end

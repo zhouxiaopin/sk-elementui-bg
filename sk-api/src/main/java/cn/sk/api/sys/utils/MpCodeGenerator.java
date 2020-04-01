@@ -46,7 +46,7 @@ public class MpCodeGenerator {
                 //作者
                 .setAuthor("zhoucp")
                 //生成路径
-                .setOutputDir(System.getProperty("user.dir") + "/src/main/java")
+                .setOutputDir(System.getProperty("user.dir") + "/sk-api/src/main/java")
                 //文件覆盖
                 .setFileOverride(true)
                 //是否打开生成路径
@@ -72,7 +72,7 @@ public class MpCodeGenerator {
 
         // 3.包名策略配置
         PackageConfig pkConfig = new PackageConfig();
-        pkConfig.setParent("cn.sk.temp.base")
+        pkConfig.setParent("cn.sk.api.base")
                 .setMapper("mapper")
                 .setService("service")
                 .setController("controller")
@@ -107,10 +107,10 @@ public class MpCodeGenerator {
                 .setColumnNaming(NamingStrategy.underline_to_camel)
                 .setRestControllerStyle(true)
                 .setSuperEntityClass(BaseModel.class)
-//                .setSuperMapperClass("cn.sk.temp.base.mapper.IBaseMapper")
-//                .setSuperServiceClass("cn.sk.temp.base.service.IBaseService")
-//                .setSuperServiceImplClass("cn.sk.temp.base.service.impl.BaseServiceImpl")
-//                .setSuperControllerClass("cn.sk.temp.base.controller.BaseController")
+                .setSuperMapperClass("cn.sk.api.base.mapper.IBaseMapper")
+                .setSuperServiceClass("cn.sk.api.base.service.IBaseService")
+                .setSuperServiceImplClass("cn.sk.api.base.service.impl.BaseServiceImpl")
+                .setSuperControllerClass("cn.sk.api.base.controller.BaseController")
 
                 //表名前缀
                 .setTablePrefix(tablePrefix)
@@ -120,6 +120,10 @@ public class MpCodeGenerator {
 
         //5.自定义代码模板
         TemplateConfig templateConfig = new TemplateConfig()
+                .setController("genTemplats/controller.java")
+                .setService("genTemplats/service.java")
+                .setServiceImpl("genTemplats/serviceImpl.java")
+                .setMapper("genTemplats/mapper.java")
                 .setEntity("genTemplats/entity.java")
                 .setXml("genTemplats/mapper.xml");
 

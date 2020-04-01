@@ -164,7 +164,7 @@ public class ${entity} implements Serializable {
 #end
 ##  pind add
     @Override
-    protected Serializable getPkVal() {
+    public Serializable getPkVal() {
       #if(${pk})
         return ${pk};
       #else

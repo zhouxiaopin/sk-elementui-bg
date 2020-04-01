@@ -2,6 +2,11 @@ package ${package.Controller};
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import ${package.Entity}.${entity};
+import ${package.Entity}.${entity}QueryVo;
+import ${package.Service}.${table.serviceName};
 
 #if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +19,7 @@ import ${superControllerClassPackage};
 
 /**
  * <p>
- * $!{table.comment} 前端控制器
+ * $!{table.comment} Controller
  * </p>
  *
  * @author ${author}
@@ -31,11 +36,17 @@ class ${table.controllerName}#if(${superControllerClass}) : ${superControllerCla
 
 #else
 #if(${superControllerClass})
-public class ${table.controllerName} extends ${superControllerClass} {
+public class ${table.controllerName} extends ${superControllerClass}<${entity}, ${entity}QueryVo> {
 #else
 public class ${table.controllerName} {
 #end
+    @Autowired
+    private ${table.serviceName} ${table.entityPath}Service;
 
+    @Override
+    protected String getPermisPrefix() {
+        return "${table.entityPath}:";
+    }
 }
 
 #end

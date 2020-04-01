@@ -1,6 +1,8 @@
 package ${package.Mapper};
 
+import org.springframework.stereotype.Repository;
 import ${package.Entity}.${entity};
+import ${package.Entity}.${entity}QueryVo;
 import ${superMapperClassPackage};
 
 /**
@@ -14,7 +16,8 @@ import ${superMapperClassPackage};
 #if(${kotlin})
 interface ${table.mapperName} : ${superMapperClass}<${entity}>
 #else
-public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+@Repository
+public interface ${table.mapperName} extends ${superMapperClass}<${entity},${entity}QueryVo> {
 
 }
 #end
