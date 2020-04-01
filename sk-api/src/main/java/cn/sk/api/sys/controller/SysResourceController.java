@@ -9,7 +9,6 @@ import cn.sk.api.sys.service.ISysResourceService;
 import cn.sk.api.sys.utils.SysUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
@@ -73,22 +72,6 @@ public class SysResourceController extends BaseController<SysResource, SysResour
 
     /****************************以下是重新父类的方法*****************************/
 
-    //根据oprt返回对应的页面
-//    @Override
-//    protected String getPage(String oprt) {
-//        String prefix = "sys/sysResource/";
-//        if (oprt.equals(QUERY_OPRT)) {
-//            return prefix + "sysResourceQuery";
-//        }
-//        if (oprt.equals(UPDATE_OPRT)) {
-//            return prefix + "sysResource";
-//        }
-//        if (oprt.equals(ADD_OPRT)) {
-//            return prefix + "sysResource";
-//        }
-//        return super.getPage(oprt);
-//    }
-
     //参数检验
     @Override
     protected ServerResponse<SysResource> paramValidate(String oprt, SysResource sysResource) {
@@ -123,32 +106,10 @@ public class SysResourceController extends BaseController<SysResource, SysResour
         return super.paramValidate(oprt, sysResource);
     }
 
-    //权限校验
+    //权限前缀
     @Override
-    protected void authorityValidate(String oprt) {
-        switch (oprt) {
-            case ADD_OPRT://添加
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysResource.ADD);
-                break;
-            case UPDATE_RECORDSTATUS_OPRT://修改记录状态（禁用/启用）
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysResource.UPDATE_RECORDSTATUS);
-                break;
-            case UPDATE_OPRT://修改
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysResource.UPDATE);
-                break;
-            case DEL_OPRT://删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysResource.DEL);
-                break;
-            case REAL_DEL_OPRT://硬删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysResource.REAL_DEL);
-                break;
-            case BATCH_DEL_OPRT://批量删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysResource.BATCH_DEL);
-                break;
-            case BATCH_REAL_DEL_OPRT://批量硬删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysResource.BATCH_REAL_DEL);
-                break;
-        }
+    protected String getPermisPrefix() {
+        return SysConst.ShiroPermis.PermisPrefix.SysResource;
     }
 
 }

@@ -1,6 +1,7 @@
 package cn.sk.api.sys.service.impl;
 
 import cn.sk.api.base.service.impl.BaseServiceImpl;
+import cn.sk.api.business.common.Const;
 import cn.sk.api.sys.common.CustomException;
 import cn.sk.api.sys.common.ResponseCode;
 import cn.sk.api.sys.common.ServerResponse;
@@ -8,9 +9,7 @@ import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.mapper.SysRoleMapper;
 import cn.sk.api.sys.mapper.SysUserMapper;
 import cn.sk.api.sys.mapper.SysUserRoleMapper;
-import cn.sk.api.sys.pojo.SysUser;
-import cn.sk.api.sys.pojo.SysUserQueryVo;
-import cn.sk.api.sys.pojo.SysUserRole;
+import cn.sk.api.sys.pojo.*;
 import cn.sk.api.sys.service.ISysUserService;
 import cn.sk.api.sys.utils.ShiroUtils;
 import com.google.common.collect.Lists;
@@ -128,9 +127,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, SysUserQueryVo,
 
         Map<String,Object> params = Maps.newHashMap();
         params.put("recordStatus", SysConst.RecordStatus.ABLE);
+
+        //获取性别字典
+//        Map<String,String> recordStatusMap = sysDictService.getDictKvAndExpData(Const.Dict.PERSON_SEX).getData();
+
         StringBuilder roleNames = new StringBuilder();
         for(int i = 0,len = list.size(); i < len; i++) {
             SysUser SysUser = list.get(i);
+
+            //设置性别
+//            SysUser.setSexStr(recordStatusMap.get(SysUser.getSex()));
 
             params.put("userId",SysUser.getUserId());
             //根据用户id查找权限
@@ -140,10 +146,27 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, SysUserQueryVo,
                 roleNames.append(sysRoles.get(j).get("roleName")).append(",");
             }
             if(roleNames.length() >1 )roleNames.deleteCharAt(roleNames.length()-1);
-            list.get(i).setRoleName(roleNames.toString());
+            SysUser.setRoleName(roleNames.toString());
         }
 
         return ServerResponse.createBySuccess(SysConst.ResponseMsg.QUERY_SUCCE,list);
+    }
+
+    @Override
+    public ServerResponse<SkPageVo<SysUser>> queryObjsByPage(SysUserQueryVo entityQueryVo) {
+
+        ServerResponse<SkPageVo<SysUser>> pageInfo = super.queryObjsByPage(entityQueryVo);
+
+        //获取性别字典
+        Map<String,String> recordStatusMap = sysDictService.getDictKvAndExpData(Const.Dict.PERSON_SEX).getData();
+
+        List<SysUser> data = pageInfo.getData().getList();
+        for(int i = 0,len = data.size(); i < len; i++) {
+            SysUser sysUser = data.get(i);
+            //设置性别
+            sysUser.setSexStr(recordStatusMap.get(sysUser.getSex()));
+        }
+        return pageInfo;
     }
 
     @Override

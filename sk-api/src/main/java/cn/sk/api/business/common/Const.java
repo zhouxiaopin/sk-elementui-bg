@@ -50,6 +50,8 @@ public class Const {
     //字典类型
     public interface Dict{
         String RECORD_STATUS = "record_status";
+        //性别
+        String PERSON_SEX = "person_sex";
         //机构
         class Organ{
             //类型

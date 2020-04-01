@@ -4,12 +4,10 @@ import cn.sk.api.base.controller.BaseController;
 import cn.sk.api.sys.common.ServerResponse;
 import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.pojo.SysDict;
-import cn.sk.api.sys.pojo.SysDict;
 import cn.sk.api.sys.pojo.SysDictQueryVo;
 import cn.sk.api.sys.service.ISysDictService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,41 +62,14 @@ public class SysDictController extends BaseController<SysDict, SysDictQueryVo> {
 
     /****************************以下是重新父类的方法*****************************/
 
-    //根据oprt返回对应的页面
-//    @Override
-//    protected String getPage(String oprt) {
-//        String prefix = "sys/sysDict/";
-//        if (oprt.equals(QUERY_OPRT)) {
-//            return prefix + "sysDictQuery";
-//        }
-//        if (oprt.equals(UPDATE_OPRT)) {
-//            return prefix + "sysDict";
-//        }
-//        if (oprt.equals(ADD_OPRT)) {
-//            return prefix + "sysDict";
-//        }
-//        return super.getPage(oprt);
-//    }
     //参数检验
     @Override
     protected ServerResponse<SysDict> paramValidate(String oprt, SysDict SysDict) {
+        SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
         if(StringUtils.equals(oprt,ADD_OPRT)) {//添加
             //判断字典编码是否存在
-//            SysDictQueryVo sysDictQueryVo = new SysDictQueryVo();
-//            SysDict condition = new SysDict();
-//
-//            sysDictQueryVo.getIsNoLike().put("dictType",true);
-//
-//            condition.setDictType(SysDict.getDictType());
-//            condition.setDictCode(SysDict.getDictCode());
-//
-//            sysDictQueryVo.setSysDict(condition);
-
-            SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
             SysDict condition = sysDictQueryVo.getCdtCustom();
-
             sysDictQueryVo.getIsNoLike().put("dictType",true);
-
             condition.setDictType(SysDict.getDictType());
             condition.setDictCode(SysDict.getDictCode());
 
@@ -112,17 +83,6 @@ public class SysDictController extends BaseController<SysDict, SysDictQueryVo> {
         }
         if(StringUtils.equals(oprt,UPDATE_OPRT)) {//修改
             //判断字典编码是否存在
-//            SysDictQueryVo sysDictQueryVo = new SysDictQueryVo();
-//            SysDict condition = new SysDict();
-//
-//            sysDictQueryVo.getIsNoLike().put("dictType",true);
-//
-//            condition.setDictType(SysDict.getDictType());
-//            condition.setDictCode(SysDict.getDictCode());
-//
-//            sysDictQueryVo.setSysDict(condition);
-
-            SysDictQueryVo sysDictQueryVo = SysDictQueryVo.newInstance();
             SysDict condition = sysDictQueryVo.getCdtCustom();
 
             sysDictQueryVo.getIsNoLike().put("dictType",true);
@@ -141,34 +101,13 @@ public class SysDictController extends BaseController<SysDict, SysDictQueryVo> {
 
             }
         }
-
         return super.paramValidate(oprt, SysDict);
     }
-    //权限校验
+
+    //权限前缀
     @Override
-    protected void authorityValidate(String oprt) {
-        switch (oprt) {
-            case ADD_OPRT://添加
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysDict.ADD);
-                break;
-            case UPDATE_RECORDSTATUS_OPRT://修改记录状态（禁用/启用）
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysDict.UPDATE_RECORDSTATUS);
-                break;
-            case UPDATE_OPRT://修改
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysDict.UPDATE);
-                break;
-            case DEL_OPRT://删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysDict.DEL);
-                break;
-            case REAL_DEL_OPRT://硬删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysDict.REAL_DEL);
-                break;
-            case BATCH_DEL_OPRT://批量删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysDict.BATCH_DEL);
-                break;
-            case BATCH_REAL_DEL_OPRT://批量硬删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysDict.BATCH_REAL_DEL);
-                break;
-        }
+    protected String getPermisPrefix() {
+        return SysConst.ShiroPermis.PermisPrefix.SYSDICT;
     }
+
 }

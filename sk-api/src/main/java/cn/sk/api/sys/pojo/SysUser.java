@@ -80,6 +80,8 @@ public class SysUser extends BaseModel{
     @TableField(exist = false)
     private String roleName;
     @TableField(exist = false)
+    private String sexStr;
+    @TableField(exist = false)
     private String recordStatusStr;
 
     /**

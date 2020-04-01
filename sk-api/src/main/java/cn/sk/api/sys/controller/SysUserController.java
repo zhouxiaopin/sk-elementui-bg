@@ -43,7 +43,6 @@ import java.util.UUID;
 public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
 
     private static final String UPDATE_PASSWORD_OPRT = "updatePassword";
-    private static final String UPDATE_RECORDSTATUS_OPRT = "updateRecordStatus";
     private static final String LOGIN_OPRT = "login";
 
     @Autowired
@@ -169,21 +168,6 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
         return serverResponse;
     }
 
-    //进入修改密码页面
-//    @GetMapping(value = "/initUpdatePassword")
-//    public ModelAndView initUpdatePassword(ModelAndView model, SysUserCustom sysUserCustom) throws Exception {
-//        //权限校验
-//        authorityValidate(UPDATE_PASSWORD_OPRT);
-//        model.addObject(OPRT_KEY, UPDATE_PASSWORD_OPRT);
-//        try {
-//            init(model, sysUserCustom);
-//        } catch (Exception e) {
-//            model.addObject("msg", SysConst.ResponseMsg.OPRT_FAIL);
-//        }
-//        model.setViewName(page(UPDATE_PASSWORD_OPRT));
-//        return model;
-//    }
-
     //修改密码
     @SkLog(value ="修改密码", saveParams=false)
     @PostMapping(value = "updatePassword")
@@ -227,28 +211,6 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
         }
         return super.updateBefore(oldObj, sysUser);
     }
-
-    //根据oprt返回对应的页面
-//    @Override
-//    protected String getPage(String oprt) {
-//        String prefix = "sys/sysUser/";
-//        if (oprt.equals(LOGIN_OPRT)) {
-//            return "login";
-//        }
-//        if (oprt.equals(QUERY_OPRT)) {
-//            return prefix + "sysUserQuery";
-//        }
-//        if (oprt.equals(UPDATE_OPRT)) {
-//            return prefix + "sysUser";
-//        }
-//        if (oprt.equals(ADD_OPRT)) {
-//            return prefix + "sysUser";
-//        }
-//        if (oprt.equals(UPDATE_PASSWORD_OPRT)) {
-//            return prefix + "sysUser";
-//        }
-//        return super.getPage(oprt);
-//    }
 
     @PostMapping(value = "/export",produces = "application/octet-stream;charset=UTF-8")
     public void export(@RequestBody SysUserQueryVo sysUserQueryVo,HttpServletResponse response){
@@ -325,15 +287,6 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
                 sysUserQueryVo = SysUserQueryVo.newInstance();
                 sysUserQueryVo.getCdtCustom().setUserName(sysUser.getUserName());
                 sysUserQueryVo.getIsNoLike().put("userName",true);
-
-//                sysUserQueryVo = new SysUserQueryVo();
-//                condition = new SysUserCustom();
-//
-//                sysUserQueryVo.getIsNoLike().put("userName",true);
-//
-//                condition.setUserName(sysUserCustom.getUserName());
-//
-//                sysUserQueryVo.setSysUserCustom(condition);
                 serverResponse = this.queryAllByCondition(sysUserQueryVo);
                 if(!CollectionUtils.isEmpty(serverResponse.getData())){
                     return ServerResponse.createByErrorMessage("用户名已存在");
@@ -345,14 +298,6 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
                 sysUserQueryVo = SysUserQueryVo.newInstance();
                 sysUserQueryVo.getCdtCustom().setUserName(sysUser.getUserName());
                 sysUserQueryVo.getIsNoLike().put("userName",true);
-//                sysUserQueryVo = new SysUserQueryVo();
-//                condition = new SysUserCustom();
-//
-//                sysUserQueryVo.getIsNoLike().put("userName",true);
-//
-//                condition.setUserName(sysUserCustom.getUserName());
-//
-//                sysUserQueryVo.setSysUserCustom(condition);
                 serverResponse = this.queryAllByCondition(sysUserQueryVo);
                 List<SysUser> sysUserCustoms = serverResponse.getData();
                 if(!CollectionUtils.isEmpty(sysUserCustoms)){
@@ -377,42 +322,19 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
         return super.paramValidate(oprt, sysUser);
     }
 
+    //权限前缀
+    @Override
+    protected String getPermisPrefix() {
+        return SysConst.ShiroPermis.PermisPrefix.SYSUSER;
+    }
+
     //权限校验
     @Override
     protected void authorityValidate(String oprt) {
+        super.authorityValidate(oprt);
         switch (oprt) {
-            case ADD_OPRT://添加
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.ADD);
-                break;
-            case UPDATE_RECORDSTATUS_OPRT://修改记录状态（禁用/启用）
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.UPDATE_RECORDSTATUS);
-                break;
-            case UPDATE_OPRT://修改
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.UPDATE);
-                break;
             case UPDATE_PASSWORD_OPRT://修改密码
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.UPDATE_PSD);
-                break;
-            case DEL_OPRT://删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.DEL);
-                break;
-            case REAL_DEL_OPRT://硬删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.REAL_DEL);
-                break;
-            case BATCH_DEL_OPRT://批量删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.BATCH_DEL);
-                break;
-            case BATCH_REAL_DEL_OPRT://批量硬删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.BATCH_REAL_DEL);
-                break;
-            case DOWN_IMPORT_TEMP://下载导入模板
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.DOWN_IMPORT_TEMP);
-                break;
-            case EXPORT_DATA://导出数据
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.EXPORT_DATA);
-                break;
-            case BATCH_IMPORT://批量导入
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysUser.BATCH_IMPORT);
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+UPDATE_PASSWORD_OPRT);
                 break;
         }
     }

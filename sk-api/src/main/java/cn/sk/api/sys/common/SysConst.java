@@ -98,87 +98,22 @@ public class SysConst {
         //批量导入
         String BATCH_IMPORT = "batchImport";
 
-        //系统用户
-        class SysUser{
-            public static final String SYSUSER = "sysUser";
-            public static final String ADD = SYSUSER+":"+ShiroPermis.ADD;
-            public static final String UPDATE = SYSUSER+":"+ShiroPermis.UPDATE;
-            public static final String UPDATE_RECORDSTATUS = SYSUSER+":"+ShiroPermis.UPDATE_RECORDSTATUS;
-            public static final String UPDATE_PSD = SYSUSER+":updatePsd";
-            public static final String DEL = SYSUSER+":"+ShiroPermis.DEL;
-            public static final String REAL_DEL = SYSUSER+":"+ShiroPermis.REAL_DEL;
-            public static final String BATCH_DEL = SYSUSER+":"+ShiroPermis.BATCH_DEL;
-            public static final String BATCH_REAL_DEL = SYSUSER+":"+ShiroPermis.BATCH_REAL_DEL;
-            public static final String DOWN_IMPORT_TEMP = SYSUSER+":"+ShiroPermis.DOWN_IMPORT_TEMP;
-            public static final String EXPORT_DATA = SYSUSER+":"+ShiroPermis.EXPORT_DATA;
-            public static final String BATCH_IMPORT = SYSUSER+":"+ShiroPermis.BATCH_IMPORT;
-        }
 
-        //系统角色
-        class SysRole{
-            public static final String SYSROLE = "sysRole";
-            public static final String ADD = SYSROLE+":"+ShiroPermis.ADD;
-            public static final String UPDATE = SYSROLE+":"+ShiroPermis.UPDATE;
-            public static final String UPDATE_RECORDSTATUS = SYSROLE+":"+ShiroPermis.UPDATE_RECORDSTATUS;
-            public static final String DEL = SYSROLE+":"+ShiroPermis.DEL;
-            public static final String REAL_DEL = SYSROLE+":"+ShiroPermis.REAL_DEL;
-            public static final String BATCH_DEL = SYSROLE+":"+ShiroPermis.BATCH_DEL;
-            public static final String BATCH_REAL_DEL = SYSROLE+":"+ShiroPermis.BATCH_REAL_DEL;
-        }
-        //系统权限
-        class SysPermis{
-            public static final String SYSPERMIS = "sysPermis";
-            public static final String ADD = SYSPERMIS+":"+ShiroPermis.ADD;
-            public static final String UPDATE = SYSPERMIS+":"+ShiroPermis.UPDATE;
-            public static final String UPDATE_RECORDSTATUS = SYSPERMIS+":"+ShiroPermis.UPDATE_RECORDSTATUS;
-            public static final String DEL = SYSPERMIS+":"+ShiroPermis.DEL;
-            public static final String REAL_DEL = SYSPERMIS+":"+ShiroPermis.REAL_DEL;
-            public static final String BATCH_DEL = SYSPERMIS+":"+ShiroPermis.BATCH_DEL;
-            public static final String BATCH_REAL_DEL = SYSPERMIS+":"+ShiroPermis.BATCH_REAL_DEL;
-        }
-        //系统资源
-        class SysResource{
-            public static final String SYSRESOURCE = "sysResource";
-            public static final String ADD = SYSRESOURCE+":"+ShiroPermis.ADD;
-            public static final String UPDATE = SYSRESOURCE+":"+ShiroPermis.UPDATE;
-            public static final String UPDATE_RECORDSTATUS = SYSRESOURCE+":"+ShiroPermis.UPDATE_RECORDSTATUS;
-            public static final String DEL = SYSRESOURCE+":"+ShiroPermis.DEL;
-            public static final String REAL_DEL = SYSRESOURCE+":"+ShiroPermis.REAL_DEL;
-            public static final String BATCH_DEL = SYSRESOURCE+":"+ShiroPermis.BATCH_DEL;
-            public static final String BATCH_REAL_DEL = SYSRESOURCE+":"+ShiroPermis.BATCH_REAL_DEL;
-        }
-        //系统日志
-        class SysLog{
-            public static final String SYSlOG = "sysLog";
-            public static final String ADD = SYSlOG+":"+ShiroPermis.ADD;
-            public static final String UPDATE = SYSlOG+":"+ShiroPermis.UPDATE;
-            public static final String UPDATE_RECORDSTATUS = SYSlOG+":"+ShiroPermis.UPDATE_RECORDSTATUS;
-            public static final String DEL = SYSlOG+":"+ShiroPermis.DEL;
-            public static final String REAL_DEL = SYSlOG+":"+ShiroPermis.REAL_DEL;
-            public static final String BATCH_DEL = SYSlOG+":"+ShiroPermis.BATCH_DEL;
-            public static final String BATCH_REAL_DEL = SYSlOG+":"+ShiroPermis.BATCH_REAL_DEL;
-        }
-        //数字字典
-        class SysDict{
-            public static final String SYSDICT = "sysDict";
-            public static final String ADD = SYSDICT+":"+ShiroPermis.ADD;
-            public static final String UPDATE = SYSDICT+":"+ShiroPermis.UPDATE;
-            public static final String UPDATE_RECORDSTATUS = SYSDICT+":"+ShiroPermis.UPDATE_RECORDSTATUS;
-            public static final String DEL = SYSDICT+":"+ShiroPermis.DEL;
-            public static final String REAL_DEL = SYSDICT+":"+ShiroPermis.REAL_DEL;
-            public static final String BATCH_DEL = SYSDICT+":"+ShiroPermis.BATCH_DEL;
-            public static final String BATCH_REAL_DEL = SYSDICT+":"+ShiroPermis.BATCH_REAL_DEL;
-        }
-        //sql语句配置
-        class SysSqlConf{
-            public static final String SYSSQLCONF = "sysSqlConf";
-            public static final String ADD = SYSSQLCONF+":"+ShiroPermis.ADD;
-            public static final String UPDATE = SYSSQLCONF+":"+ShiroPermis.UPDATE;
-            public static final String UPDATE_RECORDSTATUS = SYSSQLCONF+":"+ShiroPermis.UPDATE_RECORDSTATUS;
-            public static final String DEL = SYSSQLCONF+":"+ShiroPermis.DEL;
-            public static final String REAL_DEL = SYSSQLCONF+":"+ShiroPermis.REAL_DEL;
-            public static final String BATCH_DEL = SYSSQLCONF+":"+ShiroPermis.BATCH_DEL;
-            public static final String BATCH_REAL_DEL = SYSSQLCONF+":"+ShiroPermis.BATCH_REAL_DEL;
+        class PermisPrefix{
+            //系统用户
+            public static final String SYSUSER = "sysUser:";
+            //系统角色
+            public static final String SYSROLE = "sysRole:";
+            //系统权限
+            public static final String SYSPERMIS = "sysPermis:";
+            //系统资源
+            public static final String SysResource = "sysResource:";
+            //系统日志
+            public static final String SYSlOG = "sysLog:";
+            //数字字典
+            public static final String SYSDICT = "sysDict:";
+            //sql语句配置
+            public static final String SYSSQLCONF = "sysSqlConf:";
         }
     }
 

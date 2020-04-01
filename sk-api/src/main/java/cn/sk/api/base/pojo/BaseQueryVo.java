@@ -10,7 +10,6 @@ import java.util.Map;
 @Setter
 @Getter
 @ToString
-
 public class BaseQueryVo{
     private Integer start = 0;//当前第几条
     private Integer length = 10;//页面显示数量

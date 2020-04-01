@@ -1,10 +1,10 @@
 package cn.sk.api.base.controller;
 
+import cn.sk.api.base.service.IBaseService;
 import cn.sk.api.sys.common.ResponseCode;
 import cn.sk.api.sys.common.ServerResponse;
 import cn.sk.api.sys.common.SkLog;
 import cn.sk.api.sys.common.SysConst;
-import cn.sk.api.base.service.IBaseService;
 import cn.sk.api.sys.pojo.SkPageVo;
 import cn.sk.api.sys.pojo.SysDict;
 import cn.sk.api.sys.pojo.SysDictQueryVo;
@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Map;
 
-public class BaseController<T, V> {
+public abstract class BaseController<T, V> {
     @Autowired
     private IBaseService<T,V> baseService;
     @Autowired
@@ -38,6 +39,7 @@ public class BaseController<T, V> {
     protected static final String ADD_OPRT = "add";
     protected static final String UPDATE_OPRT = "update";
     protected static final String QUERYDETAIL_OPRT = "queryDetail";
+    protected static final String UPDATE_RECORDSTATUS_OPRT = "updateRecordStatus";
     protected static final String DEL_OPRT = "del";
     protected static final String REAL_DEL_OPRT = "realDel";
     protected static final String BATCH_DEL_OPRT = "batchDel";
@@ -50,8 +52,44 @@ public class BaseController<T, V> {
 //    protected String getPage(String oprt) {
 //        return null;
 //    }
+
+    //获取权限前缀
+    protected abstract String getPermisPrefix();
     //根据操作
-    protected void authorityValidate(String oprt){}
+    protected void authorityValidate(String oprt){
+        switch (oprt) {
+            case ADD_OPRT://添加
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+SysConst.ShiroPermis.ADD);
+                break;
+            case UPDATE_RECORDSTATUS_OPRT://修改记录状态（禁用/启用）
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+SysConst.ShiroPermis.UPDATE_RECORDSTATUS);
+                break;
+            case UPDATE_OPRT://修改
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+SysConst.ShiroPermis.UPDATE);
+                break;
+            case DEL_OPRT://删除
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+SysConst.ShiroPermis.DEL);
+                break;
+            case REAL_DEL_OPRT://硬删除
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+SysConst.ShiroPermis.REAL_DEL);
+                break;
+            case BATCH_DEL_OPRT://批量删除
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+SysConst.ShiroPermis.BATCH_DEL);
+                break;
+            case BATCH_REAL_DEL_OPRT://批量硬删除
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+SysConst.ShiroPermis.BATCH_REAL_DEL);
+                break;
+            case DOWN_IMPORT_TEMP://下载导入模板
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+SysConst.ShiroPermis.DOWN_IMPORT_TEMP);
+                break;
+            case EXPORT_DATA://导出数据
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+SysConst.ShiroPermis.EXPORT_DATA);
+                break;
+            case BATCH_IMPORT://批量导入
+                SecurityUtils.getSubject().checkPermission(getPermisPrefix()+SysConst.ShiroPermis.BATCH_IMPORT);
+                break;
+        }
+    }
 
 
     //    protected ServerResponse<T> addBefore(T t){return null;}

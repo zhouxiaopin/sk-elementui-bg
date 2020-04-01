@@ -9,7 +9,6 @@ import cn.sk.api.sys.service.ISysRoleService;
 import cn.sk.api.sys.utils.SysUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,22 +56,6 @@ public class SysRoleController extends BaseController<SysRole, SysRoleQueryVo> {
 
     /****************************以下是重新父类的方法*****************************/
 
-    //根据oprt返回对应的页面
-//    @Override
-//    protected String getPage(String oprt) {
-//        String prefix = "sys/sysRole/";
-//        if (oprt.equals(QUERY_OPRT)) {
-//            return prefix + "sysRoleQuery";
-//        }
-//        if (oprt.equals(UPDATE_OPRT)) {
-//            return prefix + "sysRole";
-//        }
-//        if (oprt.equals(ADD_OPRT)) {
-//            return prefix + "sysRole";
-//        }
-//        return super.getPage(oprt);
-//    }
-
     //参数检验
     @Override
     protected ServerResponse<SysRole> paramValidate(String oprt, SysRole sysRole) {
@@ -91,14 +74,6 @@ public class SysRoleController extends BaseController<SysRole, SysRoleQueryVo> {
                 sysRoleQueryVo.getCdtCustom().setRoleFlag(sysRole.getRoleFlag());
                 sysRoleQueryVo.getIsNoLike().put("roleFlag",true);
 
-//                sysRoleQueryVo = new SysRoleQueryVo();
-//                condition = new SysRoleCustom();
-//
-//                sysRoleQueryVo.getIsNoLike().put("roleFlag",true);
-//
-//                condition.setRoleFlag(sysRoleCustom.getRoleFlag());
-//
-//                sysRoleQueryVo.setSysRoleCustom(condition);
 
                 serverResponse = this.queryAllByCondition(sysRoleQueryVo);
                 if(!CollectionUtils.isEmpty(serverResponse.getData())){
@@ -111,14 +86,6 @@ public class SysRoleController extends BaseController<SysRole, SysRoleQueryVo> {
                 break;
             case UPDATE_OPRT://修改
                 //判断角色标识是否存在
-//                sysRoleQueryVo = new SysRoleQueryVo();
-//                condition = new SysRoleCustom();
-//
-//                sysRoleQueryVo.getIsNoLike().put("roleFlag",true);
-//
-//                condition.setRoleFlag(sysRoleCustom.getRoleFlag());
-//
-//                sysRoleQueryVo.setSysRoleCustom(condition);
                 sysRoleQueryVo = SysRoleQueryVo.newInstance();
                 sysRoleQueryVo.getCdtCustom().setRoleFlag(sysRole.getRoleFlag());
                 sysRoleQueryVo.getIsNoLike().put("roleFlag",true);
@@ -137,31 +104,9 @@ public class SysRoleController extends BaseController<SysRole, SysRoleQueryVo> {
         return super.paramValidate(oprt, sysRole);
     }
 
-    //权限校验
+    //权限前缀
     @Override
-    protected void authorityValidate(String oprt) {
-        switch (oprt) {
-            case ADD_OPRT://添加
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysRole.ADD);
-                break;
-            case UPDATE_RECORDSTATUS_OPRT://修改记录状态（禁用/启用）
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysRole.UPDATE_RECORDSTATUS);
-                break;
-            case UPDATE_OPRT://修改
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysRole.UPDATE);
-                break;
-            case DEL_OPRT://删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysRole.DEL);
-                break;
-            case REAL_DEL_OPRT://硬删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysRole.REAL_DEL);
-                break;
-            case BATCH_DEL_OPRT://批量删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysRole.BATCH_DEL);
-                break;
-            case BATCH_REAL_DEL_OPRT://批量硬删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysRole.BATCH_REAL_DEL);
-                break;
-        }
+    protected String getPermisPrefix() {
+        return SysConst.ShiroPermis.PermisPrefix.SYSROLE;
     }
 }

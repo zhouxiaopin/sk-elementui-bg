@@ -9,7 +9,6 @@ import cn.sk.api.sys.service.ISysSqlConfService;
 import cn.sk.api.sys.utils.SysUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -141,31 +140,9 @@ public class SysSqlConfController extends BaseController<SysSqlConf, SysSqlConfQ
 
         return super.paramValidate(oprt, sysSqlConf);
     }
-    //权限校验
+    //权限前缀
     @Override
-    protected void authorityValidate(String oprt) {
-        switch (oprt) {
-            case ADD_OPRT://添加
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysSqlConf.ADD);
-                break;
-            case UPDATE_RECORDSTATUS_OPRT://修改记录状态（禁用/启用）
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysSqlConf.UPDATE_RECORDSTATUS);
-                break;
-            case UPDATE_OPRT://修改
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysSqlConf.UPDATE);
-                break;
-            case DEL_OPRT://删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysSqlConf.DEL);
-                break;
-            case REAL_DEL_OPRT://硬删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysSqlConf.REAL_DEL);
-                break;
-            case BATCH_DEL_OPRT://批量删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysSqlConf.BATCH_DEL);
-                break;
-            case BATCH_REAL_DEL_OPRT://批量硬删除
-                SecurityUtils.getSubject().checkPermission(SysConst.ShiroPermis.SysSqlConf.BATCH_REAL_DEL);
-                break;
-        }
+    protected String getPermisPrefix() {
+        return SysConst.ShiroPermis.PermisPrefix.SYSSQLCONF;
     }
 }
