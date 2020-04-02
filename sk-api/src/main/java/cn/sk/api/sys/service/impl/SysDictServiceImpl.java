@@ -32,8 +32,8 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDict, SysDictQueryVo,
 
         sysDictQueryVo.getIsNoLike().put("dictType",true);
 
-        condition.setDictType(dictType);
-        condition.setRecordStatus(SysConst.RecordStatus.ABLE);
+        condition.setDictType(dictType)
+                .setRecordStatus(SysConst.RecordStatus.ABLE);
 
         List<SysDict> SysDicts = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
         //封装数据
@@ -52,8 +52,8 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDict, SysDictQueryVo,
 
         sysDictQueryVo.getIsNoLike().put("dictType",true);
 
-        condition.setDictType(dictType);
-        condition.setRecordStatus(SysConst.RecordStatus.ABLE);
+        condition.setDictType(dictType)
+                .setRecordStatus(SysConst.RecordStatus.ABLE);
         List<SysDict> SysDicts = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
         //封装数据
         Map<String,String> kvMap = Maps.newHashMap();

@@ -70,8 +70,8 @@ public class SysDictController extends BaseController<SysDict, SysDictQueryVo> {
             //判断字典编码是否存在
             SysDict condition = sysDictQueryVo.getCdtCustom();
             sysDictQueryVo.getIsNoLike().put("dictType",true);
-            condition.setDictType(SysDict.getDictType());
-            condition.setDictCode(SysDict.getDictCode());
+            condition.setDictType(SysDict.getDictType())
+                    .setDictCode(SysDict.getDictCode());
 
             ServerResponse<List<SysDict>> serverResponse = this.queryAllByCondition(sysDictQueryVo);
             if(!CollectionUtils.isEmpty(serverResponse.getData())){

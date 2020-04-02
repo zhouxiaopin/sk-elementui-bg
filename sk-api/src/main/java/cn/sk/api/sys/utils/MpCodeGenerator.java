@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
+import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Scanner;
+import java.util.*;
 
 /**
  *@Deseription mybatisplus代码生成器
@@ -127,6 +129,33 @@ public class MpCodeGenerator {
                 .setEntity("genTemplats/entity.java")
                 .setXml("genTemplats/mapper.xml");
 
+        //6.自定义属性注入
+        InjectionConfig injectionConfig = new InjectionConfig() {
+            //自定义属性注入:abc
+            //在.ftl(或者是.vm)模板中，通过${cfg.abc}获取属性
+            @Override
+            public void initMap() {
+                Map<String, Object> map = new HashMap<>();
+//                map.put("abc", this.getConfig().getGlobalConfig().getAuthor() + "-mp");
+                this.setMap(map);
+            }
+        };
+        //配置自定义属性注入
+
+        // 自定义 xxQueryVo.java 生成
+        List<FileOutConfig> focList = new ArrayList<>();
+        focList.add(new FileOutConfig("genTemplats/queryVo.java.vm") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输入文件名称
+                return config.getOutputDir()+"/cn/sk/api/base/pojo/"+tableInfo.getEntityName()+"QueryVo.java";
+            }
+        });
+        injectionConfig.setFileOutConfigList(focList);
+
+
+
+
 
         // 6代码生成器
         AutoGenerator autoGenerator = new AutoGenerator();
@@ -134,7 +163,8 @@ public class MpCodeGenerator {
                 .setDataSource(dbConfig)
                 .setPackageInfo(pkConfig)
                 .setTemplate(templateConfig)
-                .setStrategy(strategy);
+                .setStrategy(strategy)
+                .setCfg(injectionConfig);
         autoGenerator.execute();
     }
 

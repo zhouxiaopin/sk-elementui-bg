@@ -7,11 +7,13 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 @TableName("tb_sys_dict")
 public class SysDict extends BaseModel {
     @TableId(value = "dict_id", type = IdType.AUTO)
