@@ -1,3 +1,6 @@
 /logs
 /target
 .idea
+/sk-common/target/
+/sk-poi/target/
+/sk-api/logs/
