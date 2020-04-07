@@ -1,4 +1,4 @@
-package cn.sk.api.sys.common;
+package cn.sk.common.common;
 
 /**
  * 响应枚举类

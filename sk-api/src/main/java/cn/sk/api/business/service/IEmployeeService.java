@@ -1,7 +1,7 @@
 package cn.sk.api.business.service;
 
 import cn.sk.api.business.pojo.Employee;
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ServerResponse;
 
 /**
  * 员工信息业务逻辑接口

@@ -1,9 +1,9 @@
 package cn.sk.api.sys.service.impl;
 
 import cn.sk.api.base.service.impl.BaseServiceImpl;
-import cn.sk.api.sys.common.CustomException;
-import cn.sk.api.sys.common.ResponseCode;
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.CustomException;
+import cn.sk.common.common.ResponseCode;
+import cn.sk.common.common.ServerResponse;
 import cn.sk.api.sys.mapper.SysRoleMapper;
 import cn.sk.api.sys.mapper.SysRolePermisMapper;
 import cn.sk.api.sys.mapper.SysRoleResourceMapper;

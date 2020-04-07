@@ -1,6 +1,6 @@
 package cn.sk.api.business.service;
 
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ServerResponse;
 
 import javax.servlet.http.HttpServletResponse;
 

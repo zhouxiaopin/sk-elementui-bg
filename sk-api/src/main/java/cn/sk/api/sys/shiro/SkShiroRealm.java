@@ -1,6 +1,6 @@
 package cn.sk.api.sys.shiro;
 
-import cn.sk.api.sys.common.ResponseCode;
+import cn.sk.common.common.ResponseCode;
 import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.common.TokenCache;
 import cn.sk.api.sys.mapper.SysPermisMapper;

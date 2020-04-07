@@ -1,4 +1,4 @@
-package cn.sk.api.sys.common;
+package cn.sk.common.common;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

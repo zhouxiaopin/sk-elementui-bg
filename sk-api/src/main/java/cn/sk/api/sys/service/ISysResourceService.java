@@ -1,7 +1,7 @@
 package cn.sk.api.sys.service;
 
 import cn.sk.api.base.service.IBaseService;
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ServerResponse;
 import cn.sk.api.sys.pojo.SysResource;
 import cn.sk.api.sys.pojo.SysResourceQueryVo;
 

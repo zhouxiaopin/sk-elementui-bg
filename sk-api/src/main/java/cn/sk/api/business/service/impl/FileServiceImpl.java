@@ -1,7 +1,7 @@
 package cn.sk.api.business.service.impl;
 
 import cn.sk.api.business.service.IFileService;
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ServerResponse;
 import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;

@@ -3,7 +3,7 @@ package cn.sk.api.business.service.impl;
 import cn.sk.api.business.common.Const;
 import cn.sk.api.business.pojo.Employee;
 import cn.sk.api.business.service.IEmployeeService;
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ServerResponse;
 import cn.sk.api.sys.utils.JackJsonUtil;
 import cn.sk.common.utils.HttpClientUtil;
 import com.alibaba.fastjson.JSONObject;

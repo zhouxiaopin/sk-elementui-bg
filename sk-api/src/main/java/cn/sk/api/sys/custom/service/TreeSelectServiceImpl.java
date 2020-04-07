@@ -1,7 +1,7 @@
 package cn.sk.api.sys.custom.service;
 
 import cn.sk.api.business.common.Const;
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ServerResponse;
 import cn.sk.common.utils.HttpClientUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;

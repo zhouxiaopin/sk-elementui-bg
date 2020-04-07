@@ -1,8 +1,8 @@
 package cn.sk.api.base.controller;
 
 import cn.sk.api.base.service.IBaseService;
-import cn.sk.api.sys.common.ResponseCode;
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ResponseCode;
+import cn.sk.common.common.ServerResponse;
 import cn.sk.api.sys.common.SkLog;
 import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.pojo.SkPageVo;

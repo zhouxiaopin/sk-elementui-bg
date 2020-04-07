@@ -1,7 +1,7 @@
 package cn.sk.api.sys.shiro.aop;
 
-import cn.sk.api.sys.common.CustomException;
-import cn.sk.api.sys.common.ResponseCode;
+import cn.sk.common.common.CustomException;
+import cn.sk.common.common.ResponseCode;
 import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.shiro.JwtToken;
 import com.alibaba.fastjson.JSONObject;

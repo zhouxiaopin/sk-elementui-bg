@@ -1,6 +1,6 @@
 package cn.sk.api.sys.utils;
 
-import cn.sk.api.sys.common.CustomException;
+import cn.sk.common.common.CustomException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;

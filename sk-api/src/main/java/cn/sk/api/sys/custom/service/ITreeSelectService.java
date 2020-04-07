@@ -1,6 +1,6 @@
 package cn.sk.api.sys.custom.service;
 
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ServerResponse;
 
 import java.util.List;
 import java.util.Map;

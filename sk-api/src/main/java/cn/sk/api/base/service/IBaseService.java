@@ -1,7 +1,7 @@
 package cn.sk.api.base.service;
 
 import cn.sk.api.base.pojo.BaseModel;
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ServerResponse;
 import cn.sk.api.sys.pojo.SkPageVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 

@@ -2,7 +2,7 @@ package cn.sk.api.sys.service.impl;
 
 import cn.sk.api.base.service.impl.BaseServiceImpl;
 import cn.sk.api.business.common.Const;
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ServerResponse;
 import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.mapper.SysDictMapper;
 import cn.sk.api.sys.pojo.SysDict;

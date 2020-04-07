@@ -1,7 +1,7 @@
 package cn.sk.api.sys.controller;
 
 import cn.sk.api.base.controller.BaseController;
-import cn.sk.api.sys.common.ServerResponse;
+import cn.sk.common.common.ServerResponse;
 import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.pojo.SysResource;
 import cn.sk.api.sys.pojo.SysResourceQueryVo;
