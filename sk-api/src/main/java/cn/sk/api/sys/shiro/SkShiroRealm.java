@@ -1,6 +1,5 @@
 package cn.sk.api.sys.shiro;
 
-import cn.sk.common.common.ResponseCode;
 import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.common.TokenCache;
 import cn.sk.api.sys.mapper.SysPermisMapper;
@@ -8,7 +7,8 @@ import cn.sk.api.sys.mapper.SysRoleMapper;
 import cn.sk.api.sys.pojo.SysUser;
 import cn.sk.api.sys.service.ISysUserService;
 import cn.sk.api.sys.utils.JwtUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.sk.common.common.ResponseCode;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
@@ -93,8 +93,11 @@ public class SkShiroRealm extends AuthorizingRealm {
 
 //        List<SysUserCustom> sysUserCustoms = sysUserService.queryObjs(sysUserQueryVo).getData();
 
-        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getUserName,username);
+//        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(SysUser::getUserName,username);
+//        SysUser sysUser = sysUserService.getOne(queryWrapper);
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_name",username);
         SysUser sysUser = sysUserService.getOne(queryWrapper);
 
 

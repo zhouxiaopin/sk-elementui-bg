@@ -11,6 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -47,7 +48,9 @@ public class ExportExcelUtil<T> {
         try {
             List<T> objs = params.getData();
             //模板的路径
-            String path = params.getTempPath();
+//            String path = params.getTempPath();
+            //模板的输入流
+            InputStream tempFileIn = params.getTempFileIn();
             //导出的文件名
             String exportFileName = params.getFileName();
             Integer lowIndex = params.getLowIndex();
@@ -58,8 +61,9 @@ public class ExportExcelUtil<T> {
             //03
             Workbook workbook = null;
             if(TYPE_07.equals(type)) {
-                workbook = new XSSFWorkbook(Objects.requireNonNull(
-                    ExportExcelUtil.class.getClassLoader().getResourceAsStream(path)));
+                workbook = new XSSFWorkbook(Objects.requireNonNull(tempFileIn));
+//                workbook = new XSSFWorkbook(Objects.requireNonNull(
+//                    ExportExcelUtil.class.getClassLoader().getResourceAsStream(path)));
 
                 //判断是否有后缀
                 int isHas = exportFileName.lastIndexOf(".");
@@ -68,8 +72,9 @@ public class ExportExcelUtil<T> {
                 }
 
             }else{//默认03
-                workbook = new HSSFWorkbook(Objects.requireNonNull(
-                        ExportExcelUtil.class.getClassLoader().getResourceAsStream(path)));
+                workbook = new HSSFWorkbook(Objects.requireNonNull(tempFileIn));
+//                workbook = new HSSFWorkbook(Objects.requireNonNull(
+//                        ExportExcelUtil.class.getClassLoader().getResourceAsStream(path)));
 
                 //判断是否有后缀
                 int isHas = exportFileName.lastIndexOf(".");
@@ -158,8 +163,10 @@ public class ExportExcelUtil<T> {
     @Setter
     public static class ExportParam<T>{
         private List<T> data;
-        //模板的路径
-        private String tempPath;
+        //模板输入流
+        private InputStream tempFileIn;
+//        //模板的路径
+//        private String tempPath;
         //导出的文件名
         private String fileName;
         //数据开始的行索引
@@ -167,9 +174,9 @@ public class ExportExcelUtil<T> {
 
         private HttpServletResponse response;
 
-        public String getTempPath() {
-            return null==tempPath&&"".equals(tempPath)?tempPath:TEMP_PATH_PREFIX+tempPath;
-        }
+//        public String getTempPath() {
+//            return null==tempPath&&"".equals(tempPath)?tempPath:TEMP_PATH_PREFIX+tempPath;
+//        }
 
         public Integer getLowIndex() {
             return null == lowIndex?DEFAULT_LOWINDEX:lowIndex;

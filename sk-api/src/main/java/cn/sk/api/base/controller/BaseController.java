@@ -9,7 +9,7 @@ import cn.sk.api.sys.pojo.SkPageVo;
 import cn.sk.api.sys.pojo.SysDict;
 import cn.sk.api.sys.pojo.SysDictQueryVo;
 import cn.sk.api.sys.service.ISysDictService;
-import cn.sk.api.sys.utils.JackJsonUtil;
+import cn.sk.common.utils.JackJsonUtil;
 import cn.sk.api.sys.utils.LogUtil;
 import cn.sk.api.sys.vo.SelectBoxVo;
 import com.alibaba.fastjson.JSONObject;

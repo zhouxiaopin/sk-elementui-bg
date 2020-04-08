@@ -1,11 +1,14 @@
 package cn.sk.api.sys.controller;
 
 import cn.sk.api.base.controller.BaseController;
-import cn.sk.api.business.service.IFileService;
-import cn.sk.api.sys.common.*;
+import cn.sk.api.sys.service.IFileService;
+import cn.sk.api.sys.common.SkLog;
+import cn.sk.api.sys.common.SysConst;
+import cn.sk.api.sys.common.TokenCache;
 import cn.sk.api.sys.pojo.SysUser;
 import cn.sk.api.sys.pojo.SysUserQueryVo;
 import cn.sk.api.sys.service.ISysUserService;
+import cn.sk.api.sys.utils.AppContext;
 import cn.sk.api.sys.utils.JwtUtil;
 import cn.sk.api.sys.utils.ShiroUtils;
 import cn.sk.common.common.ResponseCode;
@@ -14,7 +17,7 @@ import cn.sk.common.utils.DateUtils;
 import cn.sk.poi.utils.ExportExcelUtil;
 import cn.sk.poi.utils.ImportExcelUtil;
 import cn.sk.poi.vo.BatchImportVo;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -72,8 +75,10 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
 //        sysUserQueryVo.getIsNoLike().put("userName",true);
 
 //        sysUserService.getObj();
-        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getUserName,userName);
+//        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(SysUser::getUserName,userName);
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_name",userName);
         SysUser sysUser = sysUserService.getOne(queryWrapper);
 
 
@@ -195,25 +200,7 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
         return sysUserService.update(sysUser);
     }
 
-
-
-    /****************************以下是重新父类的方法*****************************/
-    //修改之前
-    @Override
-    protected ServerResponse<SysUser> updateBefore(SysUser oldObj, SysUser sysUser) {
-        //判断是否有修改密码
-        if (!StringUtils.equals(sysUser.getPassword(), sysUser.getPassword2())) {
-            //判断盐值是否存在
-            String salt = oldObj.getSalt();
-            if (StringUtils.isEmpty(salt)) {
-                salt = ShiroUtils.DEFALT_SALT;
-                sysUser.setSalt(salt);
-            }
-            sysUser.setPassword(ShiroUtils.getMd5Pwd(salt, sysUser.getPassword()));
-        }
-        return super.updateBefore(oldObj, sysUser);
-    }
-
+    //导出数据
     @PostMapping(value = "/export",produces = "application/octet-stream;charset=UTF-8")
     public void export(@RequestBody SysUserQueryVo sysUserQueryVo,HttpServletResponse response){
 
@@ -222,10 +209,13 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
         ExportExcelUtil<SysUser> exportExcelUtil = new ExportExcelUtil<>();
         ExportExcelUtil.ExportParam<SysUser> params = ExportExcelUtil.ExportParam.<SysUser>builder()
                 .data(sysUsers).response(response).fileName("员工列表")
-                .tempPath("emp-template.xls").build();
+                .tempFileIn(AppContext.getInputStreamByFilePath("static/file/excel/emp-template.xls")).build();
+//                .tempPath("emp-template.xls").build();
 
         exportExcelUtil.exportExcel03(params);
     }
+
+    //批量导入
     @PostMapping(value = "/batchImport")
     public ServerResponse batchImport(@RequestParam("file") MultipartFile[] files) throws IOException {
         ImportExcelUtil<SysUser> importExcelUtil = new ImportExcelUtil<>();
@@ -267,10 +257,38 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
 
         return ServerResponse.createBySuccess(batchImportVo);
     }
+
+    //下载导入模板
     @GetMapping(value = "/downImportTemp",produces = "application/octet-stream;charset=UTF-8")
     public void downImportTemp(HttpServletResponse response){
         authorityValidate(DOWN_IMPORT_TEMP);
         fileService.downTemplateFile(response,"excel/emp-template.xls");
+    }
+
+    //上传图片
+    @PostMapping(value = "/uploadImg")
+    public ServerResponse uploadImg(@RequestParam("file") MultipartFile[] files){
+
+        return fileService.imgUpload(files,"");
+    }
+
+
+
+    /****************************以下是重新父类的方法*****************************/
+    //修改之前
+    @Override
+    protected ServerResponse<SysUser> updateBefore(SysUser oldObj, SysUser sysUser) {
+        //判断是否有修改密码
+        if (!StringUtils.equals(sysUser.getPassword(), sysUser.getPassword2())) {
+            //判断盐值是否存在
+            String salt = oldObj.getSalt();
+            if (StringUtils.isEmpty(salt)) {
+                salt = ShiroUtils.DEFALT_SALT;
+                sysUser.setSalt(salt);
+            }
+            sysUser.setPassword(ShiroUtils.getMd5Pwd(salt, sysUser.getPassword()));
+        }
+        return super.updateBefore(oldObj, sysUser);
     }
 
     //参数检验

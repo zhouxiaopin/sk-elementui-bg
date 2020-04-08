@@ -1,16 +1,16 @@
 package cn.sk.api.sys.service.impl;
 
 import cn.sk.api.base.service.impl.BaseServiceImpl;
-import cn.sk.common.common.ServerResponse;
 import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.mapper.SysResourceMapper;
 import cn.sk.api.sys.mapper.SysRoleMapper;
 import cn.sk.api.sys.pojo.*;
 import cn.sk.api.sys.service.ISysResourceService;
 import cn.sk.api.sys.utils.SysUtils;
+import cn.sk.common.common.ServerResponse;
 import cn.sk.common.pojo.TreeNode;
 import cn.sk.common.utils.TreeUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -101,9 +101,12 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, SysReso
             condition.setDictType(SysConst.Dict.SysResource.LEFT_ICON);
             condition.setRecordStatus(SysConst.RecordStatus.ABLE);
 
-            LambdaQueryWrapper<SysDict> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(SysDict::getDictType,SysConst.Dict.SysResource.LEFT_ICON)
-                    .eq(SysDict::getRecordStatus,SysConst.RecordStatus.ABLE);
+//            LambdaQueryWrapper<SysDict> queryWrapper = new LambdaQueryWrapper<>();
+//            queryWrapper.eq(SysDict::getDictType,SysConst.Dict.SysResource.LEFT_ICON)
+//                    .eq(SysDict::getRecordStatus,SysConst.RecordStatus.ABLE);
+            QueryWrapper<SysDict> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("dict_type",SysConst.Dict.SysResource.LEFT_ICON)
+                    .eq("record_status",SysConst.RecordStatus.ABLE);
 
 //            List<SysDictCustom> sysDictCustoms = sysDictMapper.selectListByQueryVo(sysDictQueryVo);
             List<SysDict> sysDicts = sysDictMapper.selectList(queryWrapper);

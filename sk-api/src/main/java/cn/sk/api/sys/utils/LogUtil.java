@@ -4,6 +4,7 @@ import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.pojo.SysLog;
 import cn.sk.api.sys.pojo.SysUser;
 import cn.sk.api.sys.service.ISysLogService;
+import cn.sk.common.utils.JackJsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,7 @@ import cn.sk.api.sys.pojo.SysLog;
 import cn.sk.api.sys.pojo.SysUser;
 import cn.sk.api.sys.service.ISysLogService;
 import cn.sk.api.sys.utils.IpAdrressUtil;
-import cn.sk.api.sys.utils.JackJsonUtil;
+import cn.sk.common.utils.JackJsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;

@@ -7,6 +7,7 @@ public class SysConst {
 
     //下载文件前缀
     public static final String DOWNLOAD_FILE_PREFIX = "static/file/";
+    public static final String UPLOAD_FILE_PREFIX = "static/upload/";
 
     public static String X_ACCESS_TOKEN = "X-Access-Token";
     /** 登录用户Token令牌缓存KEY前缀 */

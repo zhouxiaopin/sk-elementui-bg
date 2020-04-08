@@ -33,10 +33,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-thymeleaf</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -280,52 +280,22 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>cn.sk.temp.SkBgApplication</mainClass>
+                            <!--包名记得更改-->
+                            <mainClass>cn.sk.api.SkApiApplication</mainClass>
                         </manifest>
                     </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
+
                     <excludes>
                         <!--<exclude>**/application-*.properties</exclude>-->
                         <exclude>**/*.properties</exclude>
                         <!--<exclude>**/*.xml</exclude>-->
                         <!--<exclude>**/*.yml</exclude>-->
-                        <!--<exclude>static/**</exclude>-->
+                        <exclude>static/**</exclude>
+                        <exclude>genTemplats/**</exclude>
                         <exclude>templates/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
-            <!-- 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-jar-plugin</artifactId>-->
-            <!--<configuration>-->
-            <!---->
-            <!--</configuration>-->
-            <!--</plugin>-->
-            <!-- 拷贝依赖的jar包到lib目录 -->
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-dependency-plugin</artifactId>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>copy</id>-->
-            <!--<phase>package</phase>-->
-            <!--<goals>-->
-            <!--<goal>copy-dependencies</goal>-->
-            <!--</goals>-->
-            <!--<configuration>-->
-            <!--<outputDirectory>-->
-            <!--${project.build.directory}/lib-->
-            <!--</outputDirectory>-->
-            <!--</configuration>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
             <!-- 设置编译版本 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

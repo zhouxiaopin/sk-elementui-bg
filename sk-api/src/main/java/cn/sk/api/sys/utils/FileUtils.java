@@ -1,7 +1,7 @@
 package cn.sk.api.sys.utils;
 
 
-import cn.sk.poi.utils.ExportExcelUtil;
+import cn.sk.common.utils.DateUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class FileUtils {
 
             // 取得输出流
             out = response.getOutputStream();
-            in = ExportExcelUtil.class.getClassLoader().getResourceAsStream(filePath);
+            in = AppContext.getInputStreamByFilePath(filePath);
 
             byte[] buffer = new byte[1024];
             int i = -1;
@@ -88,4 +88,23 @@ public class FileUtils {
         }
         return false;
     }
+
+    //获取日期路径
+    public static String getYyyyMmDdPath(){
+        StringBuilder path = new StringBuilder();
+        path.append(DateUtils.getSystemTime("yyyy"));
+        path.append("/");
+        path.append(DateUtils.getSystemTime("MM"));
+        path.append("/");
+        path.append(DateUtils.getSystemTime("dd"));
+        return path.toString();
+    }
+//    private static InputStream getResourceAsStreamByFileName(){
+//      applicationContext.getEnvironment().getActiveProfiles()
+//    }
+//
+//    static interface ResourceAsStream{
+//        @Profile("loc")
+//        InputStream getResourceAsStreamByFileName();
+//    }
 }

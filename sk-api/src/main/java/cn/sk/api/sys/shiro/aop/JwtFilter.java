@@ -37,10 +37,10 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
 		String uri = ((ShiroHttpServletRequest) request).getRequestURI();
-		if(uri.equals("/sk/sysUser/export")
-				||uri.equals("/sk/sysUser/import")||uri.equals("/sk/sysUser/downTemplate")) {
-			return true;
-		}
+//		if(uri.equals("/sk/sysUser/export")
+//				||uri.equals("/sk/sysUser/uploadImg")||uri.equals("/sk/sysUser/downTemplate")) {
+//			return true;
+//		}
 		try {
 			executeLogin(request, response);
 			return true;
