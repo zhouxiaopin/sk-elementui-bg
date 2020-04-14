@@ -8,18 +8,18 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.TimeUnit;
 
 /**
- *@Deseription TokenCache
+ *@Deseription 验证码缓存
  *@Author zhoucp
  *@Date 2020/1/6 17:16
  **/
 @Slf4j
-public class TokenCache {
+public class VerifyCodeCache {
 
 
-    public static final String TOKEN_PREFIX = "token_";
+    public static final String VC_PREFIX = "verifycode_";
 
     //LRU算法
-    private static LoadingCache<String,String> localCache = CacheBuilder.newBuilder().initialCapacity(100).maximumSize(500).expireAfterAccess(30, TimeUnit.MINUTES)
+    private static LoadingCache<String,String> localCache = CacheBuilder.newBuilder().initialCapacity(100).maximumSize(500).expireAfterAccess(5, TimeUnit.MINUTES)
             .build(new CacheLoader<String, String>() {
                 //默认的数据加载实现,当调用get取值的时候,如果key没有对应的值,就调用这个方法进行加载.
                 @Override
@@ -32,6 +32,11 @@ public class TokenCache {
         localCache.put(key,value);
     }
 
+    /**
+     * 获取指定key的缓存对象
+     * @param key
+     * @return
+     */
     public static String getKey(String key){
         String value = null;
         try {

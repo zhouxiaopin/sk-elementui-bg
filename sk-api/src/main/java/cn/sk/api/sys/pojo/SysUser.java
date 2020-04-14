@@ -92,6 +92,13 @@ public class SysUser extends BaseModel{
     @ExcelAtrr(outSort = 11,inSort = 11)
     private PictureData headImg;
 
+    //验证码key
+    @TableField(exist = false)
+    private String verifyCodeKey;
+    //验证码
+    @TableField(exist = false)
+    private String verifyCode;
+
 
     @Override
     public Serializable getPkVal() {

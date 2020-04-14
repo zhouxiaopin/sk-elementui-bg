@@ -12,6 +12,8 @@ public class SysConst {
     public static String X_ACCESS_TOKEN = "X-Access-Token";
     /** 登录用户Token令牌缓存KEY前缀 */
     public static final String PREFIX_USER_TOKEN  = "prefix_user_token_";
+    /*登录用户验证码缓存key前缀*/
+    public static final String PREFIX_USER_VERIFY_CODE  = "prefix_verify_code_";
 
     public interface RecordStatus{
         String DELETE = "00";//记录删除

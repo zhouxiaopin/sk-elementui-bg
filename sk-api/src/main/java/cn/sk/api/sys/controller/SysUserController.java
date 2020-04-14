@@ -1,16 +1,18 @@
 package cn.sk.api.sys.controller;
 
 import cn.sk.api.base.controller.BaseController;
-import cn.sk.api.sys.service.IFileService;
 import cn.sk.api.sys.common.SkLog;
 import cn.sk.api.sys.common.SysConst;
 import cn.sk.api.sys.common.TokenCache;
+import cn.sk.api.sys.common.VerifyCodeCache;
 import cn.sk.api.sys.pojo.SysUser;
 import cn.sk.api.sys.pojo.SysUserQueryVo;
+import cn.sk.api.sys.service.IFileService;
 import cn.sk.api.sys.service.ISysUserService;
 import cn.sk.api.sys.utils.AppContext;
 import cn.sk.api.sys.utils.JwtUtil;
 import cn.sk.api.sys.utils.ShiroUtils;
+import cn.sk.api.sys.utils.VerifyCodeUtils;
 import cn.sk.common.common.ResponseCode;
 import cn.sk.common.common.ServerResponse;
 import cn.sk.common.utils.DateUtils;
@@ -34,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -64,12 +67,38 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
 //        return model;
 //    }
 
+//    @SkLog(value ="获取校验码")
+    @GetMapping(value = "/getVerifyCode")
+    public void getVerifyCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String uuid = request.getParameter("uuid");
+        if(StringUtils.isBlank(uuid)) {
+            log.warn(ResponseCode.ILLEGAL_ARGUMENT.getMsg());
+            return;
+        }
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setContentType("image/jpeg");
+        // 生成随机字串
+        String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+        VerifyCodeCache.setKey(SysConst.PREFIX_USER_VERIFY_CODE+uuid,verifyCode.toLowerCase());
+        // 生成图片
+        int w = 100, h = 30;
+        OutputStream out = response.getOutputStream();
+        VerifyCodeUtils.outputImage(w, h, out, verifyCode);
+
+    }
     @SkLog(value ="登录系统", saveParams=false)
     @PostMapping(value = "/login")
     public ServerResponse login(@RequestBody SysUser su){
         String userName = su.getUserName();
         String password = su.getPassword();
 
+        String verifyCodeKey = SysConst.PREFIX_USER_VERIFY_CODE+su.getVerifyCodeKey();
+        String saveVerifyCode = VerifyCodeCache.getKey(verifyCodeKey).toLowerCase();
+        if(!StringUtils.equals(saveVerifyCode,su.getVerifyCode().toLowerCase())) {
+            return ServerResponse.createByErrorMessage("验证码错误");
+        }
 //        SysUserQueryVo sysUserQueryVo = SysUserQueryVo.newInstance();
 //        sysUserQueryVo.getCdtCustom().setUserName(userName);
 //        sysUserQueryVo.getIsNoLike().put("userName",true);
@@ -105,6 +134,9 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
         data.put("token",token);
         data.put("expiresTime", DateUtils.addMinuteTime(new Date(),30));
         data.put("user",sysUser);
+
+        //移除验证码
+        VerifyCodeCache.invalidate(verifyCodeKey);
         return ServerResponse.createBySuccess(ResponseCode.LOGIN_SUCCESS.getMsg(),data);
 
     }
