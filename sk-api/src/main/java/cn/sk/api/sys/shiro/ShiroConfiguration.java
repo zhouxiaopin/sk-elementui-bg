@@ -181,7 +181,7 @@ public class ShiroConfiguration {
         //开放数据库监控后台管理界面的路径
         filterChainDefinitionMap.put("/druid/*", "anon");
         filterChainDefinitionMap.put("/sysUser/getVerifyCode", "anon");
-        filterChainDefinitionMap.put("/sysUser/logout", "anon");
+//        filterChainDefinitionMap.put("/sysUser/logout", "anon");
 //        filterChainDefinitionMap.put("/sysUser/logout", "logout");
 //        map.put("/busInfo.action", "authc,roles[user]");
 //        map.put("/admin.jsp", "authc,roles[admin]");

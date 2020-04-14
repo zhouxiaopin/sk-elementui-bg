@@ -4,10 +4,11 @@ import cn.sk.api.sys.pojo.SysLog;
 import cn.sk.api.sys.pojo.SysUser;
 import cn.sk.api.sys.service.ISysLogService;
 import cn.sk.api.sys.utils.IpAdrressUtil;
+import cn.sk.api.sys.utils.SysUtils;
 import cn.sk.common.utils.JackJsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -41,7 +42,7 @@ public class SysLogAspect {
 
     @Before("logPoinCut()")
     public void doBefore(JoinPoint joinPoint) {
-        if(StringUtils.equals("sysLogout",joinPoint.getSignature().getName())) {
+        if(StringUtils.equals("logout",joinPoint.getSignature().getName())) {
             daSaveSysLog(joinPoint);
         }
 
@@ -50,7 +51,7 @@ public class SysLogAspect {
     //切面 配置通知
     @AfterReturning("logPoinCut()")
     public void saveSysLog(JoinPoint joinPoint) {
-        if(!StringUtils.equals("sysLogout",joinPoint.getSignature().getName())) {
+        if(!StringUtils.equals("logout",joinPoint.getSignature().getName())) {
             daSaveSysLog(joinPoint);
         }
     }
@@ -103,10 +104,16 @@ public class SysLogAspect {
         }
 
         //获取用户名
-        SysUser sysUserInfo = (SysUser) SecurityUtils.getSubject().getPrincipal();
+//        SysUser sysUserInfo = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        SysUser sysUserInfo = SysUtils.getSysUser();
         if(!ObjectUtils.isEmpty(sysUserInfo)) {
             sysLog.setUserId(sysUserInfo.getUserId());
             sysLog.setUserName(sysUserInfo.getUserName());
+        }else{
+            Object[] args = joinPoint.getArgs();
+            if(ArrayUtils.isNotEmpty(args)&&args[0] instanceof SysUser) {
+                sysLog.setParams(((SysUser)args[0]).getUserName());
+            }
         }
         //获取用户ip地址
         sysLog.setIp(IpAdrressUtil.getIpAdrress(request));

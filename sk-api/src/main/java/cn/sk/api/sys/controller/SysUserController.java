@@ -95,7 +95,7 @@ public class SysUserController extends BaseController<SysUser, SysUserQueryVo> {
         String password = su.getPassword();
 
         String verifyCodeKey = SysConst.PREFIX_USER_VERIFY_CODE+su.getVerifyCodeKey();
-        String saveVerifyCode = VerifyCodeCache.getKey(verifyCodeKey).toLowerCase();
+        String saveVerifyCode = VerifyCodeCache.getKey(verifyCodeKey);
         if(!StringUtils.equals(saveVerifyCode,su.getVerifyCode().toLowerCase())) {
             return ServerResponse.createByErrorMessage("验证码错误");
         }
