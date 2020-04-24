@@ -238,6 +238,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <layout>ZIP</layout>
+                    <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
                     <!--去除在生产环境中不变的依赖-->
                     <!--<excludeGroupIds>-->
                     <!--org.springframework.boot,-->
