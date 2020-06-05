@@ -61,7 +61,7 @@ public class AppContext implements ApplicationContextAware {
         }
         InputStream in = null;
         // FIXME: 2020/4/7 部署记得把loc改为prod
-        if(StringUtils.equals("prod",getActiveProfile())) {
+        if(StringUtils.equals("prod",getActiveProfile())||StringUtils.equals("dev",getActiveProfile())) {
             ApplicationHome h = new ApplicationHome(AppContext.class);
             // 本地获取的路径 D:\idea\springboot2.x\target  upload 跟 项目jar平级
 //            jar
@@ -80,7 +80,7 @@ public class AppContext implements ApplicationContextAware {
     public static String getJarPath() {
         String path = "";
         // FIXME: 2020/4/7 部署记得把loc改为prod
-        if(StringUtils.equals("loc",getActiveProfile())) {
+        if(StringUtils.equals("loc",getActiveProfile())||StringUtils.equals("dev",getActiveProfile())) {
             ApplicationHome h = new ApplicationHome(AppContext.class);
             // 本地获取的路径 D:\idea\springboot2.x\target  upload 跟 项目jar平级
 //            jar

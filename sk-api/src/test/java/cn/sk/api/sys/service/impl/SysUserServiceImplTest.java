@@ -3,7 +3,6 @@ package cn.sk.api.sys.service.impl;
 import cn.sk.api.base.BaseServiceTest;
 import cn.sk.api.sys.pojo.SysUser;
 import cn.sk.api.sys.service.ISysUserService;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -15,7 +14,7 @@ public class SysUserServiceImplTest extends BaseServiceTest {
     @Autowired
     ISysUserService sysUserService;
 
-    @Test
+//    @Test
     public  void insert() {
         SysUser sysUser = new SysUser();
         sysUser.setUserName("用户名test");
@@ -23,7 +22,7 @@ public class SysUserServiceImplTest extends BaseServiceTest {
         sysUser.setEmail("1156693435");
         sysUserService.insert(sysUser);
     }
-    @Test
+//    @Test
     public  void update() {
         SysUser sysUser = new SysUser();
         sysUser.setUserId(36);
