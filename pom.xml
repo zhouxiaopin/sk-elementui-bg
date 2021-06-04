@@ -33,7 +33,7 @@
 		<jackson.mapper.asl.version>1.9.13</jackson.mapper.asl.version>
 		<fastjson.version>1.2.69</fastjson.version>
 		<joda.time.version>2.3</joda.time.version>
-		<httpclient.version>4.5.2</httpclient.version>
+		<httpclient.version>4.5.13</httpclient.version>
 		<commons.beanutils.version>1.9.3</commons.beanutils.version>
 		<shiro.version>1.4.0</shiro.version>
 		<jxl.version>2.6.12</jxl.version>
