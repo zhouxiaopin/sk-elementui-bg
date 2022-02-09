@@ -35,7 +35,7 @@
 		<joda.time.version>2.3</joda.time.version>
 		<httpclient.version>4.5.2</httpclient.version>
 		<commons.beanutils.version>1.9.3</commons.beanutils.version>
-		<shiro.version>1.4.0</shiro.version>
+		<shiro.version>1.7.1</shiro.version>
 		<jxl.version>2.6.12</jxl.version>
 		<thymeleaf.extras.shiro.version>2.0.0</thymeleaf.extras.shiro.version>
 		<java-jwt.version>3.7.0</java-jwt.version>
